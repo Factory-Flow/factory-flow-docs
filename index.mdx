@@ -1,97 +1,89 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Factory Flow Documentation"
+description: "Operate modern factories with secure, real-time production data."
 ---
 
-## Setting up
+## Get started quickly
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
+Launch your workspace, connect machines, and start tracking output.
 
 <Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+  <Card title="Quickstart" icon="bolt" href="/getting-started/quickstart">
+    Create a facility, add machines, and launch your first work order.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Requirements" icon="list-check" href="/getting-started/requirements">
+    Review permissions, devices, and data you will want ready.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Account setup" icon="user-gear" href="/getting-started/account-setup">
+    Invite teams and configure roles across organizations.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Terminology" icon="book-open" href="/getting-started/terminology">
+    Learn the key objects used across Factory Flow.
   </Card>
 </Columns>
 
-## Create beautiful pages
+## Core building blocks
 
-Everything you need to create world-class documentation.
+Model your org, facilities, machines, and layouts.
 
 <Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+  <Card title="Organizations" icon="users" href="/core-concepts/organizations">
+    Manage multi-tenant orgs, teams, and access boundaries.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Facilities" icon="warehouse" href="/core-concepts/facilities">
+    Organize sites, zones, and lines for accurate reporting.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Machines" icon="gears" href="/core-concepts/machines">
+    Track machine status, shifts, and data ingestion.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
+  <Card title="Work orders" icon="clipboard-list" href="/core-concepts/work-orders">
+    Track work from release to completion.
+  </Card>
+  <Card title="Bills of materials" icon="layer-group" href="/core-concepts/boms">
+    Define component requirements per SKU.
   </Card>
 </Columns>
 
-## Need inspiration?
+## Run daily operations
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+Execute the workflows used by floor teams every day.
+
+<Columns cols={2}>
+  <Card title="Plan production" icon="calendar-days" href="/workflows/plan-production">
+    Turn demand into a realistic, sequenced schedule.
+  </Card>
+  <Card title="Execute work orders" icon="play" href="/workflows/execute-work-orders">
+    Move orders through stations with live status.
+  </Card>
+  <Card title="Quality checks" icon="badge-check" href="/workflows/quality">
+    Capture defects and enforce hold policies.
+  </Card>
+  <Card title="Layout management" icon="map" href="/workflows/layout-management">
+    Version floor layouts and associate machines.
+  </Card>
+  <Card title="Maintenance" icon="wrench" href="/workflows/maintenance">
+    Track downtime and plan preventive maintenance.
+  </Card>
+</Columns>
+
+## Integrate and extend
+
+Connect Factory Flow to identity, billing, and analytics tooling.
+
+<Columns cols={2}>
+  <Card title="Integrations overview" icon="plug" href="/integrations/overview">
+    See supported systems and data flows.
+  </Card>
+  <Card title="SSO" icon="shield-keyhole" href="/integrations/sso">
+    Enable Google, Microsoft Entra ID, and GitHub sign-in.
+  </Card>
+  <Card title="ERP connections" icon="diagram-project" href="/integrations/erp">
+    Sync orders, inventory, and master data.
+  </Card>
+  <Card title="Barcode scanners" icon="barcode" href="/integrations/barcode-scanners">
+    Speed up work order and inventory actions.
+  </Card>
+  <Card title="API reference" icon="terminal" href="/api/introduction">
+    Build custom automation with the Factory Flow API.
+  </Card>
+</Columns>

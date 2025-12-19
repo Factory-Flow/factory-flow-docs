@@ -1,0 +1,22 @@
+---
+title: "Machine ingestion API"
+description: "Send part counts and machine status."
+---
+
+## Rate limits
+
+Each machine has its own rate limit to protect ingestion pipelines.
+
+## Validation
+
+Payloads validate machine identity and expected fields.
+
+## Example
+
+```json
+{
+  "machine_id": "mach_123",
+  "timestamp": "2024-05-01T10:14:00Z",
+  "part_count": 42
+}
+```

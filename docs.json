@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Factory Flow",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#1F6D7B",
+    "light": "#6EE7D8",
+    "dark": "#134754"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -17,52 +17,101 @@
             "group": "Getting started",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "getting-started/quickstart",
+              "getting-started/requirements",
+              "getting-started/account-setup",
+              "getting-started/terminology"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Core concepts",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "core-concepts/organizations",
+              "core-concepts/facilities",
+              "core-concepts/production-lines",
+              "core-concepts/machines",
+              "core-concepts/layouts",
+              "core-concepts/work-orders",
+              "core-concepts/boms",
+              "core-concepts/inventory",
+              "core-concepts/scheduling"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Workflows",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "workflows/plan-production",
+              "workflows/execute-work-orders",
+              "workflows/quality",
+              "workflows/maintenance",
+              "workflows/shipments",
+              "workflows/layout-management"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Integrations",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "integrations/overview",
+              "integrations/erp",
+              "integrations/barcode-scanners",
+              "integrations/webhooks",
+              "integrations/sso"
+            ]
+          },
+          {
+            "group": "Administration",
+            "pages": [
+              "administration/users-roles",
+              "administration/permissions",
+              "administration/settings",
+              "administration/audit-log",
+              "administration/authentication",
+              "administration/billing",
+              "administration/retention"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "pages": [
+              "analytics/dashboards",
+              "analytics/kpis",
+              "analytics/exports",
+              "analytics/ingestion",
+              "analytics/storage"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "help/faq",
+              "help/troubleshooting",
+              "help/release-notes"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "API basics",
             "pages": [
-              "api-reference/introduction"
+              "api/introduction",
+              "api/authentication",
+              "api/errors",
+              "api/pagination"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Resources",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api/work-orders",
+              "api/inventory",
+              "api/production",
+              "api/quality",
+              "api/webhooks",
+              "api/ingestion",
+              "api/tokens"
             ]
           }
         ]
@@ -71,14 +120,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Status",
+          "href": "https://status.factoryflow.com",
+          "icon": "signal-stream"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Support",
+          "href": "mailto:support@factoryflow.com",
+          "icon": "life-ring"
         }
       ]
     }
@@ -91,13 +140,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@factoryflow.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Open Factory Flow",
+      "href": "https://app.factoryflow.com"
     }
   },
   "contextual": {
@@ -111,12 +160,5 @@
      "cursor",
      "vscode"
    ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
   }
 }

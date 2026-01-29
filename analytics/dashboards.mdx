@@ -1,10 +1,298 @@
 ---
 title: "Dashboards"
-description: "Monitor production performance in real time."
+description: "Monitor production performance with real-time analytics dashboards."
 ---
 
-## Standard views
+Factory Flow provides comprehensive dashboards for monitoring machine performance, production output, and operational efficiency. Access real-time data and historical trends to make informed decisions.
 
-- Line performance
-- Machine throughput
-- Cycle time and downtime
+## Overview dashboard
+
+The Overview dashboard provides a high-level view of your entire organization.
+
+### Accessing the Overview
+
+1. Click **Overview** in the sidebar
+2. View organization-wide metrics and status
+
+### Key metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Total machines** | All machines in your organization |
+| **Connected** | Machines receiving data recently |
+| **Disconnected** | Machines not receiving data |
+| **Analytics coverage** | Percentage of machines with analytics configured |
+| **Layouts** | Number of floor plan layouts |
+
+### Recently updated machines
+
+See the 5 most recently active machines:
+- Machine name and type
+- Current data source status
+- Last data received timestamp
+
+### Machines needing attention
+
+Identify machines requiring configuration:
+- Machines without data sources
+- Machines with no recent data
+- Quick links to configure
+
+### Recent layouts
+
+Quick access to your floor plans:
+- Layout thumbnails
+- Machine count per layout
+- Last update timestamp
+
+## Analytics dashboard
+
+The Analytics dashboard provides detailed performance data for individual machines and production lines.
+
+### Accessing Analytics
+
+1. Click **Analytics** in the sidebar
+2. Select **Machine Analytics** or **Line Analytics**
+3. Choose a specific machine or line
+
+### Machine analytics
+
+View performance data for individual machines:
+
+#### Cycle time analysis
+
+- **Cycle time distribution** - Histogram of cycle times
+- **Cycle time trend** - Time-series chart of performance
+- **Expected vs. actual** - Comparison to target cycle time
+- **Threshold visualization** - Color-coded performance zones
+
+#### Part count metrics
+
+- **Total parts produced** - Aggregate output
+- **Good parts** - Parts passing quality
+- **Bad parts** - Rejected/scrapped parts
+- **Quality rate** - Good parts as percentage
+
+#### OEE calculation
+
+Overall Equipment Effectiveness combines:
+- **Availability** - Uptime vs. planned time
+- **Performance** - Actual vs. theoretical output
+- **Quality** - Good parts vs. total parts
+
+Formula: `OEE = Availability × Performance × Quality`
+
+#### Downtime analysis
+
+- **Total downtime** - Time machine was not producing
+- **Downtime Pareto** - Ranked causes of downtime
+- **Uptime percentage** - Production time ratio
+
+### Line analytics
+
+View aggregated performance across production lines:
+
+- **Line throughput** - Total output across all machines
+- **Bottleneck identification** - Which machine limits output
+- **Line OEE** - Combined effectiveness
+- **Machine comparison** - Side-by-side performance
+
+## Time controls
+
+All analytics support flexible time selection.
+
+### Quick selections
+
+| Option | Description |
+|--------|-------------|
+| **Last 1 hour** | Most recent data |
+| **Last 8 hours** | Single shift |
+| **Last 24 hours** | Full day |
+| **Last 7 days** | Weekly trend |
+| **Last 30 days** | Monthly trend |
+| **Last 90 days** | Quarterly trend |
+
+### Shift-based filtering
+
+Analyze specific shifts:
+
+1. Click the time filter
+2. Select **By shift**
+3. Choose a shift schedule
+4. Pick a specific date
+5. View data for that shift only
+
+### Custom date range
+
+Set any date range:
+
+1. Click the time filter
+2. Select **Custom range**
+3. Set start and end dates
+4. Apply the filter
+
+## Data bucketing
+
+Control how data is aggregated for visualization.
+
+### Bucket size options
+
+| Bucket | Best for |
+|--------|----------|
+| **1 minute** | Real-time monitoring, troubleshooting |
+| **5 minutes** | Short-term analysis |
+| **15 minutes** | Intra-shift comparison |
+| **1 hour** | Daily patterns |
+| **4 hours** | Shift-level trends |
+| **8 hours** | Shift comparison |
+
+### Choosing bucket size
+
+- **Shorter buckets** show more detail but may be noisy
+- **Longer buckets** smooth data but hide short events
+- Match bucket size to your analysis goal
+
+## Auto-refresh
+
+Keep dashboards current with auto-refresh.
+
+### Refresh options
+
+| Interval | Use case |
+|----------|----------|
+| **No refresh** | Static analysis, reporting |
+| **10 seconds** | Real-time monitoring |
+| **30 seconds** | Active monitoring |
+| **1 minute** | Dashboard displays |
+| **5 minutes** | Background monitoring |
+
+### Setting auto-refresh
+
+1. Click the refresh control
+2. Select an interval
+3. Dashboard updates automatically
+
+### Manual refresh
+
+Click the refresh button to update data immediately.
+
+## Machine selection
+
+Navigate between machines in the analytics view.
+
+### Switching machines
+
+1. Use the machine dropdown
+2. Select a different machine
+3. View analytics for the new selection
+
+### Filtering machines
+
+Filter the machine list by:
+- Machines with data
+- Machines without data
+- Facility
+- Machine type
+
+### Quick machine access
+
+From any analytics chart:
+- Click a machine name to switch
+- Use keyboard shortcuts for navigation
+
+## Chart interactions
+
+Interact with charts for deeper analysis.
+
+### Zooming
+
+- **Click and drag** to zoom into a time range
+- **Double-click** to reset zoom
+
+### Tooltips
+
+- **Hover** over data points for details
+- View exact values and timestamps
+
+### Legend toggles
+
+- **Click** legend items to show/hide series
+- Compare specific metrics
+
+## Dashboard use cases
+
+### Real-time monitoring
+
+Set up a dashboard for floor displays:
+
+1. Select a key machine
+2. Enable 10-second auto-refresh
+3. Choose 1-minute buckets
+4. Display on a wall screen
+
+### Shift review
+
+Analyze performance after a shift:
+
+1. Filter by shift and date
+2. Choose 15-minute buckets
+3. Review cycle time and OEE
+4. Document findings
+
+### Historical analysis
+
+Understand long-term trends:
+
+1. Select 30 or 90 day range
+2. Use 4 or 8 hour buckets
+3. Compare periods
+4. Identify patterns
+
+### Troubleshooting
+
+Investigate specific issues:
+
+1. Narrow to the problem time
+2. Use 1-minute buckets
+3. Look for anomalies
+4. Correlate with events
+
+## Best practices
+
+### For monitoring
+
+- Use auto-refresh for live displays
+- Choose appropriate bucket sizes
+- Set up layouts for visual status
+
+### For analysis
+
+- Disable auto-refresh during analysis
+- Start with big picture, then drill down
+- Document insights and actions
+
+### For reporting
+
+- Use consistent time ranges
+- Export data for detailed analysis
+- Take screenshots for presentations
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="KPIs" icon="gauge" href="/analytics/kpis">
+    Understand manufacturing metrics.
+  </Card>
+
+  <Card title="Exports" icon="file-export" href="/analytics/exports">
+    Export data for offline analysis.
+  </Card>
+
+  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
+    Set up data streaming.
+  </Card>
+
+  <Card title="Machines" icon="gears" href="/core-concepts/machines">
+    Configure machine analytics.
+  </Card>
+</CardGroup>

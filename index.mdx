@@ -1,89 +1,129 @@
 ---
 title: "Factory Flow Documentation"
-description: "Operate modern factories with secure, real-time production data."
+description: "Real-time manufacturing operations platform for modern factories. Connect machines, track production, and optimize performance."
 ---
 
-## Get started quickly
+Factory Flow is a multi-tenant manufacturing operations platform that helps you connect machines, track production data in real-time, and make data-driven decisions about your factory floor.
 
-Launch your workspace, connect machines, and start tracking output.
+## Quick start
+
+Get up and running with Factory Flow in minutes.
 
 <Columns cols={2}>
-  <Card title="Quickstart" icon="bolt" href="/getting-started/quickstart">
-    Create a facility, add machines, and launch your first work order.
+  <Card title="Quickstart guide" icon="bolt" href="/getting-started/quickstart">
+    Create your organization, add machines, and start streaming production data in under 10 minutes.
   </Card>
-  <Card title="Requirements" icon="list-check" href="/getting-started/requirements">
-    Review permissions, devices, and data you will want ready.
+  <Card title="System requirements" icon="list-check" href="/getting-started/requirements">
+    Review browser support, network requirements, and prerequisites for machine connectivity.
   </Card>
   <Card title="Account setup" icon="user-gear" href="/getting-started/account-setup">
-    Invite teams and configure roles across organizations.
+    Create your account, configure authentication, and invite your team.
   </Card>
   <Card title="Terminology" icon="book-open" href="/getting-started/terminology">
-    Learn the key objects used across Factory Flow.
+    Understand the key concepts and terms used throughout Factory Flow.
   </Card>
 </Columns>
 
-## Core building blocks
+## Core concepts
 
-Model your org, facilities, machines, and layouts.
+Model your factory with organizations, facilities, machines, and layouts.
 
 <Columns cols={2}>
   <Card title="Organizations" icon="users" href="/core-concepts/organizations">
-    Manage multi-tenant orgs, teams, and access boundaries.
+    Set up multi-tenant workspaces with role-based access control, team management, and isolated data.
   </Card>
   <Card title="Facilities" icon="warehouse" href="/core-concepts/facilities">
-    Organize sites, zones, and lines for accurate reporting.
+    Organize your physical sites and factories for accurate location-based reporting.
+  </Card>
+  <Card title="Production lines" icon="conveyor-belt" href="/core-concepts/production-lines">
+    Configure production lines with machine sequences and part flow visualization.
   </Card>
   <Card title="Machines" icon="gears" href="/core-concepts/machines">
-    Track machine status, shifts, and data ingestion.
+    Add machines, configure data sources, set cycle time thresholds, and monitor status.
   </Card>
-  <Card title="Work orders" icon="clipboard-list" href="/core-concepts/work-orders">
-    Track work from release to completion.
+  <Card title="Layouts" icon="map" href="/core-concepts/layouts">
+    Design visual floor plans with machine placement and production flow.
   </Card>
-  <Card title="Bills of materials" icon="layer-group" href="/core-concepts/boms">
-    Define component requirements per SKU.
+  <Card title="Scheduling" icon="calendar-days" href="/core-concepts/scheduling">
+    Define shifts and schedules for accurate capacity planning.
   </Card>
 </Columns>
 
-## Run daily operations
+## Daily operations
 
-Execute the workflows used by floor teams every day.
+Execute the workflows your floor teams use every day.
 
 <Columns cols={2}>
   <Card title="Plan production" icon="calendar-days" href="/workflows/plan-production">
-    Turn demand into a realistic, sequenced schedule.
+    Sequence work based on machine availability and shift schedules.
   </Card>
   <Card title="Execute work orders" icon="play" href="/workflows/execute-work-orders">
-    Move orders through stations with live status.
+    Track orders through production stages with live status updates.
   </Card>
   <Card title="Quality checks" icon="badge-check" href="/workflows/quality">
-    Capture defects and enforce hold policies.
+    Capture defects, track good/bad part counts, and enforce quality holds.
   </Card>
   <Card title="Layout management" icon="map" href="/workflows/layout-management">
-    Version floor layouts and associate machines.
+    Create and version floor layouts, position machines, and upload blueprints.
   </Card>
   <Card title="Maintenance" icon="wrench" href="/workflows/maintenance">
-    Track downtime and plan preventive maintenance.
+    Track downtime events and plan preventive maintenance.
   </Card>
 </Columns>
 
-## Integrate and extend
+## Analytics and reporting
 
-Connect Factory Flow to identity, billing, and analytics tooling.
+Monitor performance with real-time dashboards and historical analysis.
+
+<Columns cols={2}>
+  <Card title="Dashboards" icon="chart-line" href="/analytics/dashboards">
+    View machine status, cycle times, OEE, and throughput on customizable dashboards.
+  </Card>
+  <Card title="Key metrics" icon="gauge" href="/analytics/kpis">
+    Understand cycle time, downtime, OEE, and other critical manufacturing KPIs.
+  </Card>
+  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
+    Stream production data from machines via the Factory Flow API.
+  </Card>
+  <Card title="Exports" icon="file-export" href="/analytics/exports">
+    Export analytics data to Excel or PDF for offline analysis and reporting.
+  </Card>
+</Columns>
+
+## Integrations
+
+Connect Factory Flow with your existing systems and tools.
 
 <Columns cols={2}>
   <Card title="Integrations overview" icon="plug" href="/integrations/overview">
-    See supported systems and data flows.
+    See all supported integrations and data flow patterns.
   </Card>
-  <Card title="SSO" icon="shield-keyhole" href="/integrations/sso">
-    Enable Google, Microsoft Entra ID, and GitHub sign-in.
+  <Card title="Single sign-on" icon="shield-keyhole" href="/integrations/sso">
+    Enable Google, Microsoft Entra ID, and GitHub authentication.
   </Card>
-  <Card title="ERP connections" icon="diagram-project" href="/integrations/erp">
-    Sync orders, inventory, and master data.
-  </Card>
-  <Card title="Barcode scanners" icon="barcode" href="/integrations/barcode-scanners">
-    Speed up work order and inventory actions.
+  <Card title="Webhooks" icon="webhook" href="/integrations/webhooks">
+    Receive real-time notifications when events occur in Factory Flow.
   </Card>
   <Card title="API reference" icon="terminal" href="/api/introduction">
-    Build custom automation with the Factory Flow API.
+    Build custom integrations with the Factory Flow REST API.
+  </Card>
+</Columns>
+
+## Administration
+
+Manage users, billing, and organization settings.
+
+<Columns cols={2}>
+  <Card title="Users and roles" icon="user-shield" href="/administration/users-roles">
+    Invite team members and assign admin, editor, or viewer roles.
+  </Card>
+  <Card title="Billing" icon="credit-card" href="/administration/billing">
+    Manage subscriptions, payment methods, and invoices through Stripe.
+  </Card>
+  <Card title="Settings" icon="sliders" href="/administration/settings">
+    Configure organization preferences, appearance, and defaults.
+  </Card>
+  <Card title="Authentication" icon="key" href="/administration/authentication">
+    Set up passwordless login, OAuth providers, and security settings.
   </Card>
 </Columns>

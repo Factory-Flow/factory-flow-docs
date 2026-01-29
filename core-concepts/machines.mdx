@@ -1,16 +1,246 @@
 ---
 title: "Machines"
-description: "Track assets, shifts, and production signals."
+description: "Add machines, configure data sources, set cycle time thresholds, and monitor production status."
 ---
 
-## Machine records
+Machines are the core entities in Factory Flow that generate production data. Each machine represents a physical asset on your factory floor that you want to track, monitor, and analyze.
 
-Create machines and associate them with a line and facility.
+## Understanding machines
 
-## Shifts and staffing
+A machine in Factory Flow can represent:
 
-Assign shifts to machines for accurate capacity and downtime tracking.
+- CNC machines and mills
+- Injection molding equipment
+- Assembly stations
+- Packaging lines
+- Robotic cells
+- Any production equipment that produces measurable output
 
-## Data ingestion
+Each machine has:
+- A unique identifier (UUID) for API integration
+- Type classification for categorization
+- Facility, line, and shift assignments
+- Data source configuration for ingestion
+- Analytics thresholds for performance monitoring
 
-Machines can send part counts and status events through the ingestion API.
+## Creating a machine
+
+To add a new machine:
+
+1. Navigate to **Machines** in the sidebar
+2. Click **Create Machine**
+3. Fill in the machine details:
+
+### Required fields
+
+| Field | Description |
+|-------|-------------|
+| **Name** | A unique, descriptive name (e.g., "CNC-001", "Welder Station 3") |
+| **Machine Type** | Category of machine (select from list or enter custom) |
+
+### Optional fields
+
+| Field | Description |
+|-------|-------------|
+| **Facility** | Physical location where the machine is installed |
+| **Production Line** | Line this machine belongs to |
+| **Shift** | Work schedule assigned to this machine |
+| **Description** | Notes about the machine's purpose or specifications |
+
+4. Click **Create**
+
+Your machine is now ready for configuration.
+
+## Machine settings
+
+After creating a machine, configure additional settings through the machine detail page.
+
+### General settings
+
+Basic machine information:
+
+- **Name** - Update the display name
+- **Machine Type** - Change the classification
+- **Facility** - Reassign to a different location
+- **Line** - Move to a different production line
+- **Description** - Add or update notes
+
+### Data source configuration
+
+Configure how the machine receives production data:
+
+1. Go to the **Data Source** tab
+2. Select **Factory Flow API** as the data source
+3. Note the displayed information:
+   - **Machine UUID** - Unique identifier for API calls
+   - **Ingest URL** - The endpoint for sending data
+
+Example ingest URL:
+```
+https://app.factoryflow.com/api/machines/550e8400-e29b-41d4-a716-446655440000/parts
+```
+
+<Tip>
+  Copy the Machine UUID and Ingest URL to configure your PLC, edge gateway, or integration service.
+</Tip>
+
+### Analytics configuration
+
+Configure cycle time thresholds for performance visualization:
+
+1. Go to the **Analytics** tab
+2. Set the **Expected Cycle Time** (target time per part)
+3. Configure **Threshold Segments**:
+
+| Segment | Meaning | Typical Range |
+|---------|---------|---------------|
+| Green | On target | 0-100% of expected |
+| Yellow | Warning | 100-120% of expected |
+| Red | Critical | >120% of expected |
+
+The threshold editor provides a visual timeline where you can drag markers to set exact values.
+
+## Machine status
+
+Factory Flow tracks machine connection status based on data ingestion:
+
+### Status indicators
+
+| Status | Description |
+|--------|-------------|
+| **Connected** | Data received recently (within expected interval) |
+| **Disconnected** | No data received for longer than expected |
+| **No Data Source** | Machine not configured for data ingestion |
+
+### Last data received
+
+The machine detail page shows:
+- Timestamp of the last received data point
+- Time elapsed since last update
+- Connection status indicator
+
+## Viewing machines
+
+### Machines list
+
+The Machines page displays all machines in your organization:
+
+- Machine name and type
+- Assigned facility
+- Connection status
+- Last data received
+
+### Filtering and sorting
+
+Filter machines by:
+- Facility
+- Production line
+- Connection status (connected/disconnected)
+- Machine type
+
+Sort by:
+- Name
+- Last updated
+- Creation date
+
+### Machine detail page
+
+Click on a machine to view:
+- Full configuration details
+- Live data feed (if connected)
+- Analytics history
+- Data source configuration
+
+## Live data monitoring
+
+View real-time production data:
+
+1. Navigate to a machine's detail page
+2. Click the **Live Data** tab
+3. See:
+   - Current connection status
+   - Most recent part counts
+   - Timestamp of each data point
+   - Refresh controls
+
+<Note>
+  Live data requires an active data source configuration and incoming data from your machine or integration.
+</Note>
+
+## Editing machines
+
+To update machine settings:
+
+1. Navigate to the machine's detail page
+2. Click **Edit** or modify fields directly
+3. Update the desired settings
+4. Click **Save**
+
+All changes take effect immediately.
+
+## Deleting machines
+
+To remove a machine:
+
+1. Navigate to the machine's detail page
+2. Click **Delete**
+3. Confirm the deletion
+
+<Warning>
+  Deleting a machine permanently removes all associated analytics data and history. This action cannot be undone.
+</Warning>
+
+## Sending data to machines
+
+Factory Flow ingests machine data through the API. For payload formats, auth, and rate limits, see [Data ingestion](/analytics/ingestion) and [Ingestion API](/api/ingestion).
+
+## Best practices
+
+### Naming conventions
+
+Use consistent, descriptive names:
+
+| Good | Why |
+|------|-----|
+| "CNC-A01-Mill" | Type, area, function |
+| "Line1-Station3" | Line and position |
+| "Welder-001" | Type and number |
+
+### Machine types
+
+Create standard types for your equipment:
+- Use existing types when they match
+- Create custom types for specialized equipment
+- Be consistent across similar machines
+
+### Data source setup
+
+- Configure data sources immediately after creating machines
+- Test the connection with sample data
+- Monitor the "Last Data Received" field to verify connectivity
+
+### Analytics thresholds
+
+- Set realistic expected cycle times based on actual performance
+- Start with wider thresholds and narrow them as you collect data
+- Review and adjust thresholds quarterly
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
+    Set up machine data streaming.
+  </Card>
+
+  <Card title="API tokens" icon="key" href="/api/tokens">
+    Create tokens for machine authentication.
+  </Card>
+
+  <Card title="Production lines" icon="conveyor-belt" href="/core-concepts/production-lines">
+    Group machines into production lines.
+  </Card>
+
+  <Card title="Analytics" icon="chart-line" href="/analytics/dashboards">
+    View machine performance metrics.
+  </Card>
+</CardGroup>

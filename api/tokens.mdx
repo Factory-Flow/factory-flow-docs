@@ -1,12 +1,266 @@
 ---
 title: "API tokens"
-description: "Scoped tokens for secure ingestion and automation."
+description: "Create, manage, and secure API tokens for Factory Flow integrations."
 ---
 
-## Token scopes
+API tokens are credentials that allow external systems to authenticate with the Factory Flow API. This guide covers how to create, manage, and secure your API tokens.
 
-Tokens are scoped to an organization and specific capabilities.
+## Understanding API tokens
 
-## Rotation
+API tokens are:
 
-Rotate tokens regularly and revoke unused keys.
+- **Organization-scoped** - Each token belongs to one organization
+- **Permission-controlled** - Tokens have specific access levels
+- **Secure** - Shown only once at creation
+- **Revocable** - Can be disabled at any time
+
+Use tokens to:
+- Send production data from machines
+- Build custom integrations
+- Automate workflows
+- Connect third-party systems
+
+## Creating a token
+
+### Prerequisites
+
+- Admin role in the organization
+- Active organization subscription
+
+### Steps
+
+1. Navigate to **Organization Settings → API Tokens**
+2. Click **Create Token**
+3. Configure the token:
+
+| Field | Description |
+|-------|-------------|
+| **Name** | Descriptive identifier (e.g., "Line 1 Ingestion", "Dashboard Integration") |
+| **Permissions** | Access level for the token |
+
+4. Click **Create**
+5. **Copy the token immediately** - it won't be shown again
+
+<Warning>
+  The token is only displayed once. Copy and store it securely before closing the dialog.
+</Warning>
+
+## Permission levels
+
+Tokens have three permission levels:
+
+| Permission | Description | Use case |
+|------------|-------------|----------|
+| **None** | Token exists but cannot access anything | Placeholder, disabled integrations |
+| **Read** | Read-only access to organization data | Dashboards, monitoring, reporting |
+| **Read/Write** | Full access including data ingestion | Machine data ingestion, automation |
+
+### Choosing permissions
+
+- **Machine ingestion** - Requires Read/Write
+- **Monitoring dashboards** - Read is sufficient
+- **Full automation** - Requires Read/Write
+- **Temporarily disable** - Set to None
+
+## Managing tokens
+
+### Viewing tokens
+
+The API Tokens page displays:
+
+| Column | Description |
+|--------|-------------|
+| **Name** | Token identifier |
+| **Suffix** | Last few characters for identification |
+| **Permissions** | Current access level |
+| **Last Used** | When the token was last used |
+| **Created** | When the token was created |
+| **Status** | Active or Revoked |
+
+### Editing a token
+
+To update a token:
+
+1. Find the token in the list
+2. Click to edit
+3. Update the name or permissions
+4. Click **Save**
+
+<Note>
+  Changing permissions takes effect immediately. Active integrations may be affected.
+</Note>
+
+### Revoking a token
+
+To permanently disable a token:
+
+1. Find the token in the list
+2. Click **Revoke**
+3. Confirm the revocation
+
+<Warning>
+  Revocation is immediate and permanent. Any systems using this token will stop working.
+</Warning>
+
+### Token history
+
+Revoked tokens remain in the list for audit purposes:
+- Shows when revoked
+- Indicates the token is no longer active
+- Cannot be reactivated
+
+## Token identification
+
+Since tokens are only shown once, use these methods to identify them:
+
+### Token suffix
+
+The last few characters are displayed:
+- Example: `...xyz789`
+- Matches what you see when creating the token
+
+### Token name
+
+Use descriptive names:
+- Include the system or purpose
+- Add location or machine identifiers
+- Make it searchable
+
+### Last used timestamp
+
+Track which tokens are active:
+- Recently used tokens show recent timestamps
+- Unused tokens may be candidates for revocation
+
+## Security best practices
+
+### Token storage
+
+| Secure | Insecure |
+|--------|----------|
+| Secrets manager (AWS, GCP, Azure) | Source code |
+| Environment variables | Git repositories |
+| Encrypted config files | Plain text files |
+| Secure vaults (HashiCorp Vault) | Email or chat messages |
+
+### Access control
+
+- Limit who can create/view tokens (Admin only)
+- Document which systems use which tokens
+- Maintain an inventory of active integrations
+
+### Token rotation
+
+Rotate tokens periodically:
+
+1. Create a new token with the same permissions
+2. Update the integration with the new token
+3. Verify the integration works
+4. Revoke the old token
+
+### Naming conventions
+
+Use consistent, descriptive names:
+
+| Good | Why |
+|------|-----|
+| "Line1-CNC-Ingestion" | Specific machine/purpose |
+| "Dashboard-ReadOnly" | Clear purpose and permission |
+| "AWS-Lambda-Integration" | System identifier |
+
+| Avoid | Why |
+|-------|-----|
+| "test" | Not descriptive |
+| "API Key 1" | Unclear purpose |
+| "John's token" | Person-specific |
+
+## Troubleshooting
+
+### Token not working
+
+1. Verify you copied the complete token
+2. Check the token hasn't been revoked
+3. Confirm the token has required permissions
+4. Ensure you're using the correct organization
+
+### Lost token
+
+If you lose a token:
+
+1. Revoke the lost token (prevents unauthorized use)
+2. Create a new token
+3. Update all affected integrations
+
+### Identifying which token is failing
+
+1. Check the "Last Used" timestamp
+2. Match the token suffix
+3. Review which integrations use each token
+
+## Common use cases
+
+### Machine data ingestion
+
+Create a Read/Write token for each production line or system:
+
+```
+Name: "Building-A-Line-1-Ingestion"
+Permissions: Read/Write
+```
+
+### Read-only dashboard
+
+Create a Read token for monitoring systems:
+
+```
+Name: "Monitoring-Dashboard-Readonly"
+Permissions: Read
+```
+
+### CI/CD automation
+
+Create tokens for automated deployments:
+
+```
+Name: "GitHub-Actions-Deploy"
+Permissions: Read/Write
+```
+
+## Token quotas
+
+Depending on your subscription plan:
+- Token limits may apply
+- Contact support if you need more tokens
+- Consider consolidating integrations where appropriate
+
+## Audit and compliance
+
+### What's logged
+
+- Token creation (who, when)
+- Token usage (endpoint, timestamp)
+- Token revocation (who, when)
+
+### Accessing audit logs
+
+Contact support or check **Organization Settings → Audit Log** if available on your plan.
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="API authentication" icon="shield-keyhole" href="/api/authentication">
+    Use tokens in API requests.
+  </Card>
+
+  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
+    Send machine data with tokens.
+  </Card>
+
+  <Card title="Organizations" icon="users" href="/core-concepts/organizations">
+    Understand token scoping.
+  </Card>
+
+  <Card title="Users and roles" icon="user-shield" href="/administration/users-roles">
+    Who can manage tokens.
+  </Card>
+</CardGroup>

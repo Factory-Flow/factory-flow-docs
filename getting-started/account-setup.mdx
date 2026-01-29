@@ -1,19 +1,218 @@
 ---
 title: "Account setup"
-description: "Invite teams and organize access."
+description: "Create your account, configure authentication, and set up your organization."
 ---
 
-## Create your workspace
+This guide walks you through the complete account setup process for Factory Flow, from creating your account to configuring your organization.
 
-Set your organization name, time zone, and default units.
+## Creating your account
 
-## Invite your team
+### Sign up options
 
-- Add users by email.
-- Assign viewer, editor, or admin roles.
-- Group users by facility or department.
+Factory Flow supports multiple authentication methods:
 
-## Set basic preferences
+<Tabs>
+  <Tab title="Email (Passwordless)">
+    1. Navigate to [app.factoryflow.com](https://app.factoryflow.com)
+    2. Enter your email address
+    3. Click **Continue**
+    4. Check your inbox for a magic link
+    5. Click the link to sign in (valid for 15 minutes)
 
-- Define default shifts.
-- Configure work order numbering.
+    <Tip>
+      Passwordless login is secure and eliminates the need to remember passwords. A new link is sent each time you sign in.
+    </Tip>
+  </Tab>
+
+  <Tab title="Google">
+    1. Click **Continue with Google**
+    2. Select your Google account
+    3. Authorize Factory Flow to access your profile information
+    4. You'll be signed in automatically
+
+    Works with personal Gmail accounts and Google Workspace.
+  </Tab>
+
+  <Tab title="Microsoft">
+    1. Click **Continue with Microsoft**
+    2. Enter your Microsoft credentials
+    3. Authorize the application
+    4. You'll be redirected back to Factory Flow
+
+    Supports Microsoft Entra ID (formerly Azure AD) for enterprise SSO.
+  </Tab>
+
+  <Tab title="GitHub">
+    1. Click **Continue with GitHub**
+    2. Authorize Factory Flow
+    3. You'll be signed in with your GitHub identity
+
+    Useful for development teams and technical users.
+  </Tab>
+</Tabs>
+
+### Email verification
+
+If you sign up with email, you must verify your address before accessing all features:
+
+1. Check your inbox for a verification email
+2. Click **Verify Email Address**
+3. You'll be redirected to Factory Flow with a confirmation
+
+<Warning>
+  If you don't see the verification email, check your spam folder. You can request a new verification email from the login screen.
+</Warning>
+
+## Organization onboarding
+
+After signing in for the first time, you'll complete the organization onboarding process.
+
+### Option 1: Create a new organization
+
+If you're starting fresh:
+
+1. Click **Create Organization**
+2. Enter your organization name
+3. Choose a subscription plan
+4. Complete payment setup (if applicable)
+5. You'll be taken to your new organization dashboard
+
+### Option 2: Join an existing organization
+
+If you've been invited to an organization:
+
+1. Accept the invitation from your email, or
+2. Search for the organization by name
+3. Request to join
+4. Wait for an admin to approve your request
+
+<Note>
+  Pending invitations are shown on the onboarding screen. Click **Accept** to join immediately if you've been invited.
+</Note>
+
+## Inviting team members
+
+Once your organization is set up, invite your team.
+
+### Sending invitations
+
+1. Go to **Organization Settings** (click your organization name in the sidebar)
+2. Click **Members**
+3. Click **Invite Member**
+4. Enter the email address
+5. Select a role:
+   - **Viewer** - Read-only access to dashboards and reports
+   - **Editor** - Create and modify machines, lines, layouts, and shifts
+   - **Admin** - Full access including billing, users, and API tokens
+6. Click **Send Invitation**
+
+### Managing invitations
+
+Pending invitations appear in the Members list with a "Pending" status. You can:
+
+- **Resend** - Send another invitation email
+- **Revoke** - Cancel the invitation before it's accepted
+
+### Handling join requests
+
+If someone searches for your organization and requests to join:
+
+1. You'll receive a notification
+2. Go to **Organization Settings → Members**
+3. Review the request
+4. Click **Approve** or **Deny**
+
+## Configuring organization settings
+
+### General settings
+
+Navigate to **Organization Settings** to configure:
+
+- **Organization name** - Update your organization's display name
+- **Default settings** - Configure timezone and default preferences
+
+### Security settings
+
+Depending on your plan, you can configure:
+
+- **Allowed authentication methods** - Restrict sign-in to specific providers
+- **Session duration** - Control how long users stay logged in
+- **IP restrictions** - Limit access to specific networks (enterprise plans)
+
+## Managing your profile
+
+### Accessing profile settings
+
+1. Click your avatar in the top-right corner
+2. Select **Settings**
+
+### Updating your profile
+
+- **Name** - Your display name shown across Factory Flow
+- **Email** - Contact support to change your email address
+- **Appearance** - Choose light or dark theme
+
+### Changing your password
+
+If you use email/password authentication:
+
+1. Go to **Settings**
+2. Click **Update Password**
+3. Enter your current password
+4. Enter and confirm your new password
+5. Click **Save**
+
+## Switching organizations
+
+If you belong to multiple organizations:
+
+1. Click your organization name in the sidebar
+2. Select **Switch Organization**
+3. Choose the organization to switch to
+
+Or use the organization switcher in the header navigation.
+
+## Leaving an organization
+
+If you need to leave an organization:
+
+1. Go to **Organization Settings → Members**
+2. Find your name in the member list
+3. Click **Leave Organization**
+4. Confirm your decision
+
+<Warning>
+  If you're the last member of an organization, leaving will delete the organization and all its data. This action cannot be undone.
+</Warning>
+
+## Deleting your account
+
+To delete your Factory Flow account:
+
+1. Leave all organizations (or transfer ownership if you're the last admin)
+2. Contact support at [support@factoryflow.com](mailto:support@factoryflow.com)
+3. Request account deletion
+
+<Note>
+  Account deletion is permanent and removes all your personal data. Organization data is only affected if you're the last member.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Create your first facility" icon="warehouse" href="/core-concepts/facilities">
+    Set up your physical locations.
+  </Card>
+
+  <Card title="Add machines" icon="gears" href="/core-concepts/machines">
+    Connect your factory floor.
+  </Card>
+
+  <Card title="Configure SSO" icon="shield-keyhole" href="/integrations/sso">
+    Set up enterprise authentication.
+  </Card>
+
+  <Card title="Manage billing" icon="credit-card" href="/administration/billing">
+    Review subscription and payment settings.
+  </Card>
+</CardGroup>

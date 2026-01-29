@@ -1,23 +1,158 @@
 ---
-title: "Requirements"
-description: "Permissions, devices, and data to prepare."
+title: "System requirements"
+description: "Browser support, network requirements, and prerequisites for using Factory Flow."
 ---
 
-## Accounts and roles
+Before getting started with Factory Flow, review the following requirements to ensure a smooth setup.
 
-- Admin access for initial configuration.
-- Editor access for production scheduling and execution.
-- Viewer access for read-only dashboards.
+## Browser support
 
-## Devices
+Factory Flow is a modern web application that works best in up-to-date browsers.
 
-- Tablets or workstations on the floor.
-- Barcode scanners if you plan to scan work orders or inventory.
- - Machine gateways or devices that can post to the ingestion API.
+| Browser | Minimum Version | Recommended |
+|---------|----------------|-------------|
+| Chrome | 90+ | Latest |
+| Firefox | 88+ | Latest |
+| Safari | 14+ | Latest |
+| Edge | 90+ | Latest |
 
-## Data to gather
+<Warning>
+  Internet Explorer is not supported. For the best experience, use the latest version of Chrome, Firefox, Safari, or Edge.
+</Warning>
 
-- Facility and line names.
-- Machine list with identifiers.
-- SKU list and basic routing.
-- Initial inventory on hand.
+## Network requirements
+
+### For web application access
+
+- HTTPS access to `app.factoryflow.com` (port 443)
+- Stable internet connection with low latency for real-time dashboard updates
+- WebSocket support for live data streaming (optional but recommended)
+
+### For machine data ingestion
+
+If you're sending data from machines on your factory floor:
+
+- Outbound HTTPS access to the Factory Flow API endpoint
+- Ability to make POST requests with JSON payloads
+- Valid API token with write permissions
+
+<Tip>
+  If your factory network uses a firewall or proxy, ensure `app.factoryflow.com` and `api.factoryflow.com` are allowlisted.
+</Tip>
+
+## User requirements
+
+### Account setup
+
+- Valid email address for account creation and notifications
+- Optional: Google Workspace, Microsoft Entra ID, or GitHub account for SSO
+
+### Roles and access
+
+Factory Flow uses role-based access control. You'll need appropriate permissions for different actions:
+
+| Role | Permissions |
+|------|-------------|
+| **Viewer** | View dashboards, analytics, and reports. Read-only access. |
+| **Editor** | Create and modify machines, lines, shifts, facilities, and layouts. Export data. |
+| **Admin** | All Editor permissions plus: manage members, API tokens, billing, and organization settings. |
+
+## Machine connectivity
+
+### Supported data sources
+
+Factory Flow accepts data through its REST API. You can connect:
+
+- **PLCs and controllers** - Direct HTTP integration or through an edge gateway
+- **Edge gateways** - Industrial IoT platforms (Ignition, Node-RED, KEPServerEX)
+- **Custom integrations** - Any system that can make HTTP requests
+
+### Data format
+
+The ingestion API accepts JSON payloads with:
+
+```json
+{
+  "part_count_total": 100,
+  "part_count_good": 98,
+  "part_count_bad": 2
+}
+```
+
+<Note>
+  Timestamps are recorded automatically when data is received. For historical data imports, contact support.
+</Note>
+
+### Rate limits
+
+- Machine ingestion endpoints are rate-limited per machine
+- Recommended: Send updates every 1-60 seconds depending on cycle time
+- High-frequency data (sub-second) may be throttled
+
+## Subscription requirements
+
+A valid subscription is required to access core features:
+
+- **Trial** - Full access for evaluation period
+- **Active subscription** - Required for production use
+- **Grace period** - Limited access after cancellation
+
+Visit **Organization Settings → Billing** to view your subscription status and manage payment.
+
+## Data to gather before setup
+
+To streamline your implementation, prepare the following information:
+
+### Facility information
+- Names and locations of your facilities/plants
+- Organizational structure (departments, zones)
+
+### Machine inventory
+- List of machines to connect
+- Machine types and identifiers
+- Current data sources (PLCs, SCADA systems)
+
+### Production configuration
+- Production line configurations
+- Shift schedules and work calendars
+- Expected cycle times per machine
+
+### Team setup
+- List of users who need access
+- Role assignments (Admin, Editor, Viewer)
+- Email addresses for invitations
+
+## Self-hosted deployment (optional)
+
+For organizations that prefer to run Factory Flow on their own infrastructure:
+
+### Server requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| CPU | 2 cores | 4+ cores |
+| RAM | 4 GB | 8+ GB |
+| Storage | 50 GB SSD | 100+ GB SSD |
+| Docker | 20.10+ | Latest |
+| Docker Compose | 2.0+ | Latest |
+
+### Database requirements
+
+- PostgreSQL 15+ with TimescaleDB extension
+- Redis (optional, for caching and rate limiting)
+
+### Network requirements
+
+- Port 80/443 for web traffic
+- Port 5432 for PostgreSQL (internal only)
+- Port 6379 for Redis (internal only)
+
+See the [self-hosted deployment guide](/administration/settings) for detailed setup instructions.
+
+## Getting help
+
+If you have questions about requirements or compatibility:
+
+- Email: [support@factoryflow.com](mailto:support@factoryflow.com)
+- Documentation: Browse the guides in this documentation
+- FAQ: Check the [frequently asked questions](/help/faq)

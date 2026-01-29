@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Factory Flow",
   "colors": {
-    "primary": "#1F6D7B",
-    "light": "#6EE7D8",
-    "dark": "#134754"
+    "primary": "#0565ff",
+    "light": "#0565ff",
+    "dark": "#0565ff"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -18,66 +18,146 @@
             "pages": [
               "index",
               "getting-started/quickstart",
-              "getting-started/requirements",
-              "getting-started/account-setup",
-              "getting-started/terminology"
+              {
+                "group": "Setup & access",
+                "pages": [
+                  "getting-started/requirements",
+                  "getting-started/account-setup",
+                  "getting-started/terminology"
+                ]
+              },
+              {
+                "group": "First production run",
+                "pages": [
+                  "getting-started/factory-setup",
+                  "getting-started/define-products",
+                  "getting-started/release-work-order",
+                  "getting-started/connect-data",
+                  "getting-started/verify-dashboards"
+                ]
+              }
             ]
           },
           {
             "group": "Core concepts",
             "pages": [
-              "core-concepts/organizations",
-              "core-concepts/facilities",
-              "core-concepts/production-lines",
-              "core-concepts/machines",
-              "core-concepts/layouts",
-              "core-concepts/work-orders",
-              "core-concepts/boms",
-              "core-concepts/inventory",
-              "core-concepts/scheduling"
+              {
+                "group": "Factory model",
+                "pages": [
+                  "core-concepts/organizations",
+                  "core-concepts/facilities",
+                  "core-concepts/production-lines",
+                  "core-concepts/machines",
+                  "core-concepts/layouts"
+                ]
+              },
+              {
+                "group": "Operations model",
+                "pages": [
+                  "core-concepts/work-orders",
+                  "core-concepts/boms",
+                  "core-concepts/inventory",
+                  "core-concepts/scheduling"
+                ]
+              }
             ]
           },
           {
             "group": "Workflows",
             "pages": [
-              "workflows/plan-production",
-              "workflows/execute-work-orders",
-              "workflows/quality",
-              "workflows/maintenance",
-              "workflows/shipments",
-              "workflows/layout-management"
+              {
+                "group": "Plan & execute",
+                "pages": [
+                  "workflows/plan-production",
+                  "workflows/execute-work-orders"
+                ]
+              },
+              {
+                "group": "Quality & maintenance",
+                "pages": [
+                  "workflows/quality",
+                  "workflows/maintenance"
+                ]
+              },
+              {
+                "group": "Logistics & layout",
+                "pages": [
+                  "workflows/shipments",
+                  "workflows/layout-management"
+                ]
+              }
             ]
           },
           {
             "group": "Integrations",
             "pages": [
               "integrations/overview",
-              "integrations/erp",
-              "integrations/barcode-scanners",
-              "integrations/webhooks",
-              "integrations/sso"
+              {
+                "group": "Systems",
+                "pages": [
+                  "integrations/erp",
+                  "integrations/barcode-scanners"
+                ]
+              },
+              {
+                "group": "Events",
+                "pages": [
+                  "integrations/webhooks"
+                ]
+              },
+              {
+                "group": "Identity",
+                "pages": [
+                  "integrations/sso"
+                ]
+              }
             ]
           },
           {
             "group": "Administration",
             "pages": [
-              "administration/users-roles",
-              "administration/permissions",
-              "administration/settings",
-              "administration/audit-log",
-              "administration/authentication",
-              "administration/billing",
-              "administration/retention"
+              {
+                "group": "Access & security",
+                "pages": [
+                  "administration/users-roles",
+                  "administration/permissions",
+                  "administration/authentication"
+                ]
+              },
+              {
+                "group": "Organization",
+                "pages": [
+                  "administration/settings",
+                  "administration/billing"
+                ]
+              },
+              {
+                "group": "Governance",
+                "pages": [
+                  "administration/audit-log",
+                  "administration/retention"
+                ]
+              }
             ]
           },
           {
             "group": "Analytics",
             "pages": [
-              "analytics/dashboards",
-              "analytics/kpis",
-              "analytics/exports",
-              "analytics/ingestion",
-              "analytics/storage"
+              {
+                "group": "Reporting",
+                "pages": [
+                  "analytics/dashboards",
+                  "analytics/kpis",
+                  "analytics/exports"
+                ]
+              },
+              {
+                "group": "Data pipeline",
+                "pages": [
+                  "analytics/ingestion",
+                  "analytics/storage"
+                ]
+              }
             ]
           },
           {
@@ -94,24 +174,18 @@
         "tab": "API",
         "groups": [
           {
-            "group": "API basics",
+            "group": "Overview",
             "pages": [
-              "api/introduction",
-              "api/authentication",
-              "api/errors",
-              "api/pagination"
+              "api-reference/introduction"
             ]
           },
           {
-            "group": "Resources",
+            "group": "Endpoints",
             "pages": [
-              "api/work-orders",
-              "api/inventory",
-              "api/production",
-              "api/quality",
-              "api/webhooks",
-              "api/ingestion",
-              "api/tokens"
+              "api-reference/endpoint/get",
+              "api-reference/endpoint/delete",
+              "api-reference/endpoint/create",
+              "api-reference/endpoint/webhook"
             ]
           }
         ]
@@ -121,7 +195,7 @@
       "anchors": [
         {
           "anchor": "Status",
-          "href": "https://status.factoryflow.com",
+          "href": "https://status.factoryflow.io",
           "icon": "signal-stream"
         },
         {
@@ -132,6 +206,18 @@
       ]
     }
   },
+  "api": {
+    "baseUrl": "https://app.factoryflow.com/api",
+    "auth": {
+      "method": "bearer",
+      "name": "Authorization",
+      "inputPrefix": "Bearer "
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
+  "openapi": "/openapi.json",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -151,14 +237,14 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   }
 }

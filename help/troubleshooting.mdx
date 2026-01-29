@@ -1,10 +1,341 @@
 ---
 title: "Troubleshooting"
-description: "Resolve common setup and usage issues."
+description: "Resolve common setup and usage issues in Factory Flow."
 ---
 
-## Common checks
+This guide helps you diagnose and resolve common issues with Factory Flow. Find your issue below and follow the steps to resolve it.
 
-- Verify user permissions.
-- Confirm line assignments.
-- Check inventory availability.
+## Data ingestion issues
+
+### Machine shows as disconnected
+
+**Symptoms:**
+- Machine status shows "Disconnected"
+- No data appearing in dashboards
+- "Last Data Received" timestamp is old
+
+**Solutions:**
+
+1. **Check API token**
+   - Verify the token hasn't been revoked
+   - Confirm it has "Read/Write" permissions
+   - Try creating a new token
+
+2. **Verify network connectivity**
+   - Test HTTPS access to `app.factoryflow.com`
+   - Check firewall rules allow outbound connections
+   - Verify proxy settings if applicable
+
+3. **Confirm machine UUID**
+   - Double-check the UUID in your integration
+   - Copy it fresh from the machine's Data Source tab
+
+4. **Test manually**
+   ```bash
+   curl -X POST https://app.factoryflow.com/api/machines/{uuid}/parts \
+     -H "Authorization: Bearer YOUR_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"part_count_total": 1}'
+   ```
+
+5. **Check integration logs**
+   - Look for error responses from the API
+   - Common errors: 401 (auth), 404 (wrong UUID), 422 (invalid data)
+
+### Data not appearing in analytics
+
+**Symptoms:**
+- Data is being sent successfully (200 responses)
+- Dashboards show no data
+- Charts are empty
+
+**Solutions:**
+
+1. **Check time range**
+   - Ensure the analytics time filter includes when data was sent
+   - Try "Last 1 hour" or "Last 24 hours"
+
+2. **Verify machine selection**
+   - Confirm you're viewing the correct machine
+   - Check you're in the right organization
+
+3. **Wait for processing**
+   - New data may take a few seconds to appear
+   - Click the refresh button or enable auto-refresh
+
+4. **Check data format**
+   - Ensure values are positive integers
+   - Verify `part_count_total = part_count_good + part_count_bad` if all fields provided
+
+### Rate limiting (429 errors)
+
+**Symptoms:**
+- API returns 429 status code
+- "Too many requests" message
+
+**Solutions:**
+
+1. **Reduce request frequency**
+   - Don't send more often than every second
+   - Recommended: 1-60 second intervals
+
+2. **Implement backoff**
+   ```python
+   if response.status_code == 429:
+       wait = int(response.headers.get('Retry-After', 60))
+       time.sleep(wait)
+   ```
+
+3. **Check for duplicate requests**
+   - Ensure only one process sends data per machine
+   - Review integration for loops or retries
+
+## Authentication issues
+
+### Can't sign in
+
+**Symptoms:**
+- Login fails
+- Error messages on sign-in page
+- Redirected back to login
+
+**Solutions:**
+
+1. **Check email address**
+   - Verify you're using the correct email
+   - Try the exact email used to create your account
+
+2. **Try different method**
+   - If using SSO, try email login or vice versa
+   - Clear browser cache and cookies
+
+3. **Check identity provider**
+   - For SSO, verify your account is active
+   - Check Google/Microsoft/GitHub status
+
+4. **Use incognito mode**
+   - Open a private browser window
+   - Try signing in fresh
+
+5. **Request password reset**
+   - Click "Forgot password" on login page
+   - Check spam folder for reset email
+
+### SSO not working
+
+**Symptoms:**
+- SSO button doesn't respond
+- Redirect fails
+- "Email already in use" error
+
+**Solutions:**
+
+1. **"Email already in use"**
+   - You have an existing account with a different provider
+   - Sign in with your original method
+
+2. **Redirect fails**
+   - Clear browser cookies
+   - Disable browser extensions
+   - Try a different browser
+
+3. **Admin consent required (Microsoft)**
+   - Contact your IT admin for app approval
+   - Check Entra ID application permissions
+
+### API token not working
+
+**Symptoms:**
+- 401 Unauthorized errors
+- "Unauthenticated" message
+
+**Solutions:**
+
+1. **Verify token value**
+   - Ensure you copied the complete token
+   - Check for extra whitespace
+
+2. **Check token status**
+   - View token in Organization Settings → API Tokens
+   - Verify it's not revoked
+
+3. **Confirm permissions**
+   - Token needs "Read/Write" for ingestion
+   - "Read" is sufficient for queries
+
+4. **Create new token**
+   - If unsure, create a fresh token
+   - Update your integration
+
+## Dashboard and UI issues
+
+### Charts not loading
+
+**Symptoms:**
+- Spinning loader that never completes
+- Blank chart areas
+- Error messages
+
+**Solutions:**
+
+1. **Refresh the page**
+   - Hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+   - Clear browser cache
+
+2. **Check browser console**
+   - Open Developer Tools (F12)
+   - Look for JavaScript errors
+
+3. **Try different browser**
+   - Use Chrome, Firefox, Safari, or Edge
+   - Internet Explorer is not supported
+
+4. **Check network**
+   - Verify internet connection
+   - Disable VPN if applicable
+
+### Layout not displaying correctly
+
+**Symptoms:**
+- Blueprint image missing
+- Machines not positioned correctly
+- Layout loads slowly
+
+**Solutions:**
+
+1. **Blueprint issues**
+   - Re-upload the blueprint image
+   - Use JPG or PNG format
+   - Reduce file size if very large
+
+2. **Machine positions**
+   - Open layout in edit mode
+   - Verify machines are added to the layout
+   - Check machine data sources are configured
+
+3. **Performance**
+   - Reduce blueprint resolution
+   - Limit number of machines per layout
+   - Try a different browser
+
+## Organization and team issues
+
+### Can't access organization
+
+**Symptoms:**
+- "Access denied" or "Not found" errors
+- Organization doesn't appear in switcher
+
+**Solutions:**
+
+1. **Check membership**
+   - Confirm you've accepted the invitation
+   - Ask an admin if you're still a member
+
+2. **Check subscription**
+   - Organization may have an expired subscription
+   - Contact an admin to resolve billing
+
+3. **Wrong account**
+   - Verify you're signed in with the correct email
+   - Check organization switcher for correct org
+
+### Can't invite members
+
+**Symptoms:**
+- Invite button not visible
+- Error when sending invitation
+
+**Solutions:**
+
+1. **Check your role**
+   - Only Admins can invite members
+   - Ask an Admin to invite on your behalf
+
+2. **Check subscription**
+   - Some plans have member limits
+   - Upgrade plan if needed
+
+3. **Valid email required**
+   - Ensure email address is correct
+   - Try sending to a different email
+
+## Billing issues
+
+### Payment failed
+
+**Symptoms:**
+- Email notification about failed payment
+- Limited access to features
+
+**Solutions:**
+
+1. **Update payment method**
+   - Go to Organization Settings → Billing
+   - Click "Manage Billing"
+   - Update your card
+
+2. **Check card details**
+   - Verify card isn't expired
+   - Confirm sufficient funds
+   - Check for fraud blocks
+
+3. **Contact your bank**
+   - Some banks block international transactions
+   - Pre-authorize the charge
+
+### Can't access billing
+
+**Symptoms:**
+- Billing page not visible
+- "Access denied" error
+
+**Solutions:**
+
+1. **Check your role**
+   - Only Admins can access billing
+   - Ask an Admin for assistance
+
+2. **Contact support**
+   - Email [billing@factoryflow.com](mailto:billing@factoryflow.com)
+   - Include your organization name
+
+## Getting more help
+
+### Before contacting support
+
+Gather this information:
+- Your email address and organization name
+- Browser and version
+- Steps to reproduce the issue
+- Any error messages (screenshots help)
+- When the issue started
+
+### Contact support
+
+- **Email:** [support@factoryflow.com](mailto:support@factoryflow.com)
+- **Response time:** Usually within 24 hours
+
+### Check system status
+
+Visit [status.factoryflow.io](https://status.factoryflow.io) to check if there are any known issues affecting the service.
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="FAQ" icon="circle-question" href="/help/faq">
+    Quick answers to common questions.
+  </Card>
+
+  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
+    Set up machine data streaming.
+  </Card>
+
+  <Card title="API authentication" icon="key" href="/api/authentication">
+    Resolve API token issues.
+  </Card>
+
+  <Card title="SSO" icon="shield-keyhole" href="/integrations/sso">
+    Troubleshoot sign-in problems.
+  </Card>
+</CardGroup>

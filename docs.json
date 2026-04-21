@@ -9,10 +9,24 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Status",
+          "icon": "signal-stream",
+          "href": "https://status.factoryflow.io"
+        },
+        {
+          "anchor": "Support",
+          "icon": "life-ring",
+          "href": "mailto:support@factoryflow.com"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Guides",
-        "groups": [
+        "pages": [
           {
             "group": "Getting started",
             "pages": [
@@ -58,32 +72,6 @@
                   "core-concepts/boms",
                   "core-concepts/inventory",
                   "core-concepts/scheduling"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Workflows",
-            "pages": [
-              {
-                "group": "Plan & execute",
-                "pages": [
-                  "workflows/plan-production",
-                  "workflows/execute-work-orders"
-                ]
-              },
-              {
-                "group": "Quality & maintenance",
-                "pages": [
-                  "workflows/quality",
-                  "workflows/maintenance"
-                ]
-              },
-              {
-                "group": "Logistics & layout",
-                "pages": [
-                  "workflows/shipments",
-                  "workflows/layout-management"
                 ]
               }
             ]
@@ -190,21 +178,7 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Status",
-          "href": "https://status.factoryflow.io",
-          "icon": "signal-stream"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@factoryflow.com",
-          "icon": "life-ring"
-        }
-      ]
-    }
+    ]
   },
   "api": {
     "baseUrl": "https://app.factoryflow.com/api",

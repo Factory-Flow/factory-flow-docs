@@ -1,9 +1,29 @@
 ---
-title: "Factory Flow Documentation"
-description: "Real-time manufacturing operations platform for modern factories. Connect machines, track production, and optimize performance."
+title: "Introduction"
+description: "Factory Flow is a real-time manufacturing analytics platform for modern factories. Connect machines, track production, and optimize performance in order to make data-driven decisions about your factory floor."
+mode: "default"
 ---
 
-Factory Flow is a multi-tenant manufacturing operations platform that helps you connect machines, track production data in real-time, and make data-driven decisions about your factory floor.
+## Features
+
+- **Real-Time Machine Monitoring** – Connect any machine with an incrementing part counter to instantly see live production data. Track parts produced, machine status, and performance as it happens — no manual data entry required.
+- **OEE (Overall Equipment Effectiveness)** – Measure true machine productivity with a single, industry-standard score. Drill into the three pillars — **Availability**, **Performance**, and **Quality** — to pinpoint exactly where losses occur.
+- **Cycle Time Analysis** – Track how long each part takes to produce. Visualize cycle time trends and distributions over time, set thresholds to flag abnormal cycles, and identify bottlenecks before they impact output.
+- **Automatic Downtime Detection & Categorization** – Downtime is detected automatically when a machine stops producing parts. Events are categorized and tracked so you can see exactly how long machines are idle, how often, and why.
+- **Production & Throughput Tracking** – Monitor output against expected targets in real time. View production forecasts, compare actual vs. planned throughput, and track quality vs. scrap rates across any time window.
+- **Pareto Analysis** – Identify which downtime causes have the greatest impact on your operation. Focus improvement efforts where they matter most using 80/20 breakdowns of loss events.
+- **Multi-Level Analytics** – Analyze performance at any level of your operation — across the entire organization, by facility, by production line, or down to individual machines. Drill from overview to detail in one click.
+- **Shift Scheduling** – Define when machines are expected to run. Shift data is used to correctly calculate OEE and availability, ensuring metrics reflect actual planned production time — not 24/7.
+- **Production Line & Facility Management** – Group machines into production lines and facilities. Manage your factory hierarchy and see how performance rolls up from machine to line to site.
+- **Factory Floor Layouts** – Build a visual map of your factory floor. Place machines on a layout blueprint so your team can quickly navigate to the machine they care about.
+- **Flexible Data Ingestion** – Send part count data via a simple REST API or through a **Factory Flow Gateway** — an edge device that collects data locally and syncs it, even in low-connectivity environments.
+- **Analytics Export** – Export any analytics dataset to CSV or Excel for reporting, further analysis, or sharing with stakeholders.
+- **Team & Access Management** – Invite team members to your organization with role-based access — **Viewer**, **Editor**, or **Admin** — so everyone sees what they need and nothing more.
+- **Self-Hosted Deployment** – Run Factory Flow entirely on your own infrastructure. Includes license management, SMTP configuration, LDAP/Active Directory integration, and in-app system updates.
+
+## How does it work?
+
+Factory floor → NodeRED or Factory Flow Gateway → Factory Flow Application
 
 ## Quick start
 
@@ -13,117 +33,8 @@ Get up and running with Factory Flow in minutes.
   <Card title="Quickstart guide" icon="bolt" href="/getting-started/quickstart">
     Create your organization, add machines, and start streaming production data in under 10 minutes.
   </Card>
-  <Card title="System requirements" icon="list-check" href="/getting-started/requirements">
-    Review browser support, network requirements, and prerequisites for machine connectivity.
-  </Card>
+
   <Card title="Account setup" icon="user-gear" href="/getting-started/account-setup">
     Create your account, configure authentication, and invite your team.
-  </Card>
-  <Card title="Terminology" icon="book-open" href="/getting-started/terminology">
-    Understand the key concepts and terms used throughout Factory Flow.
-  </Card>
-</Columns>
-
-## Core concepts
-
-Model your factory with organizations, facilities, machines, and layouts.
-
-<Columns cols={2}>
-  <Card title="Organizations" icon="users" href="/core-concepts/organizations">
-    Set up multi-tenant workspaces with role-based access control, team management, and isolated data.
-  </Card>
-  <Card title="Facilities" icon="warehouse" href="/core-concepts/facilities">
-    Organize your physical sites and factories for accurate location-based reporting.
-  </Card>
-  <Card title="Production lines" icon="conveyor-belt" href="/core-concepts/production-lines">
-    Configure production lines with machine sequences and part flow visualization.
-  </Card>
-  <Card title="Machines" icon="gears" href="/core-concepts/machines">
-    Add machines, configure data sources, set cycle time thresholds, and monitor status.
-  </Card>
-  <Card title="Layouts" icon="map" href="/core-concepts/layouts">
-    Design visual floor plans with machine placement and production flow.
-  </Card>
-  <Card title="Scheduling" icon="calendar-days" href="/core-concepts/scheduling">
-    Define shifts and schedules for accurate capacity planning.
-  </Card>
-</Columns>
-
-## Daily operations
-
-Execute the workflows your floor teams use every day.
-
-<Columns cols={2}>
-  <Card title="Plan production" icon="calendar-days" href="/workflows/plan-production">
-    Sequence work based on machine availability and shift schedules.
-  </Card>
-  <Card title="Execute work orders" icon="play" href="/workflows/execute-work-orders">
-    Track orders through production stages with live status updates.
-  </Card>
-  <Card title="Quality checks" icon="badge-check" href="/workflows/quality">
-    Capture defects, track good/bad part counts, and enforce quality holds.
-  </Card>
-  <Card title="Layout management" icon="map" href="/workflows/layout-management">
-    Create and version floor layouts, position machines, and upload blueprints.
-  </Card>
-  <Card title="Maintenance" icon="wrench" href="/workflows/maintenance">
-    Track downtime events and plan preventive maintenance.
-  </Card>
-</Columns>
-
-## Analytics and reporting
-
-Monitor performance with real-time dashboards and historical analysis.
-
-<Columns cols={2}>
-  <Card title="Dashboards" icon="chart-line" href="/analytics/dashboards">
-    View machine status, cycle times, OEE, and throughput on customizable dashboards.
-  </Card>
-  <Card title="Key metrics" icon="gauge" href="/analytics/kpis">
-    Understand cycle time, downtime, OEE, and other critical manufacturing KPIs.
-  </Card>
-  <Card title="Data ingestion" icon="database" href="/analytics/ingestion">
-    Stream production data from machines via the Factory Flow API.
-  </Card>
-  <Card title="Exports" icon="file-export" href="/analytics/exports">
-    Export analytics data to Excel or PDF for offline analysis and reporting.
-  </Card>
-</Columns>
-
-## Integrations
-
-Connect Factory Flow with your existing systems and tools.
-
-<Columns cols={2}>
-  <Card title="Integrations overview" icon="plug" href="/integrations/overview">
-    See all supported integrations and data flow patterns.
-  </Card>
-  <Card title="Single sign-on" icon="shield-keyhole" href="/integrations/sso">
-    Enable Google, Microsoft Entra ID, and GitHub authentication.
-  </Card>
-  <Card title="Webhooks" icon="webhook" href="/integrations/webhooks">
-    Receive real-time notifications when events occur in Factory Flow.
-  </Card>
-  <Card title="API reference" icon="terminal" href="/api/introduction">
-    Build custom integrations with the Factory Flow REST API.
-  </Card>
-</Columns>
-
-## Administration
-
-Manage users, billing, and organization settings.
-
-<Columns cols={2}>
-  <Card title="Users and roles" icon="user-shield" href="/administration/users-roles">
-    Invite team members and assign admin, editor, or viewer roles.
-  </Card>
-  <Card title="Billing" icon="credit-card" href="/administration/billing">
-    Manage subscriptions, payment methods, and invoices through Stripe.
-  </Card>
-  <Card title="Settings" icon="sliders" href="/administration/settings">
-    Configure organization preferences, appearance, and defaults.
-  </Card>
-  <Card title="Authentication" icon="key" href="/administration/authentication">
-    Set up passwordless login, OAuth providers, and security settings.
   </Card>
 </Columns>

@@ -160,20 +160,12 @@
       },
       {
         "tab": "API",
+        "openapi": "/api-reference/openapi.json",
         "groups": [
           {
             "group": "Overview",
             "pages": [
               "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoints",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/webhook"
             ]
           }
         ]

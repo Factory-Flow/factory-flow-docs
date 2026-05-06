@@ -1,696 +1,598 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Factory Flow API",
-    "description": "REST API for Factory Flow - a manufacturing operations platform for connecting machines, streaming production analytics, and managing factory operations.",
-    "version": "1.0.0",
-    "contact": {
-      "name": "Factory Flow Support",
-      "email": "support@factoryflow.com"
-    }
-  },
-  "servers": [
-    {
-      "url": "https://app.factoryflow.com/api",
-      "description": "Production server"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
-  "paths": {
-    "/machines": {
-      "get": {
-        "summary": "List machines",
-        "description": "Returns a paginated list of machines in the organization.",
-        "operationId": "listMachines",
-        "tags": ["Machines"],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number for pagination",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Number of items per page (max 100)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 25,
-              "maximum": 100
-            }
-          },
-          {
-            "name": "facility_id",
-            "in": "query",
-            "description": "Filter by facility UUID",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Machine"
-                      }
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Factory Flow",
+        "version": "0.0.1",
+        "description": "Factory Flow public API. Authenticate using your organization API token as a Bearer token."
+    },
+    "servers": [
+        {
+            "url": "https://app.factoryflow.test/api"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths": {
+        "/machines/{machine}/parts": {
+            "post": {
+                "operationId": "machines.parts",
+                "tags": [
+                    "MachineParts"
+                ],
+                "parameters": [
+                    {
+                        "name": "machine",
+                        "in": "path",
+                        "required": true,
+                        "description": "The machine UUID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "const": "accepted"
+                                                }
+                                            },
+                                            "required": [
+                                                "status"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
                     },
-                    "meta": {
-                      "$ref": "#/components/schemas/PaginationMeta"
+                    "422": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "errors": {
+                                                    "$ref": "#/components/schemas/MessageBag"
+                                                }
+                                            },
+                                            "required": [
+                                                "errors"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "errors"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Too Many Requests"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "retry_after": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "retry_after"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "errors"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Unauthorized"
+                                        },
+                                        "errors": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "errors"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
                     }
-                  }
                 }
-              }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/machines/{machine_uuid}": {
-      "get": {
-        "summary": "Get machine",
-        "description": "Returns details for a specific machine.",
-        "operationId": "getMachine",
-        "tags": ["Machines"],
-        "parameters": [
-          {
-            "name": "machine_uuid",
-            "in": "path",
-            "description": "Machine UUID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Machine"
+        },
+        "/machines": {
+            "get": {
+                "operationId": "machines.index",
+                "tags": [
+                    "Machines"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MachineResource"
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "required": [
+                                                "current_page",
+                                                "per_page",
+                                                "total",
+                                                "last_page"
+                                            ]
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "first": {
+                                                    "type": "string"
+                                                },
+                                                "last": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "first",
+                                                "last",
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "meta",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
         }
-      }
     },
-    "/machines/{machine_uuid}/parts": {
-      "post": {
-        "summary": "Ingest production data",
-        "description": "Submit production part count data for a machine. This is the primary endpoint for streaming production data from factory floor equipment.",
-        "operationId": "ingestMachineParts",
-        "tags": ["Data Ingestion"],
-        "parameters": [
-          {
-            "name": "machine_uuid",
-            "in": "path",
-            "description": "Machine UUID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
             }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PartCountInput"
-              },
-              "examples": {
-                "all_fields": {
-                  "summary": "All fields provided",
-                  "value": {
-                    "part_count_total": 100,
-                    "part_count_good": 98,
-                    "part_count_bad": 2
-                  }
+        },
+        "schemas": {
+            "CycleTimeThreshold": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "label": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "number"
+                    },
+                    "color": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "downtime": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    }
                 },
-                "total_only": {
-                  "summary": "Total count only",
-                  "value": {
-                    "part_count_total": 100
-                  }
+                "required": [
+                    "id",
+                    "label",
+                    "value"
+                ],
+                "title": "CycleTimeThreshold"
+            },
+            "DetectionWindow": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean"
+                    },
+                    "window_minutes": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    }
                 },
-                "good_bad_only": {
-                  "summary": "Good and bad counts only",
-                  "value": {
-                    "part_count_good": 98,
-                    "part_count_bad": 2
-                  }
-                }
-              }
+                "required": [
+                    "enabled",
+                    "window_minutes"
+                ],
+                "title": "DetectionWindow"
+            },
+            "FacilityRef": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "7c3a1b2d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Main Factory Floor"
+                    },
+                    "location": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "uuid",
+                    "name",
+                    "location"
+                ],
+                "title": "FacilityRef"
+            },
+            "LineRef": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "part_number": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "uuid",
+                    "name",
+                    "part_number",
+                    "description"
+                ],
+                "title": "LineRef"
+            },
+            "MachineDataSource": {
+                "type": "string",
+                "enum": [
+                    "none",
+                    "factory_flow_api",
+                    "factory_flow_gateway"
+                ],
+                "title": "MachineDataSource"
+            },
+            "MachineResource": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "CNC Mill #1"
+                    },
+                    "facility": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/FacilityRef"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "machine_type": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/MachineTypeRef"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "data_source": {
+                        "$ref": "#/components/schemas/MachineDataSource"
+                    },
+                    "shifts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ShiftRef"
+                        }
+                    },
+                    "lines": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LineRef"
+                        }
+                    },
+                    "analytics": {
+                        "type": "object",
+                        "properties": {
+                            "expected_cycle_time": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "cycle_time_thresholds": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/CycleTimeThreshold"
+                                }
+                            },
+                            "oee_thresholds": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/OeeThresholds"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "shift_change_detection": {
+                                "$ref": "#/components/schemas/DetectionWindow"
+                            },
+                            "break_creep_detection": {
+                                "$ref": "#/components/schemas/DetectionWindow"
+                            }
+                        },
+                        "required": [
+                            "expected_cycle_time",
+                            "cycle_time_thresholds",
+                            "oee_thresholds",
+                            "shift_change_detection",
+                            "break_creep_detection"
+                        ]
+                    }
+                },
+                "required": [
+                    "uuid",
+                    "name",
+                    "data_source",
+                    "analytics"
+                ],
+                "title": "MachineResource"
+            },
+            "MachineTypeRef": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "CNC Mill"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "title": "MachineTypeRef"
+            },
+            "MessageBag": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": "MessageBag"
+            },
+            "OeeThresholdConfig": {
+                "type": "object",
+                "properties": {
+                    "green": {
+                        "type": "number"
+                    },
+                    "yellow": {
+                        "type": "number"
+                    },
+                    "orange": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "green",
+                    "yellow",
+                    "orange"
+                ],
+                "title": "OeeThresholdConfig"
+            },
+            "OeeThresholds": {
+                "type": "object",
+                "properties": {
+                    "overall": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OeeThresholdConfig"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "availability": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OeeThresholdConfig"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "performance": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OeeThresholdConfig"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "quality": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/OeeThresholdConfig"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "title": "OeeThresholds"
+            },
+            "ShiftRef": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "uuid",
+                    "name"
+                ],
+                "title": "ShiftRef"
             }
-          }
         },
         "responses": {
-          "200": {
-            "description": "Data ingested successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Data ingested successfully"
+            "ModelNotFoundException": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
                     }
-                  }
                 }
-              }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/ValidationError"
-          },
-          "429": {
-            "$ref": "#/components/responses/RateLimited"
-          }
         }
-      }
-    },
-    "/machines/{machine_uuid}/status": {
-      "get": {
-        "summary": "Get machine status",
-        "description": "Returns the current status and last data received timestamp for a machine.",
-        "operationId": "getMachineStatus",
-        "tags": ["Machines"],
-        "parameters": [
-          {
-            "name": "machine_uuid",
-            "in": "path",
-            "description": "Machine UUID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MachineStatus"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/facilities": {
-      "get": {
-        "summary": "List facilities",
-        "description": "Returns a list of facilities in the organization.",
-        "operationId": "listFacilities",
-        "tags": ["Facilities"],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number for pagination",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Number of items per page",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 25
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Facility"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PaginationMeta"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/lines": {
-      "get": {
-        "summary": "List production lines",
-        "description": "Returns a list of production lines in the organization.",
-        "operationId": "listLines",
-        "tags": ["Production Lines"],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number for pagination",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1
-            }
-          },
-          {
-            "name": "per_page",
-            "in": "query",
-            "description": "Number of items per page",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 25
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Line"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PaginationMeta"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          }
-        }
-      }
-    },
-    "/health": {
-      "get": {
-        "summary": "Health check",
-        "description": "Returns the health status of the API. Used for monitoring and load balancer health checks.",
-        "operationId": "healthCheck",
-        "tags": ["System"],
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Service is healthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "ok"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
-  },
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "API Token",
-        "description": "API token created in Organization Settings → API Tokens"
-      }
-    },
-    "schemas": {
-      "Machine": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Unique identifier for the machine"
-          },
-          "name": {
-            "type": "string",
-            "description": "Machine name"
-          },
-          "machine_type": {
-            "type": "string",
-            "description": "Type/category of machine"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true,
-            "description": "Optional description"
-          },
-          "facility_id": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true,
-            "description": "UUID of assigned facility"
-          },
-          "line_id": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true,
-            "description": "UUID of assigned production line"
-          },
-          "shift_id": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true,
-            "description": "UUID of assigned shift"
-          },
-          "last_data_received_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "Timestamp of last data ingestion"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Creation timestamp"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Last update timestamp"
-          }
-        }
-      },
-      "MachineStatus": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "string",
-            "enum": ["connected", "disconnected", "no_data_source"],
-            "description": "Current connection status"
-          },
-          "last_data_received_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        }
-      },
-      "PartCountInput": {
-        "type": "object",
-        "description": "Production part count data. At least one field must be provided.",
-        "properties": {
-          "part_count_total": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Total parts produced"
-          },
-          "part_count_good": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Parts passing quality checks"
-          },
-          "part_count_bad": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Rejected/scrapped parts"
-          }
-        }
-      },
-      "Facility": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Line": {
-        "type": "object",
-        "properties": {
-          "uuid": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "part_number": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "PaginationMeta": {
-        "type": "object",
-        "properties": {
-          "current_page": {
-            "type": "integer"
-          },
-          "per_page": {
-            "type": "integer"
-          },
-          "total": {
-            "type": "integer"
-          },
-          "last_page": {
-            "type": "integer"
-          }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message"
-          },
-          "errors": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "description": "Validation errors by field"
-          }
-        }
-      }
-    },
-    "responses": {
-      "Unauthorized": {
-        "description": "Authentication failed",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Unauthenticated."
-                }
-              }
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Resource not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Resource not found."
-                }
-              }
-            }
-          }
-        }
-      },
-      "ValidationError": {
-        "description": "Validation error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "example": {
-              "message": "The given data was invalid.",
-              "errors": {
-                "part_count_total": ["The part count total must be an integer."]
-              }
-            }
-          }
-        }
-      },
-      "RateLimited": {
-        "description": "Too many requests",
-        "headers": {
-          "Retry-After": {
-            "description": "Seconds to wait before retrying",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        },
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Too many requests. Please try again later."
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "tags": [
-    {
-      "name": "Data Ingestion",
-      "description": "Send production data from machines"
-    },
-    {
-      "name": "Machines",
-      "description": "Manage and query machines"
-    },
-    {
-      "name": "Facilities",
-      "description": "Manage physical locations"
-    },
-    {
-      "name": "Production Lines",
-      "description": "Manage production lines"
-    },
-    {
-      "name": "System",
-      "description": "System endpoints"
-    }
-  ]
 }

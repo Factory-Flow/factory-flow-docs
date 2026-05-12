@@ -16,137 +16,117 @@
         }
     ],
     "paths": {
-        "/machines/{machine}/parts": {
+        "/production": {
             "post": {
-                "operationId": "machines.parts",
+                "operationId": "production",
+                "description": "Report part count data for one or more machines in a single request (max 25).\nEach reading requires `machine_uuid` plus `part_count_total`. If only one of\n`part_count_good` or `part_count_bad` is provided the other is derived automatically.\nAll machines must belong to the authenticated organization and use the `factory_flow_api` data source.",
+                "summary": "Submit part count readings",
                 "tags": [
-                    "MachineParts"
+                    "BatchMachineParts"
                 ],
-                "parameters": [
-                    {
-                        "name": "machine",
-                        "in": "path",
-                        "required": true,
-                        "description": "The machine UUID",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "202": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "readings": {
+                                        "type": "array",
+                                        "items": {
                                             "type": "object",
                                             "properties": {
-                                                "status": {
+                                                "machine_uuid": {
                                                     "type": "string",
-                                                    "const": "accepted"
+                                                    "format": "uuid"
+                                                },
+                                                "part_count_total": {
+                                                    "type": "integer",
+                                                    "minimum": 0
+                                                },
+                                                "part_count_good": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
+                                                    "minimum": 0
+                                                },
+                                                "part_count_bad": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
+                                                    "minimum": 0
                                                 }
                                             },
                                             "required": [
-                                                "status"
+                                                "machine_uuid",
+                                                "part_count_total"
                                             ]
-                                        }
-                                    ]
-                                }
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 25
+                                    }
+                                },
+                                "required": [
+                                    "readings"
+                                ]
                             }
                         }
-                    },
-                    "422": {
-                        "description": "",
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Readings accepted.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "const": "Validation failed"
+                                        "status": {
+                                            "type": "string"
                                         },
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "errors": {
-                                                    "$ref": "#/components/schemas/MessageBag"
-                                                }
-                                            },
-                                            "required": [
-                                                "errors"
-                                            ]
+                                        "count": {
+                                            "type": "integer"
                                         }
                                     },
                                     "required": [
-                                        "message",
-                                        "errors"
+                                        "status",
+                                        "count"
                                     ]
                                 }
                             }
                         }
                     },
                     "429": {
-                        "description": "",
+                        "description": "Rate limit exceeded.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
                                         "message": {
-                                            "type": "string",
-                                            "const": "Too Many Requests"
-                                        },
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "retry_after": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "retry_after"
-                                            ]
-                                        }
-                                    },
-                                    "required": [
-                                        "message",
-                                        "errors"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "const": "Unauthorized"
-                                        },
-                                        "errors": {
                                             "type": "string"
+                                        },
+                                        "retry_after": {
+                                            "type": "integer"
+                                        },
+                                        "throttled_machines": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "format": "uuid"
+                                            }
                                         }
                                     },
                                     "required": [
                                         "message",
-                                        "errors"
+                                        "retry_after",
+                                        "throttled_machines"
                                     ]
                                 }
                             }
                         }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
                     }
                 }
             }
@@ -479,16 +459,6 @@
                 ],
                 "title": "MachineTypeRef"
             },
-            "MessageBag": {
-                "type": "object",
-                "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": "MessageBag"
-            },
             "OeeThresholdConfig": {
                 "type": "object",
                 "properties": {
@@ -574,8 +544,8 @@
             }
         },
         "responses": {
-            "ModelNotFoundException": {
-                "description": "Not found",
+            "ValidationException": {
+                "description": "Validation error",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -583,11 +553,22 @@
                             "properties": {
                                 "message": {
                                     "type": "string",
-                                    "description": "Error overview."
+                                    "description": "Errors overview."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "description": "A detailed description of each field that failed validation.",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
                                 }
                             },
                             "required": [
-                                "message"
+                                "message",
+                                "errors"
                             ]
                         }
                     }

@@ -19,7 +19,7 @@
         {
           "anchor": "Support",
           "icon": "life-ring",
-          "href": "mailto:support@factoryflow.com"
+          "href": "mailto:support@factoryflow.io"
         }
       ]
     },
@@ -160,12 +160,12 @@
       },
       {
         "tab": "API",
-        "openapi": "/api-reference/openapi.json",
+        "openapi": "/api/openapi.json",
         "groups": [
           {
             "group": "Overview",
             "pages": [
-              "api-reference/introduction"
+              "api/introduction"
             ]
           }
         ]
@@ -173,7 +173,7 @@
     ]
   },
   "api": {
-    "baseUrl": "https://app.factoryflow.com/api",
+    "baseUrl": "https://app.factoryflow.io/api",
     "auth": {
       "method": "bearer",
       "name": "Authorization",
@@ -183,7 +183,7 @@
       "mode": "show"
     }
   },
-  "openapi": "/openapi.json",
+  "openapi": "/api/openapi.json",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -192,7 +192,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@factoryflow.com"
+        "href": "mailto:support@factoryflow.io"
       }
     ],
     "primary": {

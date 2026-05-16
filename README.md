@@ -1,16 +1,26 @@
-# Mintlify Starter Kit
+# Factory Flow Docs
 
-Use the starter kit to get your docs deployed and ready to customize.
+Documentation site for Factory Flow, built with [Mintlify](https://mintlify.com).
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## Release notes
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+Release notes are generated from [GitHub releases](https://github.com/Factory-Flow/factory-flow-app/releases) and written to `release-notes.mdx`. Run the sync script locally before deploying whenever new releases are published.
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+**Basic (public repo or if rate limits aren't a concern):**
+
+```bash
+node scripts/sync-releases.mjs
+```
+
+**With a GitHub token (required for private repos, recommended to avoid rate limits):**
+
+```bash
+GITHUB_TOKEN=ghp_xxx node scripts/sync-releases.mjs
+```
+
+Generate a fine-grained token at GitHub → Settings → Developer settings → Personal access tokens. Grant **Contents: Read-only** access to `Factory-Flow/factory-flow-app`.
+
+After syncing, commit `release-notes.mdx` and push to deploy.
 
 ## Development
 

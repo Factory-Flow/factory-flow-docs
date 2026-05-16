@@ -152,10 +152,15 @@
             "group": "Help",
             "pages": [
               "help/faq",
-              "help/troubleshooting",
-              "help/release-notes"
+              "help/troubleshooting"
             ]
           }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "pages": [
+          "release-notes"
         ]
       },
       {

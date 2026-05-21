@@ -6,19 +6,28 @@ Documentation site for Factory Flow, built with [Mintlify](https://mintlify.com)
 
 Release notes are generated from [GitHub releases](https://github.com/Factory-Flow/factory-flow-app/releases) and written to `release-notes.mdx`. Run the sync script locally before deploying whenever new releases are published.
 
-**Basic (public repo or if rate limits aren't a concern):**
+Copy `.env.example` to `.env` and add your token:
+
+```bash
+cp .env.example .env
+```
+
+Generate a classic token at GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic). Enable the **`repo`** scope.
+
+**Run the sync:**
 
 ```bash
 node scripts/sync-releases.mjs
 ```
 
-**With a GitHub token (required for private repos, recommended to avoid rate limits):**
+**Options:**
 
-```bash
-GITHUB_TOKEN=ghp_xxx node scripts/sync-releases.mjs
-```
-
-Generate a fine-grained token at GitHub → Settings → Developer settings → Personal access tokens. Grant **Contents: Read-only** access to `Factory-Flow/factory-flow-app`.
+| Flag | Description |
+|------|-------------|
+| `--prerelease` | Include prerelease versions |
+| `--limit <n>` | Only pull the latest n releases |
+| `--from <version>` | Pull from this version onwards (e.g. `--from v0.1.4`) |
+| `--since <date>` | Only include releases after this date (e.g. `--since 2026-05-01`) |
 
 After syncing, commit `release-notes.mdx` and push to deploy.
 

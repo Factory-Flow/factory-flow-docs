@@ -18,20 +18,72 @@ mode: "default"
 
 ## Features
 
-- **Real-Time Machine Monitoring** – Connect any machine with an incrementing part counter to instantly see live production data. Track parts produced, machine status, and performance as it happens — no manual data entry required.
-- **OEE (Overall Equipment Effectiveness)** – Measure true machine productivity with a single, industry-standard score. Drill into the three pillars — **Availability**, **Performance**, and **Quality** — to pinpoint exactly where losses occur.
-- **Cycle Time Analysis** – Track how long each part takes to produce. Visualize cycle time trends and distributions over time, set thresholds to flag abnormal cycles, and identify bottlenecks before they impact output.
-- **Automatic Downtime Detection & Categorization** – Downtime is detected automatically when a machine stops producing parts. Events are categorized and tracked so you can see exactly how long machines are idle, how often, and why.
-- **Production & Throughput Tracking** – Monitor output against expected targets in real time. View production forecasts, compare actual vs. planned throughput, and track quality vs. scrap rates across any time window.
-- **Pareto Analysis** – Identify which downtime causes have the greatest impact on your operation. Focus improvement efforts where they matter most using 80/20 breakdowns of loss events.
-- **Multi-Level Analytics** – Analyze performance at any level of your operation — across the entire organization, by facility, by production line, or down to individual machines. Drill from overview to detail in one click.
-- **Shift Scheduling** – Define when machines are expected to run. Shift data is used to correctly calculate OEE and availability, ensuring metrics reflect actual planned production time — not 24/7.
-- **Production Line & Facility Management** – Group machines into production lines and facilities. Manage your factory hierarchy and see how performance rolls up from machine to line to site.
-- **Factory Floor Layouts** – Build a visual map of your factory floor. Place machines on a layout blueprint so your team can quickly navigate to the machine they care about.
-- **Flexible Data Ingestion** – Send part count data via a simple REST API or through a **Factory Flow Gateway** — an edge device that collects data locally and syncs it, even in low-connectivity environments.
-- **Analytics Export** – Export any analytics dataset to CSV or Excel for reporting, further analysis, or sharing with stakeholders.
-- **Team & Access Management** – Invite team members to your organization with role-based access — **Viewer**, **Editor**, or **Admin** — so everyone sees what they need and nothing more.
-- **Self-Hosted Deployment** – Run Factory Flow entirely on your own infrastructure. Includes license management, SMTP configuration, LDAP/Active Directory integration, and in-app system updates.
+<CardGroup cols={1}>
+  <Card title="Analytics">
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start'}}>
+      <div>
+
+        Real-time OEE, cycle time, throughput, and Pareto — drill from organization to individual machine in one click.
+
+        - Real-Time Machine Monitoring
+        - OEE (Availability, Performance & Quality)
+        - Cycle Time Analysis
+        - Production & Throughput Tracking
+        - Pareto Analysis
+        - Multi-Level Drill-Down
+
+      </div>
+      <img src="/images/Screenshot-2026-04-21-at-3.02.50-PM.png" style={{borderRadius: '8px', width: '100%'}} alt="Analytics dashboard" />
+    </div>
+  </Card>
+  <Card title="Operations">
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start'}}>
+      <div>
+
+        Manage your factory floor — from detecting a stopped machine to visualizing your entire layout.
+
+        - Automatic Downtime Detection & Categorization
+        - Shift Scheduling
+        - Production Line & Facility Management
+        - Factory Floor Layouts
+
+      </div>
+      <img src="/images/operations-screenshot.png" style={{borderRadius: '8px', width: '100%'}} alt="Operations view" />
+    </div>
+  </Card>
+  <Card title="Integrations">
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start'}}>
+      <div>
+
+        Connect Factory Flow to your existing tools and infrastructure.
+
+        - REST API & Factory Flow Gateway
+        - ERP Integration
+        - Barcode Scanners
+        - Webhooks
+        - Analytics Export (CSV / Excel)
+
+      </div>
+      <img src="/images/integrations-screenshot.png" style={{borderRadius: '8px', width: '100%'}} alt="Integrations" />
+    </div>
+  </Card>
+  <Card title="Administration">
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start'}}>
+      <div>
+
+        Enterprise-ready access control, compliance, and deployment options.
+
+        - Role-Based Access (Viewer, Editor, Admin)
+        - SSO & LDAP / Active Directory
+        - Audit Log
+        - Data Retention Policies
+        - Self-Hosted Deployment
+
+      </div>
+      <img src="/images/admin-screenshot.png" style={{borderRadius: '8px', width: '100%'}} alt="Administration" />
+    </div>
+  </Card>
+</CardGroup>
 
 ## How does it work?
 

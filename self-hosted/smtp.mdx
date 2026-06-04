@@ -1,0 +1,67 @@
+---
+title: "SMTP Email Configuration"
+description: "Connect Factory Flow to your email server so alert notifications and system emails are sent from your own domain."
+---
+
+Factory Flow sends emails for alert notifications, invitations, password resets, and OTP verification. In a self-hosted deployment, you configure your own outbound email server.
+
+## Configuring SMTP
+
+Navigate to **Application Settings → SMTP Settings**.
+
+| Field | Description |
+|-------|-------------|
+| **Host** | The hostname or IP address of your SMTP server (e.g. `smtp.yourcompany.com`). |
+| **Port** | The port your SMTP server listens on. Common values: `587` (STARTTLS), `465` (SSL/TLS), `25` (unencrypted — not recommended). |
+| **Encryption** | Choose `TLS`, `STARTTLS`, or `None`. Always use TLS or STARTTLS in production. |
+| **Username** | The email account used to authenticate with the SMTP server. |
+| **Password** | The password or app-specific password for the SMTP account. |
+| **From Address** | The address that appears in the "From" field (e.g. `noreply@yourcompany.com`). |
+| **From Name** | The display name shown to recipients (e.g. "Factory Flow Alerts"). |
+
+---
+
+## Testing Your Configuration
+
+After entering your settings, click **Send Test Email**. Factory Flow will attempt to send a test message to the App Admin's email address. A green indicator confirms success. If the test fails, the error message will describe the issue.
+
+<Tip>
+  Common causes of failure: incorrect port/encryption combination, firewall blocking outbound SMTP, or an application password being required (common with Microsoft 365 and Gmail when 2FA is enabled).
+</Tip>
+
+---
+
+## Applying Config Changes
+
+If you edit SMTP settings by modifying the `.env` file directly on the server rather than through the UI, run the following to ensure the changes take effect without a full restart:
+
+```bash
+./factoryflow config cache
+```
+
+---
+
+## Common SMTP Providers
+
+<AccordionGroup>
+  <Accordion title="Microsoft 365 / Exchange Online">
+    - **Host:** `smtp.office365.com`
+    - **Port:** `587`
+    - **Encryption:** `STARTTLS`
+
+    Use a service account or an app password. Modern Authentication may require additional configuration in your Microsoft admin portal.
+  </Accordion>
+  <Accordion title="Google Workspace / Gmail">
+    - **Host:** `smtp.gmail.com`
+    - **Port:** `587`
+    - **Encryption:** `STARTTLS`
+
+    If 2FA is enabled, generate an **App Password** in Google Account settings and use that instead of the account password.
+  </Accordion>
+  <Accordion title="On-Premise Exchange">
+    - **Host:** Your internal Exchange server hostname or IP.
+    - **Port:** `587` or `25` depending on your Exchange relay configuration.
+
+    Consult your Exchange administrator for the correct relay settings and whether authentication is required.
+  </Accordion>
+</AccordionGroup>

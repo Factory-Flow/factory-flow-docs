@@ -1,0 +1,59 @@
+---
+title: "Shifts"
+description: "Define when your machines are expected to run so Factory Flow can calculate OEE accurately."
+---
+
+Shifts are recurring schedules that tell Factory Flow when production is planned to run. They are a critical input for OEE — specifically for the **Availability** calculation. Without a shift schedule, Factory Flow cannot distinguish between planned downtime (the machine isn't scheduled to run) and unplanned downtime (the machine stopped when it should have been running).
+
+## The Shifts List
+
+Navigate to **Configure → Shifts** to see all shift definitions in your organization. Each row shows the shift name and how many machines are using it.
+
+---
+
+## Creating a Shift
+
+Click **New Shift** and fill in the two tabs.
+
+### General Tab
+
+| Field | Description |
+|-------|-------------|
+| **Name** | A descriptive label (e.g. "Day Shift", "Night Shift", "Weekend Crew"). |
+| **Timezone** | The timezone this shift operates in. All shift times are stored and evaluated in this timezone, so machines in different locations can have their own accurate schedules. |
+
+### Schedule Tab
+
+The schedule tab shows a weekly grid with days of the week across the top and hours of the day down the side. Use it to define exactly when production runs.
+
+**Preset templates:**
+
+| Template | Description |
+|----------|-------------|
+| **8-Hour Shift** | A single 8-hour block, typically 07:00–15:00 or similar. |
+| **12-Hour Shift** | A 12-hour block covering a full half-day. |
+| **24-Hour Shift** | Round-the-clock production — fills the entire day. |
+
+Click a preset to apply it, then drag the edges of the blocks to adjust the start and end times. You can add multiple shift blocks on the same day (e.g. a morning shift and an afternoon shift with a gap in between).
+
+<Frame>
+  <img src="/images/shifts-schedule-grid.png" alt="Weekly schedule grid with draggable shift blocks across days and hours" />
+</Frame>
+
+<Note>
+  Shifts are displayed in the timezone of your browser when you're viewing the schedule, but stored and evaluated in the timezone you configured on the General tab. This means a shift set to "08:00 UTC" will appear as "09:00" to a user in UTC+1.
+</Note>
+
+---
+
+## Assigning Shifts to Machines
+
+After creating a shift, assign it to machines on the **General** tab of each machine. A machine can have more than one shift (e.g. a day shift and a night shift) — both windows will count as planned production time for OEE purposes.
+
+<Frame>
+  <img src="/images/shifts-machine-assignment.png" alt="Machine General tab showing shift assignment dropdown with available shift schedules" />
+</Frame>
+
+<Tip>
+  Create shared shift definitions rather than one per machine. If your entire plant runs the same schedule, one shift definition assigned to all machines is easier to maintain than individual ones.
+</Tip>

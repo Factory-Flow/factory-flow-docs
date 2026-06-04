@@ -1,0 +1,87 @@
+---
+title: "Backups & Restore"
+description: "Create, list, and restore database backups for your Factory Flow installation."
+---
+
+The `factoryflow` script includes built-in backup and restore commands that operate directly on your Factory Flow database.
+
+<Note>
+  Database backups are also created **automatically** before every `./factoryflow update`. The backup files are saved to `./database-backups/` in your installation directory.
+</Note>
+
+---
+
+## Creating a Backup
+
+```bash
+./factoryflow backup create
+```
+
+This dumps the entire Factory Flow database to a `.sql` file in `./database-backups/`. The filename includes a timestamp so backups don't overwrite each other:
+
+```
+database-backups/db_factory_flow_20240315_143022.sql
+```
+
+Run this before making significant configuration changes or before a planned update.
+
+---
+
+## Listing Backups
+
+```bash
+./factoryflow backup list
+```
+
+Lists all available backup files with their sizes, newest first:
+
+```
+Available backups (newest first):
+
+  14M           db_factory_flow_20240315_143022.sql
+  13M           db_factory_flow_20240310_090512.sql
+  12M           db_factory_flow_20240301_120000.sql
+
+Location: ./database-backups
+```
+
+---
+
+## Restoring a Backup
+
+```bash
+# Interactive picker — choose from available backups
+./factoryflow backup restore
+
+# Restore a specific file
+./factoryflow backup restore ./database-backups/db_factory_flow_20240315_143022.sql
+```
+
+The restore command:
+
+1. Shows the backup file and size and asks for double confirmation before proceeding.
+2. Stops the application container.
+3. Drops and recreates the database.
+4. Restores the data from the backup file.
+5. Restarts the application.
+
+<Warning>
+  Restoring a backup **permanently replaces all current data** in your Factory Flow database. This cannot be undone. Make sure you have selected the correct backup file before confirming. Type `yes` when prompted to proceed.
+</Warning>
+
+---
+
+## Backup Retention
+
+The `factoryflow` script does not automatically delete old backups. Over time, the `./database-backups/` directory will grow. Review and remove old backup files periodically, keeping at least the last 2–3 backups as a safety net.
+
+---
+
+## Backup Strategy Recommendations
+
+| Scenario | Recommendation |
+|----------|---------------|
+| Before every update | Automatic — `./factoryflow update` creates one |
+| Weekly scheduled backup | Set up a cron job: `./factoryflow backup create` |
+| Before major configuration changes | Run `./factoryflow backup create` manually |
+| Long-term archival | Copy `.sql` files off the server to external storage (S3, NAS, etc.) |

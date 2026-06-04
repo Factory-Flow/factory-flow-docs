@@ -1,0 +1,65 @@
+---
+title: "Alert History"
+description: "Review every alert that has fired, who was notified, and whether notifications were delivered."
+---
+
+The Alert History page is a searchable log of every alert that has triggered in your organization. It tells you what fired, when, which machine or line caused it, what the notification said, and whether the email was successfully delivered.
+
+<Frame>
+  <img src="/images/alerts-history-list.png" alt="Alert history table showing triggered alerts with status badges" />
+</Frame>
+
+## Reading the Alert List
+
+Each row in the alert history represents a single alert event. The columns are:
+
+| Column | Description |
+|--------|-------------|
+| **Triggered At** | The exact date and time the alert condition was met. A **New** badge appears on alerts you haven't seen yet. |
+| **Alert Type** | The type of condition that fired (Cycle Time, Downtime, OEE, Production, Scrap Rate). |
+| **Target** | The machine, line, or facility the alert was configured for. |
+| **Message** | The alert message, including the value that breached the threshold. |
+| **Notifications** | The delivery status of the email notification — sent, failed, or pending. |
+
+---
+
+## Filtering Alerts
+
+Use the filter bar above the table to narrow down the list:
+
+- **Alert Type** — Filter to a specific metric (e.g. show only Downtime alerts).
+- **Target** — Filter to a specific machine, line, or facility.
+- **Date Range** — Show only alerts that fired within a date range.
+- **Search** — Full-text search across the alert message column.
+
+<Frame>
+  <img src="/images/alerts-filter-bar.png" alt="Alert filter bar with type, target, date range, and search controls" />
+</Frame>
+
+---
+
+## Notification Status
+
+Each alert shows whether the notification email reached its recipients:
+
+| Status | Meaning |
+|--------|---------|
+| **Sent** | Email was successfully delivered to all recipients in the alert group. |
+| **Failed** | Delivery failed for one or more recipients. Expand the row to see which address failed and the error reason. |
+| **Pending** | The notification is queued and will be sent shortly. |
+
+<Note>
+  If you see repeated **Failed** statuses for the same address, check that the email address in the alert group is correct. For self-hosted installations, verify your SMTP configuration under Application Settings.
+</Note>
+
+---
+
+## Alert Badge
+
+The **Alerts** item in the left sidebar shows a badge with the count of alerts you haven't reviewed yet. The badge clears as you view the alert history page. This makes it easy to see at a glance whether anything new has fired since your last visit.
+
+---
+
+## Setting Up Alert Rules
+
+Alert History is read-only. To create, edit, or delete the rules that generate alerts, go to **Configure → Alert Rules**.

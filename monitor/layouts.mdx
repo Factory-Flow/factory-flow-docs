@@ -1,0 +1,64 @@
+---
+title: "Factory Floor Layouts"
+description: "Visualize your entire factory floor with real-time machine status overlaid on a 3D layout."
+---
+
+Layouts give you a bird's-eye view of your factory floor with live performance data overlaid directly on a visual map of where your machines sit. At a glance, you can see which machines are running on target, which are struggling, and which are stopped.
+
+<Frame>
+  <img src="/images/layouts-overview.png" alt="Factory floor layout with machines color-coded by performance status" />
+</Frame>
+
+## Creating a Layout
+
+<Steps>
+  <Step title="Open the Layouts page">
+    Navigate to **Monitor → Layouts** from the sidebar.
+  </Step>
+  <Step title="Create a new layout">
+    Click **New Layout** and give it a name. You can optionally add a description (e.g. "Building A — East Wing" or "Assembly Floor").
+  </Step>
+  <Step title="Place your machines">
+    The layout editor opens a 3D floor view. Drag machines from the panel on the left and drop them onto the floor in the position that matches your real-world layout. Rearrange them at any time by dragging.
+
+    <Frame>
+      <img src="/images/layouts-editor.png" alt="Layout editor with machine panel on the left and 3D floor canvas" />
+    </Frame>
+  </Step>
+  <Step title="Save and share">
+    Click **Save**. The layout is immediately available to everyone in your organization with Viewer access or above.
+  </Step>
+</Steps>
+
+---
+
+## Reading a Layout
+
+Once machines have live data flowing, the layout view automatically colors each machine based on its current performance:
+
+| Color | Machine status |
+|-------|---------------|
+| **Green** | Running — cycle time is within target range |
+| **Yellow** | Warning — cycle time is approaching the alert threshold |
+| **Red** | Alert — cycle time has exceeded the alert threshold |
+| **Grey** | No data — machine has not reported in the current window |
+
+Hover over any machine to see a quick summary card showing current cycle time, OEE, and last reported time. Click a machine to jump directly to its Analytics page for a full drill-down.
+
+<Frame>
+  <img src="/images/layouts-machine-hover.png" alt="Machine hover card showing cycle time, OEE, and last reported time" />
+</Frame>
+
+---
+
+## Tips for Layouts
+
+<Tip>
+  Display your layout on a large screen on the production floor. Set the Analytics page to auto-refresh every 30 seconds so the view stays current without any manual interaction.
+</Tip>
+
+<Note>
+  You can create multiple layouts — one per building, floor, or production area. Each layout is independent and can contain any subset of your machines.
+</Note>
+
+You need **Editor** role or above to create and edit layouts. Viewers can see all layouts but cannot move machines or create new ones.

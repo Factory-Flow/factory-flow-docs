@@ -1,0 +1,103 @@
+---
+title: "Installation"
+description: "Install Factory Flow on your own server using the factoryflow CLI script."
+---
+
+Factory Flow is deployed as a set of Docker containers managed by `docker compose`. The `factoryflow install` command handles the entire setup interactively — from pulling images to starting the application.
+
+## Prerequisites
+
+Before running the installer, ensure your server has:
+
+- **Docker** 24.0 or later — [Install Docker](https://docs.docker.com/engine/install/)
+- **Docker Compose** v2 (the `docker compose` plugin) or the standalone `docker-compose` binary
+- A **GitHub Personal Access Token (PAT)** with `read:packages` scope — needed to pull the Factory Flow image from the GitHub Container Registry
+
+<Tip>
+  To create a GitHub PAT: go to **github.com → Settings → Developer settings → Personal access tokens → Generate new token (classic)**. Enable the `read:packages` scope and copy the token.
+</Tip>
+
+---
+
+## Running the Installer
+
+From the Factory Flow installation directory, run:
+
+```bash
+./factoryflow install
+```
+
+The installer will walk you through each step interactively.
+
+### Step 1 — GitHub authentication
+
+You'll be prompted for your GitHub username and the PAT you created above. The installer uses these to pull the Docker images and saves them to the `.env` file so future in-app updates can authenticate automatically.
+
+### Step 2 — Configuration
+
+The installer asks for:
+
+| Prompt | Description |
+|--------|-------------|
+| App port | The HTTP port Factory Flow listens on (default: `80`). The installer checks if the port is already in use. |
+| App URL | The URL your users will access Factory Flow at (e.g. `https://factoryflow.yourcompany.com`). |
+| SSL certificates | Optionally provide a `cert.pem` and `key.pem` to enable HTTPS. You can also place them in `./certs/` before running. |
+| HTTPS port | The HTTPS port (default: `443`). HTTP on the app port will redirect automatically. |
+| Reverse proxy | Whether Factory Flow sits behind a reverse proxy (e.g. Cloudflare Tunnel, nginx, Traefik). Required for correct IP detection. |
+
+### Step 3 — Pull and start
+
+The installer:
+
+1. Pulls the Factory Flow, TimescaleDB, and Redis Docker images.
+2. Starts the database and waits for it to be ready.
+3. Starts the application container.
+4. Runs a health check to confirm everything is up.
+
+### Step 4 — Save your credentials
+
+At the end of installation, the installer displays your `APP_KEY` and `INSTALLATION_ID`:
+
+```
+APP_KEY:          base64:xxxxxxxxxxxx...
+INSTALLATION_ID:  XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+```
+
+<Warning>
+  **Save these in a secure location.** Your `APP_KEY` and `INSTALLATION_ID` uniquely identify this installation and are tied to your license. If you ever need to reinstall, share them with Factory Flow support (support@factoryflow.io) so your existing license can be reused.
+</Warning>
+
+---
+
+## After Installation
+
+Once the installer completes, open your browser and navigate to your configured App URL. You'll be greeted by the Factory Flow login screen.
+
+First-time setup:
+
+1. Register the first user account — this will be your initial App Admin.
+2. Navigate to **Application Settings → License** and activate your license key.
+3. Navigate to **Application Settings → SMTP Settings** and configure outbound email.
+4. Create your organization and start adding machines.
+
+### Useful Commands After Install
+
+```bash
+# Check that all containers are running
+./factoryflow status
+
+# View live application logs
+./factoryflow logs
+
+# Stop all containers
+./factoryflow stop
+
+# Start all containers
+./factoryflow start
+```
+
+---
+
+## Reinstalling
+
+Running `./factoryflow install` on an existing installation will detect the previous setup and prompt you to confirm a complete wipe before proceeding. All data will be permanently lost. Use this only if you intend to start fresh — for updates, use `./factoryflow update` instead.

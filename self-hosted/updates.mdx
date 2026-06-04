@@ -1,0 +1,108 @@
+---
+title: "System Updates"
+description: "Update Factory Flow to the latest version using the factoryflow CLI script."
+---
+
+Factory Flow releases regular updates with new features, performance improvements, and security fixes. On self-hosted installations, updates are applied using the `factoryflow update` command.
+
+## Updating via the CLI
+
+The primary way to update is from your server's terminal:
+
+```bash
+# Update to the latest version
+./factoryflow update
+
+# Update to a specific version
+./factoryflow update 1.2.0
+```
+
+The update command:
+
+1. Pulls the new Docker image.
+2. Checks if an update is actually needed (exits cleanly if already on the latest).
+3. Prompts for confirmation before making any changes.
+4. Creates a database backup automatically before stopping the app.
+5. Stops the current container, starts the new one, and runs database migrations.
+6. Runs a health check to confirm the new version is up.
+7. Generates a rollback script in `./rollback-scripts/` in case you need to revert.
+
+<Warning>
+  The application will be unavailable for 1–3 minutes during the update while the container is replaced. Schedule updates during a maintenance window or low-traffic period.
+</Warning>
+
+---
+
+## Updating via Application Settings
+
+App Admins can also trigger updates from within the application without needing terminal access:
+
+1. Navigate to **Application Settings → System Updates**.
+2. Click **Check for Updates** to see if a newer version is available.
+3. Review the release notes.
+4. Click **Apply Update**.
+
+The in-app update runs the same process as `./factoryflow update` under the hood. A progress indicator is shown while the update applies, and the page will reload automatically once complete.
+
+<Note>
+  The in-app update requires your server to have outbound internet access to reach the update endpoint and pull the new image. For air-gapped servers, use the CLI method with pre-loaded images (see below).
+</Note>
+
+---
+
+## Updating TimescaleDB
+
+In most cases you do not need to update the database engine. If a release specifically requires a TimescaleDB update, the release notes will call this out. To update both Factory Flow and TimescaleDB together:
+
+```bash
+# Update both Factory Flow and TimescaleDB (latest compatible version)
+./factoryflow update --update-db
+
+# Update to specific versions
+./factoryflow update 1.2.0 --update-db=2.18.0-pg16
+```
+
+<Warning>
+  TimescaleDB updates involve a database engine restart and schema migration. They take longer and cannot be reversed by a simple image swap — the automatically generated rollback script handles this by restoring from the pre-update database backup. Ensure your backup completed successfully before proceeding.
+</Warning>
+
+---
+
+## Rollback
+
+Every update automatically generates a rollback script saved to `./rollback-scripts/`. To revert to the previous version:
+
+```bash
+./factoryflow rollback
+```
+
+This lists available rollback scripts (newest first) and prompts you to run the latest one. The rollback script:
+
+- **For app-only updates:** rolls back database migrations and restores the previous container image.
+- **For TimescaleDB updates:** restores the full database from the pre-update backup and reverts both images.
+
+---
+
+## Air-Gapped Updates
+
+If your server has no internet access, pre-load the Docker images on the host before running the update:
+
+```bash
+# Load a pre-downloaded image archive
+docker load -i factory-flow-1.2.0.tar
+
+# Then run the update — it will use the cached local image
+./factoryflow update 1.2.0
+```
+
+---
+
+## Update Cadence
+
+| Release type | Frequency | Notes |
+|-------------|-----------|-------|
+| Patch | As needed | Bug fixes and security patches |
+| Minor | Monthly | New features and improvements |
+| Major | Announced in advance | May include migration guides |
+
+We recommend staying within one minor version of the latest release to ensure you receive security patches.

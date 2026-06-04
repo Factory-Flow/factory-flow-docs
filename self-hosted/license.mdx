@@ -1,0 +1,67 @@
+---
+title: "License Activation"
+description: "Activate and manage your Factory Flow self-hosted license key."
+---
+
+All self-hosted Factory Flow deployments require an active license key. Without a valid license, the application will enter a restricted mode.
+
+## Activating Your License
+
+<Steps>
+  <Step title="Obtain your license key">
+    Your license key is provided by Factory Flow when you purchase or renew a self-hosted subscription. Check your purchase confirmation email or your account portal.
+  </Step>
+  <Step title="Open Application Settings">
+    Sign in as an App Admin and navigate to **Application Settings → License**.
+  </Step>
+  <Step title="Enter the license key">
+    Paste your license key into the input field and click **Activate**.
+  </Step>
+  <Step title="Confirm activation">
+    The page will display your license details — expiry date, seat limit, and enabled features. A green status indicator confirms the license is active.
+  </Step>
+</Steps>
+
+---
+
+## License Details
+
+After activation, the License page shows:
+
+| Field | Description |
+|-------|-------------|
+| **Status** | Active, Expired, or Invalid. |
+| **Expiry Date** | When the license needs to be renewed. |
+| **Seat Limit** | The maximum number of organization members allowed across your deployment. |
+| **Features** | Which Factory Flow features are enabled under this license. |
+
+---
+
+## Renewing a License
+
+When your license approaches expiry, you will see a warning banner in Application Settings. To renew:
+
+1. Purchase a renewal through your Factory Flow account or by contacting sales.
+2. You'll receive a new license key.
+3. Navigate to **Application Settings → License** and enter the new key.
+
+<Note>
+  You can activate a new license key at any time before the current one expires. The new expiry date takes effect immediately on activation.
+</Note>
+
+---
+
+## License Enforcement
+
+| Status | Effect |
+|--------|--------|
+| **Active** | Full access to all licensed features. |
+| **Expiring soon** | Warning banner shown in Application Settings; full access continues. |
+| **Expired** | Application enters read-only mode. New data ingestion is paused until renewed. |
+| **Invalid** | Application will not start. Verify the key is entered correctly. |
+
+---
+
+## Air-Gapped Environments
+
+License validation is performed locally — Factory Flow does not contact external servers to verify your license. Your deployment can operate fully offline once installed and activated.

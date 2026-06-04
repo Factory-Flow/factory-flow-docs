@@ -1,0 +1,94 @@
+---
+title: "Admin Management"
+description: "Grant App Admin access and create user accounts using the Application Settings UI or the factoryflow CLI."
+---
+
+In a self-hosted Factory Flow deployment, there are two distinct levels of administrative access:
+
+| Level | Scope | What they can do |
+|-------|-------|-----------------|
+| **Organization Admin** | Per-organization | Manage members, billing, API tokens, gateways, and configuration within one organization |
+| **App Admin** | Entire installation | Access Application Settings — manage updates, license, SMTP, LDAP, data retention, and system health |
+
+These are independent. A user can be an App Admin without being an Organization Admin in any organization, and vice versa.
+
+---
+
+## Granting App Admin Access
+
+### Via the UI
+
+Navigate to **Application Settings → App Admins** and click **Add App Admin**. Search for the user by name or email (they must already have a Factory Flow account), then click **Grant Access**.
+
+The user will see the **Application Settings** menu item in their sidebar immediately.
+
+### Via the CLI
+
+```bash
+./factoryflow user make-app-admin jane@example.com
+```
+
+This is the preferred method when you need to grant access before a user has signed in, or when working on the server directly.
+
+---
+
+## Revoking App Admin Access
+
+### Via the UI
+
+Click **Revoke** next to any user in the App Admins list under **Application Settings → App Admins**.
+
+### Via the CLI
+
+```bash
+./factoryflow user revoke-app-admin jane@example.com
+```
+
+<Warning>
+  Always ensure at least one active user has App Admin access. Without an App Admin, no one can apply updates, renew the license, or modify system configuration from within the app.
+</Warning>
+
+---
+
+## Creating User Accounts
+
+On a self-hosted deployment, public registration can be disabled. The `factoryflow user create` command lets you create accounts directly from the server without requiring the user to go through the registration flow.
+
+```bash
+./factoryflow user create \
+  --name="Jane Smith" \
+  --email=jane@example.com \
+  --password=SecurePassword123 \
+  --org="Acme Manufacturing" \
+  --role=editor
+```
+
+| Flag | Description |
+|------|-------------|
+| `--name` | The user's display name |
+| `--email` | Their email address (used to sign in) |
+| `--password` | Their initial password |
+| `--org` | The organization name to add them to (must already exist) |
+| `--role` | Their role in the organization: `admin`, `editor`, or `viewer` |
+
+All flags are optional — the command will prompt for any missing values interactively.
+
+<Tip>
+  Use `user create` when onboarding a team on a fresh install, or when LDAP is not configured and you want to pre-provision accounts without emailing invitations.
+</Tip>
+
+---
+
+## Host Information
+
+Navigate to **Application Settings → Host Info** to see your server's live resource usage:
+
+| Metric | Description |
+|--------|-------------|
+| CPU Usage | Current processor load |
+| Memory Usage | RAM consumed vs available |
+| Disk Usage | Storage used by application data and database |
+| Database Status | Connectivity and health of the Factory Flow database |
+| Application Version | Currently installed version |
+
+Use this page to diagnose performance issues or plan capacity upgrades. If resource usage is consistently high, consider upgrading your server or adjusting [Data Retention](/self-hosted/data-retention) settings to reduce database size.

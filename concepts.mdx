@@ -1,0 +1,126 @@
+---
+title: "Key Concepts"
+description: "Understand the metrics and building blocks that power Factory Flow."
+---
+
+## Core Metrics
+
+Factory Flow tracks five primary metrics across every level of your operation. Understanding what each one means — and how it's calculated — helps you get the most out of your analytics.
+
+### Cycle Time
+
+Cycle Time is the time between consecutive parts coming off a machine. It is the most fundamental signal of machine health.
+
+- **Lower is generally better** — a shorter cycle time means the machine is producing faster.
+- Factory Flow measures cycle time continuously and compares each reading to the **thresholds you configure** per machine. The color of the machine in your analytics view reflects where the current cycle time sits within those zones.
+
+| Color | Meaning |
+|-------|---------|
+| Green | Cycle time is within your target range |
+| Yellow | Cycle time is approaching your alert threshold |
+| Red | Cycle time has exceeded your alert threshold |
+
+<Frame>
+  <img src="/images/concepts-cycle-time-thresholds.png" alt="Cycle time threshold zones on a timeline" />
+</Frame>
+
+### OEE — Overall Equipment Effectiveness
+
+OEE is the gold-standard metric for measuring manufacturing productivity. It combines three factors into a single percentage:
+
+```
+OEE = Availability × Performance × Quality
+```
+
+<Frame>
+  <img src="/images/concepts-oee-breakdown.png" alt="OEE breakdown diagram showing Availability, Performance, and Quality components" />
+</Frame>
+
+<AccordionGroup>
+  <Accordion title="Availability">
+    The percentage of scheduled production time that the machine was actually running.
+
+    ```
+    Availability = (Planned Production Time − Downtime) ÷ Planned Production Time
+    ```
+
+    A machine that runs 7.5 hours out of an 8-hour shift has **93.75% Availability**.
+  </Accordion>
+
+  <Accordion title="Performance">
+    How fast the machine is running compared to its maximum designed speed.
+
+    ```
+    Performance = (Actual Output × Ideal Cycle Time) ÷ Planned Production Time
+    ```
+
+    This captures slow cycles and minor stops — the machine is running, but not at full speed.
+  </Accordion>
+
+  <Accordion title="Quality">
+    The percentage of parts produced that meet quality standards (no rework, no scrap).
+
+    ```
+    Quality = Good Parts ÷ Total Parts Produced
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  World-class OEE is considered to be **85% or above**. Most factories start around 40–60% when they first start measuring accurately.
+</Tip>
+
+### Downtime
+
+Downtime is any period when a machine stops during a scheduled shift. Factory Flow tracks downtime automatically when cycle time stops.
+
+Downtime is broken down by cause in the analytics charts so you can see whether unplanned stops are due to maintenance, material shortages, changeovers, or other reasons.
+
+### Production
+
+Production is the total number of parts (cycles) completed within the selected time window. Factory Flow plots this over time so you can see output trends and compare shifts or days side by side.
+
+### Scrap Rate
+
+Scrap Rate is the percentage of produced parts that did not meet quality standards. Tracking scrap rate over time helps identify process drift before it becomes a larger problem.
+
+---
+
+## Building Blocks
+
+These are the objects you configure in Factory Flow to represent your physical operation.
+
+<Frame>
+  <img src="/images/concepts-hierarchy.png" alt="Factory Flow hierarchy: Organization → Facility → Line → Machine" />
+</Frame>
+
+<CardGroup cols={2}>
+  <Card title="Machine" icon="gear">
+    A single piece of production equipment. Machines have a data source connected to them and can be assigned to lines and shifts.
+  </Card>
+  <Card title="Line" icon="arrow-right-arrow-left">
+    A group of machines arranged in the sequence parts flow through them. Analytics at the line level aggregate all machines on the line.
+  </Card>
+  <Card title="Facility" icon="building">
+    A physical site — a plant, warehouse, or building. Facilities contain lines and machines and provide a top-level roll-up for analytics.
+  </Card>
+  <Card title="Shift" icon="clock">
+    A recurring schedule that defines when production is expected to run. OEE is only calculated against time within a scheduled shift.
+  </Card>
+</CardGroup>
+
+---
+
+## User Roles
+
+Every member of your organization has one of three roles:
+
+| Role | What they can do |
+|------|-----------------|
+| **Admin** | Full access — manage members, billing, API tokens, gateways, and all configuration |
+| **Editor** | Create and edit machines, lines, facilities, shifts, layouts, and alert rules |
+| **Viewer** | Read-only access to analytics, layouts, machines, and alert history |
+
+<Note>
+  Role changes take effect immediately. Admins can update any member's role from **Organization Settings → Members**.
+</Note>

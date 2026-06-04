@@ -1,27 +1,113 @@
 ---
-title: "Quickstart"
-description: "Shortcut to the latest quickstart flow in Getting started."
+title: "Quick Start"
+description: "Get Factory Flow set up and your first machine reporting data in under 10 minutes."
 ---
 
-If you landed here from an older link, the quickstart is now split into focused steps under **Getting started**.
+Follow these steps to go from a fresh account to seeing live analytics on your first machine.
+
+<Steps>
+  <Step title="Create your account">
+    Head to [app.factoryflow.app/register](https://app.factoryflow.app/register) and sign up with your work email.
+
+    You'll receive a one-time code by email to verify your address. Enter it on the verification screen, then set your password to complete registration.
+
+    <Tip>
+      If your team is already on Factory Flow, ask your Organization Admin to send you an invitation instead. Accepting an invitation automatically connects your account to your team's workspace.
+    </Tip>
+  </Step>
+
+  <Step title="Set up your organization">
+    After signing in for the first time you'll be prompted to either **create a new organization** or **join an existing one**.
+
+    - **Create** — Enter a name for your workspace (usually your company or plant name). This becomes the shared environment for your entire team.
+    - **Join** — Search for your company's existing organization. Your request will be sent to an admin for approval, or you'll be joined automatically if the organization is public.
+
+    <Note>
+      Everything in Factory Flow — machines, lines, analytics, and team members — lives inside an organization. You can be a member of multiple organizations and switch between them at any time.
+    </Note>
+  </Step>
+
+  <Step title="Add your first facility">
+    Navigate to **Configure → Facilities** and click **New Facility**.
+
+    Enter a name and optional location (city, address, or site code). Facilities represent physical locations — a plant, warehouse, or building. If you only have one site, create one facility for it.
+
+    <Frame>
+      <img src="/images/quickstart-new-facility.png" alt="New Facility form" />
+    </Frame>
+  </Step>
+
+  <Step title="Add a machine">
+    Navigate to **Configure → Machines** and click **New Machine**.
+
+    Fill in:
+    - **Name** — A clear, recognizable label (e.g. "Press Line 3" or "CNC-04").
+    - **Machine Type** — The category this machine belongs to (Lathe, Press, Robot, etc.).
+    - **Data Source** — How Factory Flow collects data from this machine. Select the connector that matches your setup (Gateway, OPC-UA, etc.).
+
+    After saving, your machine will appear in the machines list and begin reporting once a data source is connected.
+
+    <Frame>
+      <img src="/images/quickstart-new-machine.png" alt="New Machine form" />
+    </Frame>
+  </Step>
+
+  <Step title="Create a production line">
+    Navigate to **Configure → Lines** and click **New Line**.
+
+    Give the line a name and assign it to your facility. Once saved, open the line and use the **Part Flow** tab to drag your machines into the sequence they run — left to right represents the order parts flow through the line.
+
+    <Frame>
+      <img src="/images/quickstart-part-flow.png" alt="Part Flow diagram editor" />
+    </Frame>
+  </Step>
+
+  <Step title="Set up a shift schedule">
+    Navigate to **Configure → Shifts** and click **New Shift**.
+
+    Choose a preset (8-hour, 12-hour, or 24-hour) or drag to draw custom shift windows on the weekly schedule grid. Assign this shift to your machines so Factory Flow knows when production is expected to be running.
+
+    <Tip>
+      Shift schedules affect OEE calculations. Only time inside a defined shift counts toward Availability — downtime outside of shifts is not penalised.
+    </Tip>
+
+    <Frame>
+      <img src="/images/quickstart-shift-schedule.png" alt="Shift schedule weekly grid" />
+    </Frame>
+  </Step>
+
+  <Step title="View your analytics">
+    Navigate to **Monitor → Analytics** and select your machine, line, or facility from the dropdown.
+
+    You'll see live KPI tiles and trend charts as data starts flowing in. Use the time window selector in the top-right to zoom between 1 hour and 3 months of history.
+
+    <Frame>
+      <img src="/images/quickstart-analytics.png" alt="Analytics dashboard with KPI tiles and charts" />
+    </Frame>
+  </Step>
+
+  <Step title="Set up your first alert">
+    Navigate to **Configure → Alert Rules** and click **New Alert Rule**.
+
+    Choose what to monitor (a machine, line, or facility), set a threshold (e.g. "Cycle Time exceeds 45 seconds"), and assign an alert group to receive email notifications when the rule fires.
+  </Step>
+</Steps>
+
+---
+
+## What's next?
 
 <CardGroup cols={2}>
-  <Card title="Quickstart overview" icon="bolt" href="/getting-started/quickstart">
-    Start here for the five-step path.
+  <Card title="Understand the numbers" icon="calculator" href="/concepts">
+    Learn how OEE, Cycle Time, and Downtime are calculated.
   </Card>
-  <Card title="Factory setup" icon="warehouse" href="/getting-started/factory-setup">
-    Create facilities, lines, machines, and shifts.
+  <Card title="Invite your team" icon="users" href="/manage/team">
+    Add colleagues and set their access level.
   </Card>
-  <Card title="Define products and BOMs" icon="sitemap" href="/getting-started/define-products">
-    Set up SKUs and components.
+  <Card title="Explore analytics" icon="chart-mixed" href="/monitor/analytics">
+    Deep-dive into what you can see on the Analytics page.
   </Card>
-  <Card title="Release a work order" icon="clipboard-list" href="/getting-started/release-work-order">
-    Create and start an order.
-  </Card>
-  <Card title="Connect machine data" icon="database" href="/getting-started/connect-data">
-    Send a test payload.
-  </Card>
-  <Card title="Verify dashboards" icon="chart-line" href="/getting-started/verify-dashboards">
-    Confirm analytics update.
+  <Card title="Build your floor layout" icon="map" href="/monitor/layouts">
+    Place machines on a visual factory floor map.
   </Card>
 </CardGroup>

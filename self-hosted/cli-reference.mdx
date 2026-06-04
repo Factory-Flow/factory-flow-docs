@@ -1,0 +1,247 @@
+---
+title: "CLI Reference"
+description: "Complete reference for all factoryflow script commands."
+---
+
+The `factoryflow` script is the management CLI for your self-hosted Factory Flow installation. It lives in your installation directory and wraps Docker Compose operations with Factory Flow-specific logic.
+
+```bash
+./factoryflow <command> [options]
+```
+
+---
+
+## Lifecycle
+
+### `install`
+
+Interactive first-time installation wizard. Sets up `.env`, pulls Docker images, starts the database and application, and runs a health check.
+
+```bash
+./factoryflow install
+```
+
+See [Installation](/self-hosted/installation) for the full walkthrough.
+
+### `update [version]`
+
+Updates Factory Flow to the specified version (default: latest). Automatically creates a database backup and generates a rollback script before making any changes.
+
+```bash
+# Update to latest
+./factoryflow update
+
+# Update to a specific version
+./factoryflow update 1.2.0
+
+# Also update TimescaleDB to latest compatible version
+./factoryflow update --update-db
+
+# Update both to specific versions
+./factoryflow update 1.2.0 --update-db=2.18.0-pg16
+
+# Skip the confirmation prompt (useful in automation)
+./factoryflow update --yes
+./factoryflow update 1.2.0 -y
+```
+
+See [System Updates](/self-hosted/updates) for full details.
+
+### `rollback`
+
+Lists available rollback scripts and prompts you to run the latest one. Rollback scripts are generated automatically by `update`.
+
+```bash
+./factoryflow rollback
+```
+
+To run a specific rollback script manually:
+
+```bash
+bash ./rollback-scripts/rollback_20240315_143022.sh
+```
+
+---
+
+## Backups
+
+### `backup create`
+
+Creates a database backup in `./database-backups/`.
+
+```bash
+./factoryflow backup create
+```
+
+### `backup list`
+
+Lists available backup files with sizes.
+
+```bash
+./factoryflow backup list
+```
+
+### `backup restore [file]`
+
+Restores a backup. If no file is provided, an interactive picker is shown.
+
+```bash
+# Interactive picker
+./factoryflow backup restore
+
+# Restore a specific file
+./factoryflow backup restore ./database-backups/db_factory_flow_20240315_143022.sql
+```
+
+See [Backups & Restore](/self-hosted/backups) for full details.
+
+---
+
+## Operations
+
+### `start`
+
+Starts all Factory Flow containers.
+
+```bash
+./factoryflow start
+```
+
+### `stop`
+
+Stops all Factory Flow containers.
+
+```bash
+./factoryflow stop
+```
+
+### `status`
+
+Shows the running status of all containers.
+
+```bash
+./factoryflow status
+```
+
+### `logs [service]`
+
+Tails logs. Defaults to the application container (`app`).
+
+```bash
+# Application container logs (Docker)
+./factoryflow logs
+
+# Laravel application log
+./factoryflow logs laravel
+
+# Queue worker log
+./factoryflow logs queue
+
+# Scheduler log
+./factoryflow logs scheduler
+
+# Database container logs
+./factoryflow logs timescaledb
+```
+
+---
+
+## App
+
+### `config cache`
+
+Re-caches the Laravel configuration. Run this after manually editing the `.env` file.
+
+```bash
+./factoryflow config cache
+```
+
+### `config show [key]`
+
+Shows current configuration values.
+
+```bash
+# Show all config
+./factoryflow config show
+
+# Show a specific key
+./factoryflow config show mail
+```
+
+### `artisan <cmd>`
+
+Runs any Laravel Artisan command inside the app container.
+
+```bash
+./factoryflow artisan queue:failed
+./factoryflow artisan migrate:status
+```
+
+### `shell`
+
+Opens an interactive shell inside the running app container.
+
+```bash
+./factoryflow shell
+```
+
+### `jobs failed`
+
+Lists failed background queue jobs.
+
+```bash
+./factoryflow jobs failed
+```
+
+### `jobs retry`
+
+Retries all failed queue jobs.
+
+```bash
+./factoryflow jobs retry
+```
+
+### `jobs flush`
+
+Deletes all failed queue jobs.
+
+```bash
+./factoryflow jobs flush
+```
+
+---
+
+## Users
+
+### `user create`
+
+Creates a user account and optionally attaches them to an organization.
+
+```bash
+./factoryflow user create \
+  --name="Jane Smith" \
+  --email=jane@example.com \
+  --password=SecurePassword123 \
+  --org="Acme Manufacturing" \
+  --role=editor
+```
+
+All flags are optional — the command will prompt for missing values interactively.
+
+### `user make-app-admin <email>`
+
+Grants App Admin access to an existing user.
+
+```bash
+./factoryflow user make-app-admin jane@example.com
+```
+
+### `user revoke-app-admin <email>`
+
+Revokes App Admin access from a user.
+
+```bash
+./factoryflow user revoke-app-admin jane@example.com
+```
+
+See [Admin Management](/self-hosted/admin-management) for context on what App Admin access controls.

@@ -1,0 +1,105 @@
+---
+title: "Machines"
+description: "Register and configure the production equipment you want Factory Flow to monitor."
+---
+
+Machines are the foundation of Factory Flow. Every piece of data — cycle times, OEE, downtime, alerts — originates from a machine. Before you can monitor anything, you need to register the machines you want to track.
+
+## The Machine List
+
+Navigate to **Configure → Machines** to see all machines registered in your organization. The list is searchable and filterable by machine type.
+
+Each row shows:
+- **Name** — The machine's label.
+- **Machine Type** — The category (e.g. CNC, Press, Robot, Conveyor).
+- **Lines** — Which production lines this machine is assigned to.
+- **Shifts** — Which shift schedule governs this machine's OEE calculations.
+
+<Frame>
+  <img src="/images/machines-list.png" alt="Machines list with name, type, lines, and shift columns" />
+</Frame>
+
+---
+
+## Creating a Machine
+
+Click **New Machine** to open the machine editor. Fill out the tabs below.
+
+### General Tab
+
+| Field | Description |
+|-------|-------------|
+| **Name** | A clear, recognizable label visible throughout the app (e.g. "Hydraulic Press 2" or "CNC-07"). |
+| **Machine Type** | The category this machine belongs to. Types are used for filtering and grouping. |
+| **Assigned Shifts** | The shift schedule(s) that define when this machine is expected to be running. OEE is calculated against these windows. |
+| **Assigned Lines** | The production line(s) this machine belongs to. A machine can be on multiple lines. |
+
+<Frame>
+  <img src="/images/machines-general-tab.png" alt="Machine editor General tab with name, type, shifts, and lines fields" />
+</Frame>
+
+### Data Source Tab
+
+The Data Source tab is where you configure how Factory Flow receives data from the machine. Select the connector type that matches your setup, then fill in the connection details.
+
+<Frame>
+  <img src="/images/machines-data-source-tab.png" alt="Machine Data Source tab showing connector type selector and connection settings" />
+</Frame>
+
+<Note>
+  Data source configuration is set up once per machine. If you need help connecting a specific machine type or protocol, contact support.
+</Note>
+
+### Analytics Tab
+
+The Analytics tab lets you define the thresholds that power color-coding, OEE calculations, and alerts.
+
+**Cycle Time Thresholds**
+
+Use the visual timeline editor to define zones:
+
+| Zone | Meaning |
+|------|---------|
+| **Target** (Green) | The ideal range your machine should operate within. |
+| **Warning** (Yellow) | Cycle time is drifting — worth watching but not yet critical. |
+| **Alert** (Red) | Cycle time has exceeded an acceptable level. |
+
+Drag the zone boundaries on the timeline to set your values in seconds.
+
+<Frame>
+  <img src="/images/machines-analytics-thresholds.png" alt="Cycle time threshold timeline editor with draggable green, yellow, and red zone boundaries" />
+</Frame>
+
+**Expected Throughput**
+
+Set the number of parts per hour this machine should produce at full performance. Factory Flow uses this value to calculate the Performance component of OEE.
+
+**OEE Thresholds**
+
+Set the percentage thresholds for Availability, Performance, and Quality at which you want the OEE indicator to turn yellow (warning) and red (alert). These thresholds also control alert rule evaluation if you have OEE-based alert rules configured.
+
+### Alerts Tab
+
+The Alerts tab shows all alert rules currently configured for this specific machine. You can create new machine-level rules directly here, or manage all your rules from **Configure → Alert Rules**.
+
+---
+
+## Editing and Deleting Machines
+
+Click any machine in the list to open its editor. Make changes and click **Save**.
+
+To delete a machine, open it and scroll to the bottom of the General tab. Deleting a machine removes all of its historical data. This action cannot be undone.
+
+<Warning>
+  Deleting a machine permanently removes all associated analytics data. Export any reports you need before deleting.
+</Warning>
+
+---
+
+## Live Data View
+
+From any machine's editor, click **View Live Data** to open a real-time stream of the raw data being received from the machine. This is useful for confirming a new data connection is working correctly.
+
+<Frame>
+  <img src="/images/machines-live-data.png" alt="Live Data view showing a real-time stream of incoming machine readings" />
+</Frame>

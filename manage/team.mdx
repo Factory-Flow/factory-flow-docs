@@ -1,0 +1,83 @@
+---
+title: "Team & Members"
+description: "Invite colleagues, manage roles, and control who has access to your organization."
+---
+
+Every person who uses Factory Flow in your organization is a member with a defined role. Admins manage who can join, what they can do, and who they are.
+
+## Viewing Members
+
+Navigate to **Organization Settings → Members** to see everyone currently in your organization. The list shows each person's name, email address, role, and when they last signed in.
+
+<Frame>
+  <img src="/images/team-members-list.png" alt="Members list showing name, email, role badge, and last sign-in for each member" />
+</Frame>
+
+---
+
+## Inviting Someone
+
+<Steps>
+  <Step title="Open Members">
+    Go to **Organization Settings → Members**.
+  </Step>
+  <Step title="Click Invite Member">
+    Click the **Invite Member** button in the top-right.
+  </Step>
+  <Step title="Enter their email and role">
+    Enter the person's email address and select the role they should have (Admin, Editor, or Viewer). See the role descriptions below if you're unsure.
+
+    <Frame>
+      <img src="/images/team-invite-modal.png" alt="Invite Member modal with email input and role selector" />
+    </Frame>
+  </Step>
+  <Step title="Send the invitation">
+    Click **Send Invitation**. The person receives an email with a link to accept. If they don't already have a Factory Flow account, they'll be prompted to create one as part of accepting.
+  </Step>
+</Steps>
+
+Pending invitations appear below the members list. You can resend or revoke a pending invitation at any time.
+
+---
+
+## Roles
+
+| Role | What they can do |
+|------|-----------------|
+| **Admin** | Everything — manage members, billing, API tokens, gateways, alert groups, and all configuration. |
+| **Editor** | Create and edit machines, lines, facilities, shifts, layouts, and alert rules. Cannot manage team or billing. |
+| **Viewer** | Read-only access to analytics, layouts, machines, lines, and alert history. Cannot create or change anything. |
+
+<Tip>
+  Use **Viewer** for anyone who only needs to read dashboards and reports — supervisors, executives, or external auditors. Use **Editor** for engineers and operators who need to configure machines and alerts.
+</Tip>
+
+---
+
+## Changing a Member's Role
+
+Click the role badge next to any member's name to open the role selector. Changes take effect immediately.
+
+---
+
+## Removing a Member
+
+Click the **•••** menu next to any member and select **Remove from Organization**. Their account is not deleted — they simply lose access to this organization. You can re-invite them at any time.
+
+<Warning>
+  You cannot remove the last Admin from an organization. Assign another member as Admin first.
+</Warning>
+
+---
+
+## Joining Without an Invitation
+
+If your organization is set to **Public** (toggled under Organization Settings → General), users can search for your organization by name and submit a join request. Admins see pending requests on the Members page and can approve or decline them.
+
+---
+
+## Alert Groups
+
+Alert groups are email distribution lists used for notifications. They are separate from organization membership — you can add any email address to an alert group, including addresses that don't have a Factory Flow account.
+
+Manage alert groups under **Organization Settings → Alert Groups**.

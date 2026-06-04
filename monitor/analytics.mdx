@@ -1,0 +1,131 @@
+---
+title: "Analytics"
+description: "Monitor real-time and historical performance metrics across every machine, line, and facility."
+---
+
+The Analytics page is the main monitoring hub in Factory Flow. It gives you a live and historical view of every KPI that matters — from a single machine all the way up to an entire facility.
+
+## Navigating Analytics
+
+Analytics is organized into three levels. Use the **selector dropdown** at the top of the page to switch between them:
+
+<CardGroup cols={3}>
+  <Card title="Machine" icon="gear">
+    Drill into a single machine's cycle time, OEE, and downtime history.
+  </Card>
+  <Card title="Line" icon="arrow-right-arrow-left">
+    See aggregated performance across all machines on a production line.
+  </Card>
+  <Card title="Facility" icon="building">
+    Roll up analytics across all lines and machines at a site.
+  </Card>
+</CardGroup>
+
+<Frame>
+  <img src="/images/analytics-selector.png" alt="Analytics level selector dropdown showing Machine, Line, and Facility options" />
+</Frame>
+
+---
+
+## KPI Tiles
+
+At the top of every analytics view, five KPI tiles give you an instant summary of the selected time window:
+
+| Tile | What it shows |
+|------|--------------|
+| **Cycle Time** | Average time between parts. Compared against your configured target range. |
+| **OEE** | Overall Equipment Effectiveness as a percentage. Color-coded against your thresholds. |
+| **Production** | Total parts produced in the selected window. |
+| **Downtime** | Total time the machine/line was stopped during a scheduled shift. |
+| **Scrap Rate** | Percentage of parts that did not meet quality standards. |
+
+Each tile shows the current value alongside a trend indicator comparing it to the previous equivalent period.
+
+<Frame>
+  <img src="/images/analytics-kpi-tiles.png" alt="Five KPI tiles showing Cycle Time, OEE, Production, Downtime, and Scrap Rate" />
+</Frame>
+
+---
+
+## Charts
+
+Below the KPI tiles, Factory Flow renders several charts to help you understand trends over time.
+
+### Cycle Time Trend
+
+A time-series line chart showing how cycle time has moved across the selected window. Threshold bands are overlaid so you can instantly see periods where performance was in or out of range.
+
+<Frame>
+  <img src="/images/analytics-cycle-time-trend.png" alt="Cycle time trend chart with green, yellow, and red threshold bands" />
+</Frame>
+
+### OEE Breakdown
+
+A stacked chart that splits OEE into its three components — Availability, Performance, and Quality — over time. This makes it easy to identify which factor is pulling down your overall score.
+
+<Frame>
+  <img src="/images/analytics-oee-breakdown.png" alt="Stacked OEE breakdown chart showing Availability, Performance, and Quality over time" />
+</Frame>
+
+### Production Output
+
+A bar chart showing parts produced per time bucket. Useful for comparing shift-to-shift or day-to-day output.
+
+### Downtime Analysis
+
+A chart breaking downtime into categories (maintenance, changeover, material wait, etc.) so you can see which causes are costing the most time.
+
+<Frame>
+  <img src="/images/analytics-downtime.png" alt="Downtime analysis chart with categorized causes" />
+</Frame>
+
+### Cycle Time Distribution
+
+A histogram showing the spread of individual cycle time readings. A tight, narrow distribution centered on your target is ideal. A wide spread indicates inconsistency.
+
+---
+
+## Controls
+
+### Time Window
+
+Use the time window selector to choose how much history to display:
+
+| Option | Description |
+|--------|-------------|
+| 1h, 4h, 8h, 12h | Last N hours — ideal for live shift monitoring |
+| 1d | Last 24 hours |
+| 1w | Last 7 days |
+| 1M | Last 30 days |
+| 3M | Last 90 days |
+| Custom | Pick any start and end date |
+
+### Bucket Size
+
+The bucket size controls the granularity of chart data points. A smaller bucket gives more detail; a larger bucket smooths the data and is better for spotting long-term trends. Factory Flow auto-suggests a bucket size based on your time window, but you can override it.
+
+### Auto-Refresh
+
+Use the refresh interval setting to keep your analytics automatically up to date. Choose from manual refresh, 30 seconds, 1 minute, or 5 minutes. Auto-refresh is useful when analytics is displayed on a floor TV or NOC screen.
+
+### Shift Filter
+
+Toggle the **Include Shifts** option to filter analytics to only show data collected during scheduled shift hours. When enabled, off-shift noise (like overnight idle cycles) is excluded from calculations.
+
+### Alert Overlay
+
+Toggle the **Show Alerts** option to overlay alert trigger events directly onto the trend charts as markers. This makes it easy to correlate a spike in cycle time with the alert that fired.
+
+<Frame>
+  <img src="/images/analytics-controls.png" alt="Analytics controls bar showing time window, bucket size, auto-refresh, and filter toggles" />
+</Frame>
+
+---
+
+## Exporting Reports
+
+Click the **Export PDF** button in the top-right of any analytics view to download a formatted PDF report of the current view. The export includes the active KPI tiles and all visible charts, with the time window and bucket size preserved.
+
+<Tip>
+  Export reports are useful for shift handover summaries, weekly operations reviews, or sending a snapshot to a stakeholder who doesn't have a Factory Flow account.
+</Tip>

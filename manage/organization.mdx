@@ -1,0 +1,112 @@
+---
+title: "Organization Settings"
+description: "Manage your organization's profile, API access, gateways, billing, and audit logs."
+---
+
+Organization Settings is the administrative hub for your Factory Flow workspace. Navigate there by clicking your organization name in the sidebar and selecting **Settings**.
+
+<Frame>
+  <img src="/images/org-settings-overview.png" alt="Organization Settings page showing the General, API Tokens, Gateways, and other sections" />
+</Frame>
+
+---
+
+## General
+
+Set your organization's display name and control its public visibility.
+
+**Public Organization** — When enabled, any Factory Flow user can find your organization by name and submit a join request. When disabled, access is by invitation only. Most teams leave this off for security.
+
+---
+
+## API Tokens
+
+API Tokens allow external systems to read analytics data from your Factory Flow organization programmatically.
+
+To create a token:
+1. Click **New Token**.
+2. Give it a descriptive name so you know what it's used for (e.g. "Power BI Dashboard" or "ERP Integration").
+3. Click **Create** and copy the token immediately — it is only shown once.
+
+<Warning>
+  Treat API tokens like passwords. Anyone with a token can read your organization's analytics data. Do not share tokens or commit them to source control. If a token is compromised, delete it and create a new one immediately.
+</Warning>
+
+<Frame>
+  <img src="/images/org-api-tokens.png" alt="API Tokens list with token names, creation dates, and revoke buttons" />
+</Frame>
+
+Tokens can be revoked at any time by clicking **Delete** next to the token name.
+
+---
+
+## Gateways
+
+Gateways are the IoT devices or edge computers that collect data from your machines and forward it to Factory Flow. Each gateway needs to be registered here before it can send data.
+
+To register a gateway, click **New Gateway**, give it a name and description, and save. You'll receive a unique identifier to configure on the gateway device itself.
+
+<Frame>
+  <img src="/images/org-gateways.png" alt="Gateways list showing registered gateway devices with their unique identifiers and status" />
+</Frame>
+
+---
+
+## Alert Groups
+
+Alert groups are named email distribution lists used by your alert rules. When an alert fires, Factory Flow sends the notification to all addresses in the assigned group.
+
+To create an alert group:
+1. Click **New Alert Group**.
+2. Give it a name (e.g. "Maintenance Team" or "Operations Leads").
+3. Add email addresses — one per line.
+4. Save.
+
+<Note>
+  Email addresses in alert groups do not need to be Factory Flow users. You can add any email address, including shared inboxes or external contacts.
+</Note>
+
+---
+
+## Subscription & Usage
+
+The **Subscription** tab shows your current plan, billing information, and renewal date.
+
+The **Usage** tab shows how much of your plan's limits you're currently consuming:
+
+| Resource | Description |
+|----------|-------------|
+| **Machines** | Number of machines registered vs your plan's limit. |
+| **Layouts** | Number of floor layouts created. |
+| **Storage** | Data storage consumed by historical analytics. |
+
+If you're approaching a limit, you'll see a warning indicator. Contact support or upgrade your plan to increase limits.
+
+---
+
+## Audit Log
+
+The Audit Log is a chronological record of every significant action taken in your organization — who made changes, what they changed, and when.
+
+| Column | Description |
+|--------|-------------|
+| **Timestamp** | When the action occurred. |
+| **User** | The member who performed the action. |
+| **Action** | What was done (e.g. "Machine Created", "Member Invited", "Alert Rule Deleted"). |
+| **Details** | Additional context about the specific change. |
+
+The audit log is read-only and cannot be cleared or edited. It is available to all Admin and Editor members.
+
+<Frame>
+  <img src="/images/org-audit-log.png" alt="Audit log table showing timestamped entries with user, action, and details columns" />
+</Frame>
+
+---
+
+## Danger Zone
+
+The **Danger Zone** at the bottom of Organization Settings contains the option to **Delete Organization**.
+
+<Warning>
+  Deleting your organization permanently removes all machines, analytics data, layouts, alert rules, and member access. This cannot be undone. Export any data you need before proceeding.
+</Warning>

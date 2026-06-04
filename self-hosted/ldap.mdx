@@ -1,0 +1,94 @@
+---
+title: "LDAP & Active Directory"
+description: "Connect Factory Flow to your corporate directory so employees sign in with their existing credentials."
+---
+
+Factory Flow supports LDAP and Microsoft Active Directory integration, allowing your team to sign in with their existing corporate credentials. You can also map LDAP groups to Factory Flow roles so access levels are managed automatically from your directory.
+
+## How It Works
+
+When LDAP is configured and enabled:
+
+1. A user enters their corporate username and password on the Factory Flow login screen.
+2. Factory Flow queries your LDAP server to verify the credentials.
+3. If authentication succeeds, Factory Flow checks the user's LDAP group membership.
+4. The user's Factory Flow role is set based on the group-to-role mapping you've configured.
+5. If the user doesn't yet have a Factory Flow account, one is created automatically on first login.
+
+<Note>
+  LDAP-authenticated users still exist as regular Factory Flow members. Their roles are synchronized from LDAP group membership on each login.
+</Note>
+
+---
+
+## Configuring LDAP
+
+Navigate to **Application Settings → LDAP Settings**.
+
+### Server Settings
+
+| Field | Description |
+|-------|-------------|
+| **Host** | The hostname or IP of your LDAP/Active Directory server. |
+| **Port** | `389` for plain LDAP or STARTTLS; `636` for LDAP over SSL (LDAPS). |
+| **Encryption** | `None`, `STARTTLS`, or `SSL`. Use `SSL` or `STARTTLS` in production. |
+| **Base DN** | The base Distinguished Name to search from (e.g. `DC=yourcompany,DC=com`). |
+
+### Bind Account
+
+A read-only service account Factory Flow uses to query your directory.
+
+| Field | Description |
+|-------|-------------|
+| **Bind DN** | The full DN of the service account (e.g. `CN=factoryflow-svc,OU=ServiceAccounts,DC=yourcompany,DC=com`). |
+| **Bind Password** | The password for the service account. |
+
+### User Search
+
+| Field | Description |
+|-------|-------------|
+| **User Search Base** | The OU or container to search for users (e.g. `OU=Users,DC=yourcompany,DC=com`). |
+| **Username Attribute** | The attribute users type as their username. Typically `sAMAccountName` for Active Directory or `uid` for OpenLDAP. |
+| **Email Attribute** | The attribute containing the user's email. Typically `mail`. |
+| **Display Name Attribute** | The attribute for the user's full name. Typically `displayName` or `cn`. |
+
+---
+
+## Group-to-Role Mapping
+
+Map LDAP groups to Factory Flow roles so access is managed automatically from your directory.
+
+Navigate to **Group Mappings** and click **Add Mapping**:
+
+| Field | Description |
+|-------|-------------|
+| **LDAP Group DN** | The full DN of the group (e.g. `CN=FactoryFlow-Admins,OU=Groups,DC=yourcompany,DC=com`). |
+| **Factory Flow Role** | The role to assign: `Admin`, `Editor`, or `Viewer`. |
+
+When a user signs in, Factory Flow evaluates all group mappings in order. The first matching group wins. Users not in any mapped group are denied access.
+
+<Tip>
+  Create three AD security groups — one for each role — and manage membership entirely in Active Directory. Role changes take effect on the user's next login.
+</Tip>
+
+---
+
+## Testing the Connection
+
+Click **Test Connection** after saving your settings. Factory Flow will attempt to bind with your service account and confirm the LDAP server is reachable. A green indicator confirms success.
+
+---
+
+## Applying Config Changes
+
+If you modify LDAP settings by editing the `.env` file directly on the server rather than through the UI, run:
+
+```bash
+./factoryflow config cache
+```
+
+---
+
+## Disabling LDAP
+
+Toggle the **Enable LDAP** switch off to disable LDAP authentication. Users will revert to email/password login. Existing Factory Flow accounts are preserved.

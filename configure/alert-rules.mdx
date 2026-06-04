@@ -1,0 +1,79 @@
+---
+title: "Alert Rules"
+description: "Configure threshold-based rules that notify your team when machine performance drifts outside acceptable limits."
+---
+
+Alert Rules are the conditions Factory Flow watches for. When a machine's data crosses a threshold you've defined, Factory Flow fires an alert and sends a notification to the email group you've specified.
+
+## The Alert Rules List
+
+Navigate to **Configure → Alert Rules** to see all rules in your organization. Each row shows the rule name, the metric being monitored, the target (machine, line, or facility), and the threshold.
+
+<Frame>
+  <img src="/images/alert-rules-list.png" alt="Alert rules list showing rule name, metric, target, and threshold for each rule" />
+</Frame>
+
+---
+
+## Creating an Alert Rule
+
+Click **New Alert Rule** and fill in the form.
+
+### What to monitor
+
+**Metric** — The performance indicator that will trigger the alert:
+
+| Metric | Triggers when... |
+|--------|----------------|
+| **Cycle Time** | Cycle time exceeds (or drops below) a defined value in seconds. |
+| **Downtime** | Accumulated downtime in a window exceeds a threshold in minutes. |
+| **OEE** | OEE falls below a percentage threshold. |
+| **Production** | Parts produced in a window falls below an expected target. |
+| **Scrap Rate** | Scrap percentage exceeds a defined threshold. |
+
+**Target** — Whether this rule applies to a specific machine, a line, or a whole facility. Line and facility rules aggregate data from all their machines before evaluating the threshold.
+
+**Threshold** — The value at which the alert fires. For Cycle Time and Downtime this is an upper limit (above X, fire). For OEE and Production it's a lower limit (below X, fire).
+
+<Frame>
+  <img src="/images/alert-rules-new-form.png" alt="New Alert Rule form showing metric selector, target picker, and threshold input" />
+</Frame>
+
+### Who to notify
+
+**Alert Group** — Select the email distribution group that should receive the notification when this rule fires. Alert groups are managed under **Organization Settings → Alert Groups**.
+
+<Note>
+  You need at least one Alert Group set up before you can save an alert rule. Create one first under **Organization Settings → Alert Groups** if you haven't already.
+</Note>
+
+### Rule name and description
+
+Give the rule a clear name so it's immediately recognizable in the alert history (e.g. "Press 4 — Cycle Time High" or "Line 2 — OEE Below Target").
+
+---
+
+## Alert Frequency
+
+Factory Flow evaluates alert rules continuously as data arrives. Once an alert fires for a given rule, it will not fire again for the same rule until either:
+- The condition clears (the metric returns to a healthy value), or
+- A configurable cooldown period passes.
+
+This prevents your team from being flooded with repeated notifications for the same ongoing issue.
+
+---
+
+## Machine-Level vs Organization-Level Rules
+
+You can create alert rules in two places:
+
+- **Configure → Alert Rules** — Organization-wide rule management. Best for an overview of all rules.
+- **Machine editor → Alerts tab** — Create rules scoped to a specific machine directly within its settings.
+
+Both create the same type of rule. The machine editor view is a convenience shortcut.
+
+---
+
+## Editing and Deleting Rules
+
+Click any rule in the list to edit it. To delete a rule, open it and click **Delete Rule** at the bottom. Deleting a rule does not remove its history from the Alert History page.

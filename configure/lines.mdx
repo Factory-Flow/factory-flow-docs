@@ -1,0 +1,73 @@
+---
+title: "Production Lines"
+description: "Group machines into production lines and map the sequence parts flow through them."
+---
+
+A production line in Factory Flow is a named group of machines that work together to produce a part or product. Grouping machines into lines lets you monitor the performance of an entire production process as a single unit, rather than watching each machine in isolation.
+
+## The Lines List
+
+Navigate to **Configure → Lines** to see all lines in your organization. Each row shows the line name, the facility it belongs to, and how many machines are assigned to it.
+
+<Frame>
+  <img src="/images/lines-list.png" alt="Production lines list showing name, facility, and machine count" />
+</Frame>
+
+---
+
+## Creating a Line
+
+Click **New Line** to open the line editor.
+
+### General Tab
+
+| Field | Description |
+|-------|-------------|
+| **Name** | A descriptive name for the line (e.g. "Assembly Line 1" or "Welding Cell B"). |
+| **Description** | Optional. A longer note about what this line produces or its purpose. |
+| **Part Number** | Optional. Associate a part number or product code with this line for reference. |
+| **Facility** | The physical location this line operates in. |
+
+### Part Flow Tab
+
+The Part Flow tab is a visual diagram editor that lets you map the sequence machines run in — from left to right, in the order a part moves through them.
+
+<Steps>
+  <Step title="Open the Part Flow tab">
+    Click the **Part Flow** tab in the line editor.
+  </Step>
+  <Step title="Add machines to the diagram">
+    Click **Add Machine** and select from your registered machines. The machine appears as a node in the diagram.
+  </Step>
+  <Step title="Connect machines in sequence">
+    Drag from the output handle on one machine node to the input handle of the next to create a flow arrow. This represents the path a part takes through the line.
+  </Step>
+  <Step title="Rearrange as needed">
+    Drag nodes to reposition them. The visual layout does not affect data — it's purely for clarity.
+  </Step>
+  <Step title="Save">
+    Click **Save**. The flow diagram is now visible to everyone in your organization.
+  </Step>
+</Steps>
+
+<Frame>
+  <img src="/images/lines-part-flow.png" alt="Part Flow diagram showing machines connected left to right in production sequence" />
+</Frame>
+
+<Tip>
+  The Part Flow diagram is displayed alongside the line's analytics, so your team can see the production sequence while reviewing performance data. A clear diagram makes it easier to pinpoint where bottlenecks are occurring.
+</Tip>
+
+### Alerts Tab
+
+The Alerts tab shows alert rules configured at the line level. Line-level alerts are useful for monitoring metrics that span the whole line, such as total line downtime or overall line OEE.
+
+---
+
+## Line Analytics
+
+Once a line has machines assigned, you can view its analytics under **Monitor → Analytics** by selecting a line from the dropdown. Line analytics aggregate data from all machines on the line into a combined view.
+
+<Frame>
+  <img src="/images/lines-analytics.png" alt="Line analytics view showing aggregated throughput and OEE across all machines on the line" />
+</Frame>

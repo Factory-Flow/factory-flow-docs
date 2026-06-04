@@ -1,0 +1,96 @@
+---
+title: "Self-Hosted Overview"
+description: "Everything you need to know about running Factory Flow on your own infrastructure."
+---
+
+Factory Flow is available as a fully self-hosted deployment for organizations that require data to stay on their own infrastructure — whether for compliance, security, air-gapped networks, or operational preference.
+
+The self-hosted version of Factory Flow is **feature-identical to the cloud offering**, with additional capabilities that give your team full control over the system.
+
+<CardGroup cols={2}>
+  <Card title="Full data ownership" icon="database">
+    All machine data, analytics, and user information stays within your infrastructure. Nothing is sent to external servers.
+  </Card>
+  <Card title="Internal network support" icon="network-wired">
+    Deploy on an air-gapped or private network. Factory Flow does not require internet access to function once installed.
+  </Card>
+  <Card title="LDAP / Active Directory" icon="address-book">
+    Connect to your corporate directory so employees sign in with their existing credentials and roles are mapped automatically.
+  </Card>
+  <Card title="Custom email delivery" icon="envelope">
+    Configure your own SMTP server so alert notifications and system emails are sent from your own domain.
+  </Card>
+</CardGroup>
+
+---
+
+## The `factoryflow` Script
+
+All installation, update, and operational tasks on a self-hosted deployment are managed through the `factoryflow` CLI script. It is the single entry point for everything from first install to day-to-day operations.
+
+```bash
+./factoryflow <command> [options]
+```
+
+Run `./factoryflow help` at any time to see a full command list:
+
+```
+Lifecycle:
+  install                       Install Factory Flow
+  update [version]              Update to a specific version (default: latest)
+  rollback                      List and run available rollback scripts
+
+Backups:
+  backup create                 Create a database backup
+  backup list                   List available backups
+  backup restore [file]         Restore a backup
+
+Operations:
+  start                         Start all containers
+  stop                          Stop all containers
+  status                        Show container status
+  logs [service]                Tail Docker logs (default: app)
+  logs laravel                  Tail the application log
+  logs queue                    Tail the queue worker log
+  logs scheduler                Tail the scheduler log
+
+Users:
+  user create                   Create a user account
+  user make-app-admin <email>   Grant App Admin access
+  user revoke-app-admin <email> Revoke App Admin access
+```
+
+See [CLI Reference](/self-hosted/cli-reference) for the full command documentation.
+
+---
+
+## What's Different in Self-Hosted
+
+| Feature | Cloud | Self-Hosted |
+|---------|-------|-------------|
+| Data hosting | Managed cloud | Your own servers |
+| Authentication | Email/password + OAuth | Email/password + optional LDAP |
+| User registration | Public sign-up | Admin-created or invitation only |
+| Email notifications | System-managed | Your configured SMTP server |
+| Software updates | Automatic | `./factoryflow update` |
+| License | Managed in-app | License key activated in Application Settings |
+| System administration | Not applicable | Full Application Settings panel + CLI |
+| Data retention | Plan-based | Configurable by App Admin |
+
+---
+
+## Application Settings Panel
+
+Self-hosted deployments have an additional section called **Application Settings** accessible to users designated as App Admins. It sits in the sidebar and contains:
+
+- **System Updates** — Check for and trigger application updates (also available via CLI).
+- **License** — Activate and manage your license key.
+- **SMTP Settings** — Configure outbound email.
+- **LDAP Settings** — Connect to Active Directory or LDAP.
+- **Data Retention** — Control how long historical analytics data is stored.
+- **App Admins** — Grant or revoke application-admin privileges.
+- **Host Info** — View live server resource usage (CPU, memory, disk, database).
+
+<Note>
+  Application Settings is only visible to **App Admins**. This is separate from the organization Admin role. See [Admin Management](/self-hosted/admin-management) for how to grant this access — both via the UI and via the `factoryflow` script.
+</Note>

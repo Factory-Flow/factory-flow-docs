@@ -28,131 +28,67 @@
         "tab": "Guides",
         "pages": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
-              "index",
-              "getting-started/quickstart",
-              {
-                "group": "Setup & access",
-                "pages": [
-                  "getting-started/requirements",
-                  "getting-started/account-setup",
-                  "getting-started/terminology"
-                ]
-              },
-              {
-                "group": "First production run",
-                "pages": [
-                  "getting-started/factory-setup",
-                  "getting-started/define-products",
-                  "getting-started/release-work-order",
-                  "getting-started/connect-data",
-                  "getting-started/verify-dashboards"
-                ]
-              }
+              "introduction",
+              "quickstart",
+              "concepts"
             ]
           },
           {
-            "group": "Core concepts",
+            "group": "Monitor",
             "pages": [
-              {
-                "group": "Factory model",
-                "pages": [
-                  "core-concepts/organizations",
-                  "core-concepts/facilities",
-                  "core-concepts/production-lines",
-                  "core-concepts/machines",
-                  "core-concepts/layouts"
-                ]
-              },
-              {
-                "group": "Operations model",
-                "pages": [
-                  "core-concepts/work-orders",
-                  "core-concepts/boms",
-                  "core-concepts/inventory",
-                  "core-concepts/scheduling"
-                ]
-              }
+              "monitor/analytics",
+              "monitor/layouts",
+              "monitor/alerts"
             ]
           },
           {
-            "group": "Integrations",
+            "group": "Configure",
             "pages": [
-              "integrations/overview",
-              {
-                "group": "Systems",
-                "pages": [
-                  "integrations/erp",
-                  "integrations/barcode-scanners"
-                ]
-              },
-              {
-                "group": "Events",
-                "pages": [
-                  "integrations/webhooks"
-                ]
-              },
-              {
-                "group": "Identity",
-                "pages": [
-                  "integrations/sso"
-                ]
-              }
+              "configure/machines",
+              "configure/lines",
+              "configure/facilities",
+              "configure/shifts",
+              "configure/alert-rules"
             ]
           },
           {
-            "group": "Administration",
+            "group": "Manage",
             "pages": [
-              {
-                "group": "Access & security",
-                "pages": [
-                  "administration/users-roles",
-                  "administration/permissions",
-                  "administration/authentication"
-                ]
-              },
-              {
-                "group": "Organization",
-                "pages": [
-                  "administration/settings",
-                  "administration/billing"
-                ]
-              },
-              {
-                "group": "Governance",
-                "pages": [
-                  "administration/audit-log",
-                  "administration/retention"
-                ]
-              }
+              "manage/team",
+              "manage/organization",
+              "manage/profile"
             ]
           },
           {
-            "group": "Analytics",
+            "group": "Self-Hosted",
             "pages": [
+              "self-hosted/overview",
+              "self-hosted/installation",
+              "self-hosted/license",
               {
-                "group": "Reporting",
+                "group": "Configure",
                 "pages": [
-                  "analytics/dashboards",
-                  "analytics/kpis",
-                  "analytics/exports"
+                  "self-hosted/smtp",
+                  "self-hosted/ldap"
                 ]
               },
               {
-                "group": "Data pipeline",
+                "group": "Manage",
                 "pages": [
-                  "analytics/ingestion",
-                  "analytics/storage"
+                  "self-hosted/updates",
+                  "self-hosted/backups",
+                  "self-hosted/data-retention"
+                ]
+              },
+              {
+                "group": "Administration",
+                "pages": [
+                  "self-hosted/admin-management",
+                  "self-hosted/cli-reference"
                 ]
               }
-            ]
-          },
-          {
-            "group": "Help",
-            "pages": [
-              "help/faq",
-              "help/troubleshooting"
             ]
           }
         ]

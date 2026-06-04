@@ -1,0 +1,112 @@
+---
+title: "Data retention"
+description: "Configure how long Factory Flow keeps machine readings, analytics, and audit log entries."
+---
+
+Factory Flow stores machine readings and derived metrics in PostgreSQL. Over time, this data grows. Retention policies let you automatically purge old data to manage database size.
+
+## What gets retained
+
+| Data type | Default retention | Notes |
+|-----------|-----------------|-------|
+| Machine readings (raw) | 90 days | Individual part counts and cycle times |
+| Aggregated analytics | 1 year | Hourly/daily rollups |
+| Alert history | 1 year | Triggered alerts and resolution records |
+| Audit log | 2 years | User actions and configuration changes |
+| Layout snapshots | Indefinite | Deleted when layout is deleted |
+
+## Configuring retention
+
+Set retention windows in your `.env` file:
+
+```env
+RETENTION_RAW_DAYS=90
+RETENTION_ANALYTICS_DAYS=365
+RETENTION_ALERTS_DAYS=365
+RETENTION_AUDIT_LOG_DAYS=730
+```
+
+Restart the application after making changes:
+
+```bash
+docker compose restart app
+```
+
+To disable retention for a data type (keep forever), set the value to `0`:
+
+```env
+RETENTION_RAW_DAYS=0
+```
+
+<Warning>
+  Disabling retention with `0` means data accumulates indefinitely. Monitor your database size if you do this.
+</Warning>
+
+## Retention jobs
+
+Retention is enforced by a background job that runs nightly. The job deletes records older than the configured window in small batches to avoid locking.
+
+### Checking job status
+
+```bash
+docker compose exec app bin/retention status
+```
+
+This shows the last run time, number of records deleted, and any errors.
+
+### Running retention manually
+
+```bash
+docker compose exec app bin/retention run
+```
+
+Useful after changing retention settings or to reclaim space immediately.
+
+## Storage estimates
+
+As a rough guide:
+
+| Machines | Frequency | Raw data per day |
+|----------|-----------|-----------------|
+| 10 | 1 part/min | ~50 MB |
+| 50 | 1 part/min | ~250 MB |
+| 100 | 1 part/min | ~500 MB |
+| 100 | 5 parts/min | ~2.5 GB |
+
+Aggregated analytics are much smaller — roughly 1–2% of raw data size.
+
+## Database monitoring
+
+Check current database size:
+
+```bash
+docker compose exec db psql -U postgres -c "SELECT pg_size_pretty(pg_database_size('factoryflow'));"
+```
+
+Check size by table:
+
+```bash
+docker compose exec db psql -U postgres factoryflow -c "
+SELECT relname AS table, pg_size_pretty(pg_total_relation_size(relid)) AS size
+FROM pg_catalog.pg_statio_user_tables
+ORDER BY pg_total_relation_size(relid) DESC
+LIMIT 10;"
+```
+
+## Before major updates
+
+Back up and review your database size before applying updates. See [Updates](/self-hosted/updates) for the backup procedure.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Updates" icon="arrow-up-circle" href="/self-hosted/updates">
+    Backup procedure before updates.
+  </Card>
+  <Card title="Admin management" icon="shield" href="/self-hosted/admin-management">
+    Environment variable reference.
+  </Card>
+  <Card title="Self-Hosted overview" icon="server" href="/self-hosted/overview">
+    Infrastructure sizing guidance.
+  </Card>
+</CardGroup>

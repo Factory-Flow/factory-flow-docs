@@ -87,8 +87,10 @@ Navigate to **Application Settings → Host Info** to see your server's live res
 |--------|-------------|
 | CPU Usage | Current processor load |
 | Memory Usage | RAM consumed vs available |
-| Disk Usage | Storage used by application data and database |
+| Disk Usage | Storage breakdown by category: database, app storage, logs, and backups (space used by `.sql` backup files) |
 | Database Status | Connectivity and health of the Factory Flow database |
 | Application Version | Currently installed version |
+
+The **Storage Paths** table on this page lists the configured host path for each volume — database, app storage, logs, and backups. Volumes using the default Docker-managed volume show `Docker managed volume`. These paths are also configurable via the CLI; see [Storage Paths](/self-hosted/storage-paths).
 
 Use this page to diagnose performance issues or plan capacity upgrades. If resource usage is consistently high, consider upgrading your server or adjusting [Data Retention](/self-hosted/data-retention) settings to reduce database size.

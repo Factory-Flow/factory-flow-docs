@@ -1,0 +1,102 @@
+---
+title: "Storage Paths"
+description: "Control where Factory Flow stores its database, files, logs, and backups on the host filesystem."
+---
+
+By default, Factory Flow stores all data in Docker-managed named volumes. Configuring custom host paths lets you direct data to a specific drive, partition, or NAS — useful when you need to separate data from the OS disk, use high-performance storage for the database, or back up volumes independently.
+
+---
+
+## Configurable Paths
+
+| Volume | Env var | Default | Notes |
+|--------|---------|---------|-------|
+| Database | `TIMESCALEDB_DATA_PATH` | Docker managed volume | Local disk or iSCSI only — see warning below |
+| App Storage | `APP_STORAGE_PATH` | Docker managed volume | Safe on NFS / SMB |
+| Logs | `APP_LOGS_PATH` | Docker managed volume | Safe on NFS / SMB |
+| Backups | `BACKUP_PATH` | `./database-backups` | Safe on NFS / SMB |
+
+<Warning>
+  **`TIMESCALEDB_DATA_PATH` must be a local disk or iSCSI mount.** Storing PostgreSQL data on NFS or SMB network shares can corrupt the database due to file-locking limitations in those protocols.
+
+  `APP_STORAGE_PATH`, `APP_LOGS_PATH`, and `BACKUP_PATH` are safe on any storage, including NFS and SMB.
+</Warning>
+
+---
+
+## Setting Paths During Installation
+
+The installer will ask:
+
+```
+Customize storage paths? [y/N]
+```
+
+Answering `y` prompts for each path individually. Leave any entry blank to keep the Docker-managed volume for that path.
+
+---
+
+## Viewing Current Paths
+
+```bash
+./factoryflow paths list
+```
+
+Example output:
+
+```
+Storage paths:
+
+  database    /mnt/iscsi/factory-flow/db
+  storage     (docker managed volume)
+  logs        (docker managed volume)
+  backups     ./database-backups
+```
+
+Current paths are also visible in the admin UI under **Manage Application → Host Info → Storage Paths**.
+
+---
+
+## Changing Paths After Installation
+
+Use `./factoryflow paths set <volume> <path>` to update a path on a running installation. The behavior varies by volume type.
+
+### Backups and Logs — no downtime
+
+```bash
+./factoryflow paths set backups /mnt/nas/backups
+./factoryflow paths set logs /mnt/nas/factory-flow/logs
+```
+
+The affected containers are recreated automatically. The application remains available throughout.
+
+### App Storage — brief downtime, files migrated
+
+```bash
+./factoryflow paths set storage /mnt/nas/factory-flow/storage
+```
+
+The application stops, all existing files are copied to the new path, then the application restarts. Downtime is proportional to the amount of stored data.
+
+### Database — full migration procedure
+
+```bash
+./factoryflow paths set timescaledb /mnt/iscsi/factory-flow/db
+```
+
+This is the most involved operation. The command:
+
+1. Creates a database backup.
+2. Stops all containers.
+3. Copies the database data directory to the new path.
+4. Updates the `.env` configuration.
+5. Restarts the containers.
+6. Verifies TimescaleDB health.
+
+<Note>
+  If TimescaleDB fails to start after the migration, the `.env` change is rolled back automatically and the original data directory is left intact.
+</Note>
+
+<Warning>
+  The target path for `timescaledb` must be on a local disk or iSCSI mount. Do not use NFS or SMB for this volume.
+</Warning>

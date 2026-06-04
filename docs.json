@@ -71,7 +71,8 @@
                 "group": "Configure",
                 "pages": [
                   "self-hosted/smtp",
-                  "self-hosted/ldap"
+                  "self-hosted/ldap",
+                  "self-hosted/storage-paths"
                 ]
               },
               {

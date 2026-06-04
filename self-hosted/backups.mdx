@@ -1,87 +1,165 @@
 ---
-title: "Backups & Restore"
-description: "Create, list, and restore database backups for your Factory Flow installation."
+title: "Database Backups"
+description: "Create, schedule, and restore database backups for your self-hosted Factory Flow installation."
 ---
 
-The `factoryflow` script includes built-in backup and restore commands that operate directly on your Factory Flow database.
+Factory Flow stores backups as full PostgreSQL dumps (`.sql` files). The **10 most recent backups are kept automatically** — older ones are pruned each time a new backup is created.
 
-<Note>
-  Database backups are also created **automatically** before every `./factoryflow update`. The backup files are saved to `./database-backups/` in your installation directory.
-</Note>
+---
+
+## Backup Location
+
+Backups are saved to `./database-backups/` by default, in the same directory as the `factoryflow` script. The current path is shown in the admin UI under **Manage Application → Database Backups**.
+
+To change the location:
+
+```bash
+./factoryflow paths set backups <path>
+```
+
+The new path takes effect immediately without restarting containers.
 
 ---
 
 ## Creating a Backup
 
+### CLI
+
 ```bash
 ./factoryflow backup create
 ```
 
-This dumps the entire Factory Flow database to a `.sql` file in `./database-backups/`. The filename includes a timestamp so backups don't overwrite each other:
+### Admin UI
+
+Navigate to **Manage Application → Database Backups** and click **Back Up Now**.
+
+Both methods produce a timestamped `.sql` file, for example:
 
 ```
-database-backups/db_factory_flow_20240315_143022.sql
+database-backups/db_factory_flow_20240101_020000.sql
 ```
-
-Run this before making significant configuration changes or before a planned update.
 
 ---
 
 ## Listing Backups
 
+### CLI
+
 ```bash
 ./factoryflow backup list
 ```
 
-Lists all available backup files with their sizes, newest first:
+Outputs all backup files with their sizes, newest first:
 
 ```
 Available backups (newest first):
 
-  14M           db_factory_flow_20240315_143022.sql
-  13M           db_factory_flow_20240310_090512.sql
-  12M           db_factory_flow_20240301_120000.sql
+  14M    db_factory_flow_20240315_143022.sql
+  13M    db_factory_flow_20240310_090512.sql
+  12M    db_factory_flow_20240301_120000.sql
 
 Location: ./database-backups
 ```
 
+### Admin UI
+
+Click the **View** button on the Database Backups page. Each backup is shown with its file size and creation date.
+
+---
+
+## Deleting a Backup
+
+### CLI
+
+```bash
+# Interactive picker — select a backup to delete
+./factoryflow backup delete
+
+# Delete a specific file by name
+./factoryflow backup delete db_factory_flow_20240101_020000.sql
+```
+
+### Admin UI
+
+Click the **trash icon** next to any backup in the list.
+
+---
+
+## Pruning Old Backups
+
+The `prune` command removes all but the 10 most recent backups. It shows exactly what will be deleted and requires confirmation before proceeding.
+
+```bash
+./factoryflow backup prune
+```
+
+Pruning also runs automatically whenever a new backup is created.
+
+---
+
+## Automatic Schedule
+
+Configure a backup schedule in the admin UI under **Manage Application → Database Backups**. The available schedules are:
+
+| Schedule | Description |
+|----------|-------------|
+| Off | No automatic backups |
+| Daily | Every day at 2:00 AM |
+| Weekly | Every Monday at 2:00 AM |
+| Monthly | 1st of each month at 2:00 AM |
+
+Schedule changes take effect immediately — no container restart required.
+
+---
+
+## External Storage
+
+After each backup (manual or scheduled), Factory Flow can upload a copy to an external destination. Backups are always saved locally first; external storage is an additional copy, not a replacement.
+
+Configure external storage in the admin UI under **Manage Application → Database Backups → External Storage**.
+
+Use **Test Connection** to verify write access before saving. Credentials are stored encrypted on your server and never transmitted elsewhere.
+
+### S3-Compatible (AWS S3, Cloudflare R2, Backblaze B2, MinIO, Wasabi, and others)
+
+| Field | Description |
+|-------|-------------|
+| Bucket | Name of the target bucket |
+| Region | Bucket region (e.g. `us-east-1`) |
+| Endpoint | Custom endpoint URL — leave blank for AWS S3 |
+| Access Key | S3 access key ID |
+| Secret Key | S3 secret access key |
+| Path Prefix | Optional prefix prepended to backup filenames (e.g. `factory-flow/backups/`) |
+
+### SFTP / Remote Server
+
+| Field | Description |
+|-------|-------------|
+| Host | Hostname or IP address of the remote server |
+| Port | SSH port (default: `22`) |
+| Username | SSH username |
+| Password | SSH password |
+| Remote Path | Absolute path on the remote server where backups will be stored |
+
 ---
 
 ## Restoring a Backup
+
+<Warning>
+  Restoring a backup **permanently replaces all current data** in your Factory Flow database. This cannot be undone. Confirm you have selected the correct backup before proceeding.
+</Warning>
 
 ```bash
 # Interactive picker — choose from available backups
 ./factoryflow backup restore
 
 # Restore a specific file
-./factoryflow backup restore ./database-backups/db_factory_flow_20240315_143022.sql
+./factoryflow backup restore db_factory_flow_20240101_020000.sql
 ```
 
-The restore command:
+The restore command asks for confirmation, then:
 
-1. Shows the backup file and size and asks for double confirmation before proceeding.
-2. Stops the application container.
-3. Drops and recreates the database.
-4. Restores the data from the backup file.
-5. Restarts the application.
-
-<Warning>
-  Restoring a backup **permanently replaces all current data** in your Factory Flow database. This cannot be undone. Make sure you have selected the correct backup file before confirming. Type `yes` when prompted to proceed.
-</Warning>
-
----
-
-## Backup Retention
-
-The `factoryflow` script does not automatically delete old backups. Over time, the `./database-backups/` directory will grow. Review and remove old backup files periodically, keeping at least the last 2–3 backups as a safety net.
-
----
-
-## Backup Strategy Recommendations
-
-| Scenario | Recommendation |
-|----------|---------------|
-| Before every update | Automatic — `./factoryflow update` creates one |
-| Weekly scheduled backup | Set up a cron job: `./factoryflow backup create` |
-| Before major configuration changes | Run `./factoryflow backup create` manually |
-| Long-term archival | Copy `.sql` files off the server to external storage (S3, NAS, etc.) |
+1. Stops the application container.
+2. Drops and recreates the database.
+3. Restores data from the selected backup file.
+4. Restarts the application.

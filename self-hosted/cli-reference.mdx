@@ -93,7 +93,77 @@ Restores a backup. If no file is provided, an interactive picker is shown.
 ./factoryflow backup restore ./database-backups/db_factory_flow_20240315_143022.sql
 ```
 
-See [Backups & Restore](/self-hosted/backups) for full details.
+### `backup delete [file]`
+
+Deletes a backup file. If no filename is given, an interactive picker is shown.
+
+```bash
+# Interactive picker
+./factoryflow backup delete
+
+# Delete a specific file
+./factoryflow backup delete db_factory_flow_20240101_020000.sql
+```
+
+### `backup prune`
+
+Deletes all backups beyond the retention limit, keeping the 10 most recent. Shows the files that will be removed and requires confirmation before proceeding.
+
+```bash
+./factoryflow backup prune
+```
+
+See [Database Backups](/self-hosted/backups) for full details.
+
+---
+
+## Storage Paths
+
+### `paths list`
+
+Shows the configured storage path for each volume. Displays `(docker managed volume)` for any volume using the default.
+
+```bash
+./factoryflow paths list
+```
+
+### `paths set timescaledb <path>`
+
+Relocates the database data directory to the specified path. Performs a full migration: creates a backup, stops containers, copies the data directory, updates `.env`, restarts, and verifies health. Rolls back `.env` automatically if TimescaleDB fails to start.
+
+```bash
+./factoryflow paths set timescaledb /mnt/iscsi/factory-flow/db
+```
+
+<Warning>
+  The target path must be a local disk or iSCSI mount. NFS and SMB network shares can corrupt the PostgreSQL database.
+</Warning>
+
+### `paths set storage <path>`
+
+Relocates app storage (uploads, exports). The application stops briefly while existing files are migrated, then restarts.
+
+```bash
+./factoryflow paths set storage /mnt/nas/factory-flow/storage
+```
+
+### `paths set logs <path>`
+
+Changes where log files are written. Affected containers are recreated automatically; no application downtime.
+
+```bash
+./factoryflow paths set logs /mnt/nas/factory-flow/logs
+```
+
+### `paths set backups <path>`
+
+Changes the backup directory. Affected containers are recreated automatically; no application downtime.
+
+```bash
+./factoryflow paths set backups /mnt/nas/backups
+```
+
+See [Storage Paths](/self-hosted/storage-paths) for full details.
 
 ---
 
@@ -139,6 +209,9 @@ Tails logs. Defaults to the application container (`app`).
 
 # Scheduler log
 ./factoryflow logs scheduler
+
+# Analytics log
+./factoryflow logs analytics
 
 # Database container logs
 ./factoryflow logs timescaledb

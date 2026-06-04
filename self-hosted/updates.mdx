@@ -5,6 +5,10 @@ description: "Update Factory Flow to the latest version using the factoryflow CL
 
 Factory Flow releases regular updates with new features, performance improvements, and security fixes. On self-hosted installations, updates are applied using the `factoryflow update` command.
 
+<Note>
+  **The `factoryflow` script and `docker-compose.yml` update themselves automatically.** After a successful `./factoryflow install` or `./factoryflow update`, both files are replaced with the versions bundled inside the new container image (extracted from `/app/release/` inside the app container). You no longer need to manually download an updated script after upgrading.
+</Note>
+
 ## Updating via the CLI
 
 The primary way to update is from your server's terminal:

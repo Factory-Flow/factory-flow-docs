@@ -44,6 +44,11 @@ The installer asks for:
 | SSL certificates | Optionally provide a `cert.pem` and `key.pem` to enable HTTPS. You can also place them in `./certs/` before running. |
 | HTTPS port | The HTTPS port (default: `443`). HTTP on the app port will redirect automatically. |
 | Reverse proxy | Whether Factory Flow sits behind a reverse proxy (e.g. Cloudflare Tunnel, nginx, Traefik). Required for correct IP detection. |
+| Storage paths | Optionally store data on a specific drive or directory. Press Enter (or `N`) to use Docker-managed volumes — the recommended default for most installs. Enter `Y` to supply absolute paths for the database, app storage, logs, and/or backups. |
+
+<Tip>
+  Docker-managed volumes are the right choice for most installations. Only customize storage paths if you need data on a specific disk, partition, or NAS. See [Storage Paths](/self-hosted/storage-paths) for the full options and the NFS/iSCSI warning for the database volume.
+</Tip>
 
 ### Step 3 — Pull and start
 

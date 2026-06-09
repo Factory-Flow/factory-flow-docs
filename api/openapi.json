@@ -34,7 +34,7 @@
         "/production": {
             "post": {
                 "operationId": "production",
-                "description": "Report part count data for one or more machines in a single request (max 25).\nEach reading requires `machine_uuid` plus `part_count_total`. If only one of\n`part_count_good` or `part_count_bad` is provided the other is derived automatically.\nAll machines must belong to the authenticated organization and use the `factory_flow_api` data source.\n\nReadings that fail business-logic checks (unknown UUID, per-machine rate limit) are\nreturned in `rejected`; valid readings are always written. The response is 202 when\nat least one reading is accepted, 422 when all are rejected.\n\n**Batch rate limit:** 60 requests per minute per token/gateway. Exceeding this returns 429.\n\n**Per-machine rate limit:** each machine UUID may be written at most once every 10 seconds,\nglobally across all callers (API tokens and gateways). If another source wrote to the same\nmachine within that window, the reading is rejected with `error: \"Rate limit exceeded\"` and\na `retry_after` value (seconds) in the rejected entry.",
+                "description": "Report part count data for one or more machines in a single request (max 100).\nEach reading requires `machine_uuid` plus `part_count_total`. If only one of\n`part_count_good` or `part_count_bad` is provided the other is derived automatically.\nAll machines must belong to the authenticated organization and use the `factory_flow_api` data source.\n\nReadings that fail business-logic checks (unknown UUID, per-machine rate limit) are\nreturned in `rejected`; valid readings are always written. The response is 202 when\nat least one reading is accepted, 422 when all are rejected.\n\n**Batch rate limit:** 60 requests per minute per token/gateway. Exceeding this returns 429.\n\n**Per-machine rate limit:** each machine UUID may be written at most once every 10 seconds,\nglobally across all callers (API tokens and gateways). If another source wrote to the same\nmachine within that window, the reading is rejected with `error: \"Rate limit exceeded\"` and\na `retry_after` value (seconds) in the rejected entry.",
                 "summary": "Post production",
                 "tags": [
                     "MachineProduction"
@@ -80,7 +80,7 @@
                                             ]
                                         },
                                         "minItems": 1,
-                                        "maxItems": 25
+                                        "maxItems": 100
                                     }
                                 },
                                 "required": [

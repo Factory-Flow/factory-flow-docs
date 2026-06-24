@@ -1,5 +1,6 @@
 ---
 title: "Production Lines"
+icon: "git-fork"
 description: "Group machines into production lines and map the sequence parts flow through them."
 ---
 
@@ -10,7 +11,8 @@ A production line in Factory Flow is a named group of machines that work togethe
 Navigate to **Configure → Lines** to see all lines in your organization. Each row shows the line name, the facility it belongs to, and how many machines are assigned to it.
 
 <Frame>
-  <img src="/images/lines-list.png" alt="Production lines list showing name, facility, and machine count" />
+  <img className="block dark:hidden" src="/images/configure/lines-list.png" alt="Production lines list showing name, facility, and machine count" />
+  <img className="hidden dark:block" src="/images/configure/lines-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/lines-list.png"; }} alt="Production lines list showing name, facility, and machine count" />
 </Frame>
 
 ---
@@ -51,7 +53,8 @@ The Part Flow tab is a visual diagram editor that lets you map the sequence mach
 </Steps>
 
 <Frame>
-  <img src="/images/lines-part-flow.png" alt="Part Flow diagram showing machines connected left to right in production sequence" />
+  <img className="block dark:hidden" src="/images/configure/lines-part-flow.png" alt="Part Flow diagram showing machines connected left to right in production sequence" />
+  <img className="hidden dark:block" src="/images/configure/lines-part-flow-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/lines-part-flow.png"; }} alt="Part Flow diagram showing machines connected left to right in production sequence" />
 </Frame>
 
 <Tip>
@@ -69,5 +72,6 @@ The Alerts tab shows alert rules configured at the line level. Line-level alerts
 Once a line has machines assigned, you can view its analytics under **Monitor → Analytics** by selecting a line from the dropdown. Line analytics aggregate data from all machines on the line into a combined view.
 
 <Frame>
-  <img src="/images/lines-analytics.png" alt="Line analytics view showing aggregated throughput and OEE across all machines on the line" />
+  <img className="block dark:hidden" src="/images/configure/lines-analytics.png" alt="Line analytics view showing aggregated throughput and OEE across all machines on the line" />
+  <img className="hidden dark:block" src="/images/configure/lines-analytics-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/lines-analytics.png"; }} alt="Line analytics view showing aggregated throughput and OEE across all machines on the line" />
 </Frame>

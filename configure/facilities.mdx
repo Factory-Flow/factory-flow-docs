@@ -1,5 +1,6 @@
 ---
 title: "Facilities"
+icon: "building"
 description: "Represent your physical sites in Factory Flow for location-based analytics and organization."
 ---
 
@@ -10,7 +11,8 @@ Facilities represent the physical locations where your production happens — a 
 Navigate to **Configure → Facilities** to see all registered facilities. The list shows each facility's name, location, and how many machines and lines are assigned to it.
 
 <Frame>
-  <img src="/images/facilities-list.png" alt="Facilities list showing name, location, machine count, and line count" />
+  <img className="block dark:hidden" src="/images/configure/facilities-list.png" alt="Facilities list showing name, location, machine count, and line count" />
+  <img className="hidden dark:block" src="/images/configure/facilities-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/facilities-list.png"; }} alt="Facilities list showing name, location, machine count, and line count" />
 </Frame>
 
 ---
@@ -28,7 +30,8 @@ Click **New Facility** and fill in the details:
 Save the facility. You can now assign lines and machines to it when creating or editing them.
 
 <Frame>
-  <img src="/images/facilities-new.png" alt="New Facility form with name, location, and description fields" />
+  <img className="block dark:hidden" src="/images/configure/facilities-new.png" alt="New Facility form with name, location, and description fields" />
+  <img className="hidden dark:block" src="/images/configure/facilities-new-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/facilities-new.png"; }} alt="New Facility form with name, location, and description fields" />
 </Frame>
 
 ---
@@ -38,7 +41,8 @@ Save the facility. You can now assign lines and machines to it when creating or 
 With lines and machines assigned, navigate to **Monitor → Analytics** and select a facility from the dropdown. Facility analytics aggregate all machines and lines at the site into a single view, making it easy to see overall site performance at a glance.
 
 <Frame>
-  <img src="/images/facilities-analytics.png" alt="Facility-level analytics view showing rolled-up KPIs across all lines and machines at the site" />
+  <img className="block dark:hidden" src="/images/configure/facilities-analytics.png" alt="Facility-level analytics view showing rolled-up KPIs across all lines and machines at the site" />
+  <img className="hidden dark:block" src="/images/configure/facilities-analytics-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/facilities-analytics.png"; }} alt="Facility-level analytics view showing rolled-up KPIs across all lines and machines at the site" />
 </Frame>
 
 <Tip>

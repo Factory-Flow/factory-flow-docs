@@ -1,12 +1,14 @@
 ---
 title: "Alert History"
+icon: "bell"
 description: "Review every alert that has fired, who was notified, and whether notifications were delivered."
 ---
 
 The Alert History page is a searchable log of every alert that has triggered in your organization. It tells you what fired, when, which machine or line caused it, what the notification said, and whether the email was successfully delivered.
 
 <Frame>
-  <img src="/images/alerts-history-list.png" alt="Alert history table showing triggered alerts with status badges" />
+  <img className="block dark:hidden" src="/images/monitor/alerts-history-list.png" alt="Alert history table showing triggered alerts with status badges" />
+  <img className="hidden dark:block" src="/images/monitor/alerts-history-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/alerts-history-list.png"; }} alt="Alert history table showing triggered alerts with status badges" />
 </Frame>
 
 ## Reading the Alert List
@@ -33,7 +35,8 @@ Use the filter bar above the table to narrow down the list:
 - **Search** — Full-text search across the alert message column.
 
 <Frame>
-  <img src="/images/alerts-filter-bar.png" alt="Alert filter bar with type, target, date range, and search controls" />
+  <img className="block dark:hidden" src="/images/monitor/alerts-filter-bar.png" alt="Alert filter bar with type, target, date range, and search controls" />
+  <img className="hidden dark:block" src="/images/monitor/alerts-filter-bar-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/alerts-filter-bar.png"; }} alt="Alert filter bar with type, target, date range, and search controls" />
 </Frame>
 
 ---

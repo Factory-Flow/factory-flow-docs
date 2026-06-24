@@ -1,5 +1,6 @@
 ---
 title: "Analytics"
+icon: "chart-bar"
 description: "Monitor real-time and historical performance metrics across every machine, line, and facility."
 ---
 
@@ -10,10 +11,10 @@ The Analytics page is the main monitoring hub in Factory Flow. It gives you a li
 Analytics is organized into three levels. Use the **selector dropdown** at the top of the page to switch between them:
 
 <CardGroup cols={3}>
-  <Card title="Machine" icon="gear">
+  <Card title="Machine" icon="cpu">
     Drill into a single machine's cycle time, OEE, and downtime history.
   </Card>
-  <Card title="Line" icon="arrow-right-arrow-left">
+  <Card title="Line" icon="git-fork">
     See aggregated performance across all machines on a production line.
   </Card>
   <Card title="Facility" icon="building">
@@ -22,7 +23,8 @@ Analytics is organized into three levels. Use the **selector dropdown** at the t
 </CardGroup>
 
 <Frame>
-  <img src="/images/analytics-selector.png" alt="Analytics level selector dropdown showing Machine, Line, and Facility options" />
+  <img className="block dark:hidden" src="/images/monitor/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9 (1).png" alt="Analytics level selector dropdown showing Machine, Line, and Facility options" />
+  <img className="hidden dark:block" src="/images/monitor/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9 (1)-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9 (1).png"; }} alt="Analytics level selector dropdown showing Machine, Line, and Facility options" />
 </Frame>
 
 ---
@@ -42,7 +44,8 @@ At the top of every analytics view, five KPI tiles give you an instant summary o
 Each tile shows the current value alongside a trend indicator comparing it to the previous equivalent period.
 
 <Frame>
-  <img src="/images/analytics-kpi-tiles.png" alt="Five KPI tiles showing Cycle Time, OEE, Production, Downtime, and Scrap Rate" />
+  <img className="block dark:hidden" src="/images/monitor/analytics-kpi-tiles.png" alt="Five KPI tiles showing Cycle Time, OEE, Production, Downtime, and Scrap Rate" />
+  <img className="hidden dark:block" src="/images/monitor/analytics-kpi-tiles-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/analytics-kpi-tiles.png"; }} alt="Five KPI tiles showing Cycle Time, OEE, Production, Downtime, and Scrap Rate" />
 </Frame>
 
 ---
@@ -56,7 +59,8 @@ Below the KPI tiles, Factory Flow renders several charts to help you understand 
 A time-series line chart showing how cycle time has moved across the selected window. Threshold bands are overlaid so you can instantly see periods where performance was in or out of range.
 
 <Frame>
-  <img src="/images/analytics-cycle-time-trend.png" alt="Cycle time trend chart with green, yellow, and red threshold bands" />
+  <img className="block dark:hidden" src="/images/monitor/analytics-cycle-time-trend.png" alt="Cycle time trend chart with green, yellow, and red threshold bands" />
+  <img className="hidden dark:block" src="/images/monitor/analytics-cycle-time-trend-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/analytics-cycle-time-trend.png"; }} alt="Cycle time trend chart with green, yellow, and red threshold bands" />
 </Frame>
 
 ### OEE Breakdown
@@ -64,7 +68,8 @@ A time-series line chart showing how cycle time has moved across the selected wi
 A stacked chart that splits OEE into its three components — Availability, Performance, and Quality — over time. This makes it easy to identify which factor is pulling down your overall score.
 
 <Frame>
-  <img src="/images/analytics-oee-breakdown.png" alt="Stacked OEE breakdown chart showing Availability, Performance, and Quality over time" />
+  <img className="block dark:hidden" src="/images/monitor/analytics-oee-breakdown.png" alt="Stacked OEE breakdown chart showing Availability, Performance, and Quality over time" />
+  <img className="hidden dark:block" src="/images/monitor/analytics-oee-breakdown-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/analytics-oee-breakdown.png"; }} alt="Stacked OEE breakdown chart showing Availability, Performance, and Quality over time" />
 </Frame>
 
 ### Production Output
@@ -76,7 +81,8 @@ A bar chart showing parts produced per time bucket. Useful for comparing shift-t
 A chart breaking downtime into categories (maintenance, changeover, material wait, etc.) so you can see which causes are costing the most time.
 
 <Frame>
-  <img src="/images/analytics-downtime.png" alt="Downtime analysis chart with categorized causes" />
+  <img className="block dark:hidden" src="/images/monitor/analytics-downtime.png" alt="Downtime analysis chart with categorized causes" />
+  <img className="hidden dark:block" src="/images/monitor/analytics-downtime-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/analytics-downtime.png"; }} alt="Downtime analysis chart with categorized causes" />
 </Frame>
 
 ### Cycle Time Distribution
@@ -117,7 +123,8 @@ Toggle the **Include Shifts** option to filter analytics to only show data colle
 Toggle the **Show Alerts** option to overlay alert trigger events directly onto the trend charts as markers. This makes it easy to correlate a spike in cycle time with the alert that fired.
 
 <Frame>
-  <img src="/images/analytics-controls.png" alt="Analytics controls bar showing time window, bucket size, auto-refresh, and filter toggles" />
+  <img className="block dark:hidden" src="/images/monitor/analytics-controls.png" alt="Analytics controls bar showing time window, bucket size, auto-refresh, and filter toggles" />
+  <img className="hidden dark:block" src="/images/monitor/analytics-controls-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/analytics-controls.png"; }} alt="Analytics controls bar showing time window, bucket size, auto-refresh, and filter toggles" />
 </Frame>
 
 ---

@@ -1,12 +1,14 @@
 ---
 title: "Organization Settings"
+icon: "landmark"
 description: "Manage your organization's profile, API access, gateways, billing, and audit logs."
 ---
 
 Organization Settings is the administrative hub for your Factory Flow workspace. Navigate there by clicking your organization name in the sidebar and selecting **Settings**.
 
 <Frame>
-  <img src="/images/org-settings-overview.png" alt="Organization Settings page showing the General, API Tokens, Gateways, and other sections" />
+  <img className="block dark:hidden" src="/images/manage/org-settings-overview.png" alt="Organization Settings page showing the General, API Tokens, Gateways, and other sections" />
+  <img className="hidden dark:block" src="/images/manage/org-settings-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/manage/org-settings-overview.png"; }} alt="Organization Settings page showing the General, API Tokens, Gateways, and other sections" />
 </Frame>
 
 ---
@@ -19,52 +21,17 @@ Set your organization's display name and control its public visibility.
 
 ---
 
-## API Tokens
-
-API Tokens allow external systems to read analytics data from your Factory Flow organization programmatically.
-
-To create a token:
-1. Click **New Token**.
-2. Give it a descriptive name so you know what it's used for (e.g. "Power BI Dashboard" or "ERP Integration").
-3. Click **Create** and copy the token immediately — it is only shown once.
-
-<Warning>
-  Treat API tokens like passwords. Anyone with a token can read your organization's analytics data. Do not share tokens or commit them to source control. If a token is compromised, delete it and create a new one immediately.
-</Warning>
-
-<Frame>
-  <img src="/images/org-api-tokens.png" alt="API Tokens list with token names, creation dates, and revoke buttons" />
-</Frame>
-
-Tokens can be revoked at any time by clicking **Delete** next to the token name.
-
----
-
-## Gateways
-
-Gateways are the IoT devices or edge computers that collect data from your machines and forward it to Factory Flow. Each gateway needs to be registered here before it can send data.
-
-To register a gateway, click **New Gateway**, give it a name and description, and save. You'll receive a unique identifier to configure on the gateway device itself.
-
-<Frame>
-  <img src="/images/org-gateways.png" alt="Gateways list showing registered gateway devices with their unique identifiers and status" />
-</Frame>
-
----
-
-## Alert Groups
-
-Alert groups are named email distribution lists used by your alert rules. When an alert fires, Factory Flow sends the notification to all addresses in the assigned group.
-
-To create an alert group:
-1. Click **New Alert Group**.
-2. Give it a name (e.g. "Maintenance Team" or "Operations Leads").
-3. Add email addresses — one per line.
-4. Save.
-
-<Note>
-  Email addresses in alert groups do not need to be Factory Flow users. You can add any email address, including shared inboxes or external contacts.
-</Note>
+<CardGroup cols={3}>
+  <Card title="API Tokens" icon="key" href="/manage/organization/api-tokens">
+    Create tokens for programmatic access to your analytics data.
+  </Card>
+  <Card title="Gateways" icon="router" href="/manage/organization/gateways">
+    Register gateway devices that collect data from your machines.
+  </Card>
+  <Card title="Alert Groups" icon="bell" href="/manage/organization/alert-groups">
+    Manage email distribution lists for alert notifications.
+  </Card>
+</CardGroup>
 
 ---
 
@@ -98,7 +65,8 @@ The Audit Log is a chronological record of every significant action taken in you
 The audit log is read-only and cannot be cleared or edited. It is available to all Admin and Editor members.
 
 <Frame>
-  <img src="/images/org-audit-log.png" alt="Audit log table showing timestamped entries with user, action, and details columns" />
+  <img className="block dark:hidden" src="/images/manage/org-audit-log.png" alt="Audit log table showing timestamped entries with user, action, and details columns" />
+  <img className="hidden dark:block" src="/images/manage/org-audit-log-dark.png" onError={(e) => { e.currentTarget.src = "/images/manage/org-audit-log.png"; }} alt="Audit log table showing timestamped entries with user, action, and details columns" />
 </Frame>
 
 ---

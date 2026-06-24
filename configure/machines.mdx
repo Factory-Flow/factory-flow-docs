@@ -1,5 +1,6 @@
 ---
 title: "Machines"
+icon: "cpu"
 description: "Register and configure the production equipment you want Factory Flow to monitor."
 ---
 
@@ -16,7 +17,8 @@ Each row shows:
 - **Shifts** — Which shift schedule governs this machine's OEE calculations.
 
 <Frame>
-  <img src="/images/machines-list.png" alt="Machines list with name, type, lines, and shift columns" />
+  <img className="block dark:hidden" src="/images/configure/machines-list.png" alt="Machines list with name, type, lines, and shift columns" />
+  <img className="hidden dark:block" src="/images/configure/machines-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/machines-list.png"; }} alt="Machines list with name, type, lines, and shift columns" />
 </Frame>
 
 ---
@@ -35,7 +37,8 @@ Click **New Machine** to open the machine editor. Fill out the tabs below.
 | **Assigned Lines** | The production line(s) this machine belongs to. A machine can be on multiple lines. |
 
 <Frame>
-  <img src="/images/machines-general-tab.png" alt="Machine editor General tab with name, type, shifts, and lines fields" />
+  <img className="block dark:hidden" src="/images/configure/machine-edit-general.png" alt="Machine editor General tab with name, type, shifts, and lines fields" />
+  <img className="hidden dark:block" src="/images/configure/machine-edit-general-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/machine-edit-general.png"; }} alt="Machine editor General tab with name, type, shifts, and lines fields" />
 </Frame>
 
 ### Data Source Tab
@@ -43,7 +46,8 @@ Click **New Machine** to open the machine editor. Fill out the tabs below.
 The Data Source tab is where you configure how Factory Flow receives data from the machine. Select the connector type that matches your setup, then fill in the connection details.
 
 <Frame>
-  <img src="/images/machines-data-source-tab.png" alt="Machine Data Source tab showing connector type selector and connection settings" />
+  <img className="block dark:hidden" src="/images/configure/machine-edit-data-source.png" alt="Machine Data Source tab showing connector type selector and connection settings" />
+  <img className="hidden dark:block" src="/images/configure/machine-edit-data-source-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/machine-edit-data-source.png"; }} alt="Machine Data Source tab showing connector type selector and connection settings" />
 </Frame>
 
 <Note>
@@ -67,7 +71,8 @@ Use the visual timeline editor to define zones:
 Drag the zone boundaries on the timeline to set your values in seconds.
 
 <Frame>
-  <img src="/images/machines-analytics-thresholds.png" alt="Cycle time threshold timeline editor with draggable green, yellow, and red zone boundaries" />
+  <img className="block dark:hidden" src="/images/configure/machines-analytics-thresholds.png" alt="Cycle time threshold timeline editor with draggable green, yellow, and red zone boundaries" />
+  <img className="hidden dark:block" src="/images/configure/machines-analytics-thresholds-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/machines-analytics-thresholds.png"; }} alt="Cycle time threshold timeline editor with draggable green, yellow, and red zone boundaries" />
 </Frame>
 
 **Expected Throughput**
@@ -101,5 +106,6 @@ To delete a machine, open it and scroll to the bottom of the General tab. Deleti
 From any machine's editor, click **View Live Data** to open a real-time stream of the raw data being received from the machine. This is useful for confirming a new data connection is working correctly.
 
 <Frame>
-  <img src="/images/machines-live-data.png" alt="Live Data view showing a real-time stream of incoming machine readings" />
+  <img className="block dark:hidden" src="/images/configure/machines-live-data.png" alt="Live Data view showing a real-time stream of incoming machine readings" />
+  <img className="hidden dark:block" src="/images/configure/machines-live-data-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/machines-live-data.png"; }} alt="Live Data view showing a real-time stream of incoming machine readings" />
 </Frame>

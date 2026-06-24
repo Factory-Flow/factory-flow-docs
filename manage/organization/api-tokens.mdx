@@ -1,0 +1,23 @@
+---
+title: "API Tokens"
+icon: "key"
+description: "Create and manage API tokens for programmatic access to your Factory Flow organization."
+---
+
+API Tokens allow external systems to read analytics data from your Factory Flow organization programmatically.
+
+To create a token:
+1. Click **New Token**.
+2. Give it a descriptive name so you know what it's used for (e.g. "Power BI Dashboard" or "ERP Integration").
+3. Click **Create** and copy the token immediately — it is only shown once.
+
+<Warning>
+  Treat API tokens like passwords. Anyone with a token can read your organization's analytics data. Do not share tokens or commit them to source control. If a token is compromised, delete it and create a new one immediately.
+</Warning>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/manage/org-api-tokens.png" alt="API Tokens list with token names, creation dates, and revoke buttons" />
+  <img className="hidden dark:block" src="/images/manage/org-api-tokens-dark.png" onError={(e) => { e.currentTarget.src = "/images/manage/org-api-tokens.png"; }} alt="API Tokens list with token names, creation dates, and revoke buttons" />
+</Frame>
+
+Tokens can be revoked at any time by clicking **Delete** next to the token name.

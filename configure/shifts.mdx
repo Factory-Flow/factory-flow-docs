@@ -1,5 +1,6 @@
 ---
 title: "Shifts"
+icon: "clock"
 description: "Define when your machines are expected to run so Factory Flow can calculate OEE accurately."
 ---
 
@@ -37,7 +38,8 @@ The schedule tab shows a weekly grid with days of the week across the top and ho
 Click a preset to apply it, then drag the edges of the blocks to adjust the start and end times. You can add multiple shift blocks on the same day (e.g. a morning shift and an afternoon shift with a gap in between).
 
 <Frame>
-  <img src="/images/shifts-schedule-grid.png" alt="Weekly schedule grid with draggable shift blocks across days and hours" />
+  <img className="block dark:hidden" src="/images/configure/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9.png" alt="Weekly schedule grid with draggable shift blocks across days and hours" />
+  <img className="hidden dark:block" src="/images/configure/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/demo.factoryflow.io_shifts_6f0b0813-13a3-44dd-a0d3-11430d9d9be9.png"; }} alt="Weekly schedule grid with draggable shift blocks across days and hours" />
 </Frame>
 
 <Note>
@@ -51,7 +53,8 @@ Click a preset to apply it, then drag the edges of the blocks to adjust the star
 After creating a shift, assign it to machines on the **General** tab of each machine. A machine can have more than one shift (e.g. a day shift and a night shift) — both windows will count as planned production time for OEE purposes.
 
 <Frame>
-  <img src="/images/shifts-machine-assignment.png" alt="Machine General tab showing shift assignment dropdown with available shift schedules" />
+  <img className="block dark:hidden" src="/images/configure/shifts-machine-assignment.png" alt="Machine General tab showing shift assignment dropdown with available shift schedules" />
+  <img className="hidden dark:block" src="/images/configure/shifts-machine-assignment-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/shifts-machine-assignment.png"; }} alt="Machine General tab showing shift assignment dropdown with available shift schedules" />
 </Frame>
 
 <Tip>

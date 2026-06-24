@@ -1,5 +1,6 @@
 ---
 title: "Alert Rules"
+icon: "triangle-alert"
 description: "Configure threshold-based rules that notify your team when machine performance drifts outside acceptable limits."
 ---
 
@@ -10,7 +11,8 @@ Alert Rules are the conditions Factory Flow watches for. When a machine's data c
 Navigate to **Configure → Alert Rules** to see all rules in your organization. Each row shows the rule name, the metric being monitored, the target (machine, line, or facility), and the threshold.
 
 <Frame>
-  <img src="/images/alert-rules-list.png" alt="Alert rules list showing rule name, metric, target, and threshold for each rule" />
+  <img className="block dark:hidden" src="/images/configure/alert-rules-list.png" alt="Alert rules list showing rule name, metric, target, and threshold for each rule" />
+  <img className="hidden dark:block" src="/images/configure/alert-rules-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/alert-rules-list.png"; }} alt="Alert rules list showing rule name, metric, target, and threshold for each rule" />
 </Frame>
 
 ---
@@ -36,7 +38,8 @@ Click **New Alert Rule** and fill in the form.
 **Threshold** — The value at which the alert fires. For Cycle Time and Downtime this is an upper limit (above X, fire). For OEE and Production it's a lower limit (below X, fire).
 
 <Frame>
-  <img src="/images/alert-rules-new-form.png" alt="New Alert Rule form showing metric selector, target picker, and threshold input" />
+  <img className="block dark:hidden" src="/images/configure/alert-rules-new-form.png" alt="New Alert Rule form showing metric selector, target picker, and threshold input" />
+  <img className="hidden dark:block" src="/images/configure/alert-rules-new-form-dark.png" onError={(e) => { e.currentTarget.src = "/images/configure/alert-rules-new-form.png"; }} alt="New Alert Rule form showing metric selector, target picker, and threshold input" />
 </Frame>
 
 ### Who to notify

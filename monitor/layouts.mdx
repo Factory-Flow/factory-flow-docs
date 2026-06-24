@@ -1,12 +1,14 @@
 ---
-title: "Factory Floor Layouts"
+title: "Layouts"
+icon: "layout-grid"
 description: "Visualize your entire factory floor with real-time machine status overlaid on a 3D layout."
 ---
 
 Layouts give you a bird's-eye view of your factory floor with live performance data overlaid directly on a visual map of where your machines sit. At a glance, you can see which machines are running on target, which are struggling, and which are stopped.
 
 <Frame>
-  <img src="/images/layouts-overview.png" alt="Factory floor layout with machines color-coded by performance status" />
+  <img className="block dark:hidden" src="/images/monitor/layouts-overview.png" alt="Factory floor layout with machines color-coded by performance status" />
+  <img className="hidden dark:block" src="/images/monitor/layouts-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/layouts-overview.png"; }} alt="Factory floor layout with machines color-coded by performance status" />
 </Frame>
 
 ## Creating a Layout
@@ -22,7 +24,8 @@ Layouts give you a bird's-eye view of your factory floor with live performance d
     The layout editor opens a 3D floor view. Drag machines from the panel on the left and drop them onto the floor in the position that matches your real-world layout. Rearrange them at any time by dragging.
 
     <Frame>
-      <img src="/images/layouts-editor.png" alt="Layout editor with machine panel on the left and 3D floor canvas" />
+      <img className="block dark:hidden" src="/images/monitor/layouts-editor.png" alt="Layout editor with machine panel on the left and 3D floor canvas" />
+      <img className="hidden dark:block" src="/images/monitor/layouts-editor-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/layouts-editor.png"; }} alt="Layout editor with machine panel on the left and 3D floor canvas" />
     </Frame>
   </Step>
   <Step title="Save and share">
@@ -46,7 +49,8 @@ Once machines have live data flowing, the layout view automatically colors each 
 Hover over any machine to see a quick summary card showing current cycle time, OEE, and last reported time. Click a machine to jump directly to its Analytics page for a full drill-down.
 
 <Frame>
-  <img src="/images/layouts-machine-hover.png" alt="Machine hover card showing cycle time, OEE, and last reported time" />
+  <img className="block dark:hidden" src="/images/monitor/layouts-machine-hover.png" alt="Machine hover card showing cycle time, OEE, and last reported time" />
+  <img className="hidden dark:block" src="/images/monitor/layouts-machine-hover-dark.png" onError={(e) => { e.currentTarget.src = "/images/monitor/layouts-machine-hover.png"; }} alt="Machine hover card showing cycle time, OEE, and last reported time" />
 </Frame>
 
 ---

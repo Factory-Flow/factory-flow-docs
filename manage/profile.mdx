@@ -1,5 +1,6 @@
 ---
 title: "Profile & Security"
+icon: "circle-user"
 description: "Update your personal details, change your password, manage two-factor authentication, and control your account security."
 ---
 
@@ -8,7 +9,8 @@ Your profile settings let you manage everything about your personal Factory Flow
 Navigate to **Settings** using the user menu in the bottom-left corner of the sidebar.
 
 <Frame>
-  <img src="/images/profile-overview.png" alt="Profile settings page showing sections for Profile, Password, Security, and Appearance" />
+  <img className="block dark:hidden" src="/images/manage/profile-overview.png" alt="Profile settings page showing sections for Profile, Password, Security, and Appearance" />
+  <img className="hidden dark:block" src="/images/manage/profile-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/manage/profile-overview.png"; }} alt="Profile settings page showing sections for Profile, Password, Security, and Appearance" />
 </Frame>
 
 ---
@@ -43,7 +45,8 @@ Two-factor authentication (2FA) adds a second layer of security to your account.
 5. Save your **recovery codes** in a safe place — these are one-time codes you can use if you lose access to your authenticator app.
 
 <Frame>
-  <img src="/images/profile-2fa-setup.png" alt="Two-factor authentication setup screen showing QR code and verification code input" />
+  <img className="block dark:hidden" src="/images/manage/profile-2fa-setup.png" alt="Two-factor authentication setup screen showing QR code and verification code input" />
+  <img className="hidden dark:block" src="/images/manage/profile-2fa-setup-dark.png" onError={(e) => { e.currentTarget.src = "/images/manage/profile-2fa-setup.png"; }} alt="Two-factor authentication setup screen showing QR code and verification code input" />
 </Frame>
 
 <Warning>

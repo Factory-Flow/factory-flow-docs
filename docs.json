@@ -13,12 +13,12 @@
       "anchors": [
         {
           "anchor": "Status",
-          "icon": "signal-stream",
+          "icon": "activity",
           "href": "https://status.factoryflow.io"
         },
         {
           "anchor": "Support",
-          "icon": "life-ring",
+          "icon": "headset",
           "href": "mailto:support@factoryflow.io"
         }
       ]
@@ -30,9 +30,9 @@
           {
             "group": "Getting Started",
             "pages": [
-              "introduction",
-              "quickstart",
-              "concepts"
+              "getting-started/introduction",
+              "getting-started/quickstart",
+              "getting-started/concepts"
             ]
           },
           {
@@ -57,7 +57,15 @@
             "group": "Manage",
             "pages": [
               "manage/team",
-              "manage/organization",
+              {
+                "group": "Organization",
+                "pages": [
+                  "manage/organization",
+                  "manage/organization/api-tokens",
+                  "manage/organization/gateways",
+                  "manage/organization/alert-groups"
+                ]
+              },
               "manage/profile"
             ]
           },
@@ -97,7 +105,7 @@
       {
         "tab": "Changelog",
         "pages": [
-          "release-notes"
+          "getting-started/release-notes"
         ]
       },
       {
@@ -126,6 +134,9 @@
     }
   },
   "openapi": "/api/openapi.json",
+  "icons": {
+    "library": "lucide"
+  },
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"

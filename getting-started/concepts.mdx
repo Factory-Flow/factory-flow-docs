@@ -1,5 +1,6 @@
 ---
 title: "Key Concepts"
+icon: "book-open"
 description: "Understand the metrics and building blocks that power Factory Flow."
 ---
 
@@ -12,37 +13,35 @@ Factory Flow tracks five primary metrics across every level of your operation. U
 Cycle Time is the time between consecutive parts coming off a machine. It is the most fundamental signal of machine health.
 
 - **Lower is generally better** — a shorter cycle time means the machine is producing faster.
-- Factory Flow measures cycle time continuously and compares each reading to the **thresholds you configure** per machine. The color of the machine in your analytics view reflects where the current cycle time sits within those zones.
+- Factory Flow measures cycle time continuously and compares each reading against the **custom thresholds you configure per machine**. Each threshold has its own color and can optionally be marked as downtime. Readings are automatically categorized into the matching zone, and any zone marked as downtime is excluded from Availability in OEE calculations.
 
-| Color | Meaning |
-|-------|---------|
-| Green | Cycle time is within your target range |
-| Yellow | Cycle time is approaching your alert threshold |
-| Red | Cycle time has exceeded your alert threshold |
+| Zone | Description |
+|------|-------------|
+| Target | The expected operating range for this machine. |
+| Custom thresholds | Each additional threshold you define has its own color and label. |
+| Downtime | Any threshold can be flagged as downtime — readings in that zone count against Availability. |
 
 <Frame>
-  <img src="/images/concepts-cycle-time-thresholds.png" alt="Cycle time threshold zones on a timeline" />
+  <img className="block dark:hidden" src="/images/getting-started/concepts-cycle-time-thresholds.png" alt="Cycle time threshold zones on a timeline" />
+  <img className="hidden dark:block" src="/images/getting-started/concepts-cycle-time-thresholds-dark.png" onError={(e) => { e.currentTarget.src = "/images/getting-started/concepts-cycle-time-thresholds.png"; }} alt="Cycle time threshold zones on a timeline" />
 </Frame>
 
 ### OEE — Overall Equipment Effectiveness
 
 OEE is the gold-standard metric for measuring manufacturing productivity. It combines three factors into a single percentage:
 
-```
-OEE = Availability × Performance × Quality
-```
+$$OEE = Availability \times Performance \times Quality$$
 
 <Frame>
-  <img src="/images/concepts-oee-breakdown.png" alt="OEE breakdown diagram showing Availability, Performance, and Quality components" />
+  <img className="block dark:hidden" src="/images/getting-started/concepts-oee-breakdown.png" alt="OEE breakdown diagram showing Availability, Performance, and Quality components" />
+  <img className="hidden dark:block" src="/images/getting-started/concepts-oee-breakdown-dark.png" onError={(e) => { e.currentTarget.src = "/images/getting-started/concepts-oee-breakdown.png"; }} alt="OEE breakdown diagram showing Availability, Performance, and Quality components" />
 </Frame>
 
 <AccordionGroup>
   <Accordion title="Availability">
     The percentage of scheduled production time that the machine was actually running.
 
-    ```
-    Availability = (Planned Production Time − Downtime) ÷ Planned Production Time
-    ```
+    $$Availability = \frac{Planned\ Production\ Time - Downtime}{Planned\ Production\ Time}$$
 
     A machine that runs 7.5 hours out of an 8-hour shift has **93.75% Availability**.
   </Accordion>
@@ -50,9 +49,7 @@ OEE = Availability × Performance × Quality
   <Accordion title="Performance">
     How fast the machine is running compared to its maximum designed speed.
 
-    ```
-    Performance = (Actual Output × Ideal Cycle Time) ÷ Planned Production Time
-    ```
+    $$Performance = \frac{Actual\ Output \times Ideal\ Cycle\ Time}{Planned\ Production\ Time}$$
 
     This captures slow cycles and minor stops — the machine is running, but not at full speed.
   </Accordion>
@@ -60,9 +57,7 @@ OEE = Availability × Performance × Quality
   <Accordion title="Quality">
     The percentage of parts produced that meet quality standards (no rework, no scrap).
 
-    ```
-    Quality = Good Parts ÷ Total Parts Produced
-    ```
+    $$Quality = \frac{Good\ Parts}{Total\ Parts\ Produced}$$
   </Accordion>
 </AccordionGroup>
 
@@ -91,14 +86,15 @@ Scrap Rate is the percentage of produced parts that did not meet quality standar
 These are the objects you configure in Factory Flow to represent your physical operation.
 
 <Frame>
-  <img src="/images/concepts-hierarchy.png" alt="Factory Flow hierarchy: Organization → Facility → Line → Machine" />
+  <img className="block dark:hidden" src="/images/getting-started/concepts-hierarchy.png" alt="Factory Flow hierarchy: Organization → Facility → Line → Machine" />
+  <img className="hidden dark:block" src="/images/getting-started/concepts-hierarchy-dark.png" onError={(e) => { e.currentTarget.src = "/images/getting-started/concepts-hierarchy.png"; }} alt="Factory Flow hierarchy: Organization → Facility → Line → Machine" />
 </Frame>
 
 <CardGroup cols={2}>
-  <Card title="Machine" icon="gear">
+  <Card title="Machine" icon="cpu">
     A single piece of production equipment. Machines have a data source connected to them and can be assigned to lines and shifts.
   </Card>
-  <Card title="Line" icon="arrow-right-arrow-left">
+  <Card title="Line" icon="git-fork">
     A group of machines arranged in the sequence parts flow through them. Analytics at the line level aggregate all machines on the line.
   </Card>
   <Card title="Facility" icon="building">

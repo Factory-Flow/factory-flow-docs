@@ -80,7 +80,8 @@
                 "pages": [
                   "self-hosted/smtp",
                   "self-hosted/ldap",
-                  "self-hosted/storage-paths"
+                  "self-hosted/storage-paths",
+                  "self-hosted/ssl-and-proxies"
                 ]
               },
               {

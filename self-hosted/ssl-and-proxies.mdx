@@ -1,0 +1,95 @@
+---
+title: "SSL & Reverse Proxies"
+icon: "lock"
+description: "Serve Factory Flow over HTTPS with your own certificates, or configure trusted proxies when running behind a reverse proxy."
+---
+
+Factory Flow can terminate HTTPS directly using certificates you provide, and can be configured to trust a reverse proxy in front of it (e.g. Cloudflare Tunnel, nginx, Traefik) so client IPs and protocols are detected correctly.
+
+---
+
+## SSL / HTTPS
+
+### Enabling During Installation
+
+The installer asks:
+
+```
+Configure SSL certificates now? [y/N]
+```
+
+You have two options:
+
+- **Place certificates before installing.** Copy your certificate and key to `./certs/cert.pem` and `./certs/key.pem` in the installation directory before running `./factoryflow install`. The installer detects them automatically and uses them as-is.
+- **Provide paths interactively.** Answer `y` and enter the paths to your certificate (fullchain) and private key files when prompted. They're copied into `./certs/`.
+
+```bash
+./factoryflow install
+# ...
+Configure SSL certificates now? [y/N]: y
+Path to certificate file (fullchain/cert.pem): /etc/letsencrypt/live/yourdomain/fullchain.pem
+Path to private key file (key.pem): /etc/letsencrypt/live/yourdomain/privkey.pem
+```
+
+The installer sets file permissions automatically (`644` for the certificate, `600` for the private key), prompts for an HTTPS port (default `443`, checked for availability), and updates your **App URL** to use `https://` if it wasn't already.
+
+<Note>
+  When SSL is enabled, HTTP on your configured app port automatically redirects to HTTPS — you don't need a separate redirect rule.
+</Note>
+
+### What Gets Configured
+
+| Setting | Where it's stored |
+|---------|--------------------|
+| SSL enabled flag | `SSL_ENABLED` in `.env` |
+| HTTPS port | `APP_SSL_PORT` in `.env` |
+| Certificate / key | `./certs/cert.pem`, `./certs/key.pem` |
+
+Enabling SSL adds `docker-compose.ssl.yml` as an override on top of `docker-compose.yml`. This override is applied automatically by every `factoryflow` command whenever `SSL_ENABLED=true` — you don't need to reference it manually.
+
+### Renewing or Replacing Certificates
+
+Replace `./certs/cert.pem` and `./certs/key.pem` with the new files (keeping the same names and permissions), then restart the application so it picks up the change:
+
+```bash
+./factoryflow stop
+./factoryflow start
+```
+
+<Warning>
+  Only local disk or iSCSI-style paths are supported for `./certs/`. If you automate renewal (e.g. with certbot), have your renewal hook copy the renewed files into `./certs/` and restart the app container.
+</Warning>
+
+---
+
+## Reverse Proxies
+
+If Factory Flow sits behind a reverse proxy — Cloudflare Tunnel, nginx, Traefik, or similar — the app needs to trust that proxy in order to read the real client IP and protocol (`X-Forwarded-For` / `X-Forwarded-Proto`) instead of the proxy's own connection details.
+
+### Enabling During Installation
+
+The installer asks:
+
+```
+Is Factory Flow running behind a reverse proxy? [y/N]
+```
+
+Answering `y` sets `TRUSTED_PROXIES` in `.env` to cover the standard private address ranges used by Docker networking:
+
+```
+TRUSTED_PROXIES=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+```
+
+This intentionally covers the full RFC 1918 range rather than a single detected subnet — Docker can reassign the specific bridge subnet on container or network recreation, so pinning to one address would be fragile. This includes the default Docker bridge, the VM host bridges used by Docker Desktop on macOS (e.g. `192.168.64.x` on UTM/Parallels), and typical corporate/datacenter ranges.
+
+### Changing After Installation
+
+To enable or update this after the initial install, edit `TRUSTED_PROXIES` directly in `.env`, then re-cache the configuration:
+
+```bash
+./factoryflow config cache
+```
+
+<Note>
+  If you're not running behind any reverse proxy, leave this unset — trusting proxy headers you don't actually receive from a real proxy can allow client IP spoofing.
+</Note>

@@ -118,6 +118,23 @@ See [Database Backups](/self-hosted/backups) for full details.
 
 ---
 
+## Version
+
+### `version`
+
+Shows the installed Factory Flow version and TimescaleDB extension version, resolved from the running containers (not just what's recorded in `.env`).
+
+```bash
+./factoryflow version
+```
+
+```
+Factory Flow:  1.4.2  (ghcr.io/factory-flow/factory-flow-app:1.4.2)
+TimescaleDB:   v2.17.2 — timescale/timescaledb:2.17.2-pg16
+```
+
+---
+
 ## Storage Paths
 
 ### `paths list`
@@ -194,9 +211,9 @@ Shows the running status of all containers.
 ./factoryflow status
 ```
 
-### `logs [service]`
+### `logs [service] [--lines=N]`
 
-Tails logs. Defaults to the application container (`app`).
+Tails logs. Defaults to the application container (`app`), showing the last 100 lines before following.
 
 ```bash
 # Application container logs (Docker)
@@ -216,6 +233,9 @@ Tails logs. Defaults to the application container (`app`).
 
 # Database container logs
 ./factoryflow logs timescaledb
+
+# Show more history before following
+./factoryflow logs laravel --lines=500
 ```
 
 ---
@@ -241,6 +261,16 @@ Shows current configuration values.
 # Show a specific key
 ./factoryflow config show mail
 ```
+
+### `github login`
+
+Sets or rotates the GitHub Container Registry credentials used to pull images and to authenticate in-app updates. Prompts for a GitHub username and PAT, verifies them with `docker login`, and saves them to `.env`.
+
+```bash
+./factoryflow github login
+```
+
+Use this if your original PAT has expired or been revoked and in-app or CLI updates start failing to pull images.
 
 ### `artisan <cmd>`
 
@@ -297,10 +327,11 @@ Creates a user account and optionally attaches them to an organization.
   --email=jane@example.com \
   --password=SecurePassword123 \
   --org="Acme Manufacturing" \
-  --role=editor
+  --role=editor \
+  --app-admin
 ```
 
-All flags are optional — the command will prompt for missing values interactively.
+All flags are optional — the command will prompt for missing values interactively. Pass `--app-admin` to grant App Admin access immediately, instead of running `user make-app-admin` separately afterward.
 
 ### `user make-app-admin <email>`
 

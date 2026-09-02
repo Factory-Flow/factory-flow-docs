@@ -12,6 +12,8 @@ Before running the installer, ensure your server has:
 
 - **Docker** 24.0 or later — [Install Docker](https://docs.docker.com/engine/install/)
 - **Docker Compose** v2 (the `docker compose` plugin) or the standalone `docker-compose` binary
+- **openssl** — used to generate the `APP_KEY`, installation ID, and database/Redis passwords
+- **python3** — used to parse volume configuration during installation
 - A **GitHub Personal Access Token (PAT)** with `read:packages` scope — needed to pull the Factory Flow image from the GitHub Container Registry
 
 <Tip>
@@ -34,6 +36,10 @@ The installer will walk you through each step interactively.
 
 You'll be prompted for your GitHub username and the PAT you created above. The installer uses these to pull the Docker images and saves them to the `.env` file so future in-app updates can authenticate automatically.
 
+<Tip>
+  If this PAT later expires or is revoked, run `./factoryflow github login` to save a new one — see [CLI Reference](/self-hosted/cli-reference#github-login).
+</Tip>
+
 ### Step 2 — Configuration
 
 The installer asks for:
@@ -43,12 +49,16 @@ The installer asks for:
 | App port | The HTTP port Factory Flow listens on (default: `80`). The installer checks if the port is already in use. |
 | App URL | The URL your users will access Factory Flow at (e.g. `https://factoryflow.yourcompany.com`). |
 | SSL certificates | Optionally provide a `cert.pem` and `key.pem` to enable HTTPS. You can also place them in `./certs/` before running. |
-| HTTPS port | The HTTPS port (default: `443`). HTTP on the app port will redirect automatically. |
-| Reverse proxy | Whether Factory Flow sits behind a reverse proxy (e.g. Cloudflare Tunnel, nginx, Traefik). Required for correct IP detection. |
+| HTTPS port | The HTTPS port (default: `443`), only asked if SSL is enabled. HTTP on the app port will redirect automatically, and the installer switches your App URL to `https://` for you. |
+| Reverse proxy | Whether Factory Flow sits behind a reverse proxy (e.g. Cloudflare Tunnel, nginx, Traefik). Required for correct client IP and protocol detection. |
 | Storage paths | Optionally store data on a specific drive or directory. Press Enter (or `N`) to use Docker-managed volumes — the recommended default for most installs. Enter `Y` to supply absolute paths for the database, app storage, logs, and/or backups. |
 
 <Tip>
   Docker-managed volumes are the right choice for most installations. Only customize storage paths if you need data on a specific disk, partition, or NAS. See [Storage Paths](/self-hosted/storage-paths) for the full options and the NFS/iSCSI warning for the database volume.
+</Tip>
+
+<Tip>
+  See [SSL & Reverse Proxies](/self-hosted/ssl-and-proxies) for the full HTTPS certificate setup and trusted-proxy configuration.
 </Tip>
 
 ### Step 3 — Pull and start
@@ -106,4 +116,4 @@ First-time setup:
 
 ## Reinstalling
 
-Running `./factoryflow install` on an existing installation will detect the previous setup and prompt you to confirm a complete wipe before proceeding. All data will be permanently lost. Use this only if you intend to start fresh — for updates, use `./factoryflow update` instead.
+Running `./factoryflow install` on an existing installation will detect the previous setup and require two separate confirmations — a `y/N` prompt followed by typing `yes` — before wiping it. All data and database volumes will be permanently lost. Use this only if you intend to start fresh — for updates, use `./factoryflow update` instead.

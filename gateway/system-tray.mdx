@@ -1,0 +1,40 @@
+---
+title: "System Tray"
+icon: "app-window-mac"
+description: "Factory Flow Gateway keeps collecting data from the system tray, even when the main window is closed."
+---
+
+Factory Flow Gateway is designed to run unattended. Closing or minimizing the main window doesn't stop data collection — the app minimizes to your system tray (or menu bar on macOS) and keeps running.
+
+## Tray Menu
+
+Right-click (or click, on macOS) the tray icon to access:
+
+| Option | Action |
+|--------|--------|
+| **Open Dashboard** | Bring the main window to the front on the Dashboard. |
+| **Open Settings** | Bring the main window to the front on Settings. |
+| **Start / Stop Collector** | Start or stop data collection without opening the main window. |
+| **Restart** | Restart the application. |
+| **Quit** | Fully close Factory Flow Gateway, stopping all collection. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/tray-menu.png" alt="System tray menu with Open Dashboard, Open Settings, Start/Stop Collector, Restart, and Quit options" />
+  <img className="hidden dark:block" src="/images/gateway/tray-menu-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/tray-menu.png"; }} alt="System tray menu with Open Dashboard, Open Settings, Start/Stop Collector, Restart, and Quit options" />
+</Frame>
+
+## Tray Icon Status
+
+The tray icon itself reflects live status at a glance, changing based on:
+
+- Connection to the Factory Flow server
+- The state of your configured connections
+- Whether the collector is running or stopped
+
+<Tip>
+  If you're troubleshooting and expect data to be flowing, check the tray icon first — it's the fastest way to confirm the collector is actually running without opening the main window.
+</Tip>
+
+<Note>
+  If you enabled **Run on Startup** and **Start Minimized** in [Application Settings](/gateway/settings#application-settings), Factory Flow Gateway will launch directly to the tray after a reboot with no window ever appearing.
+</Note>

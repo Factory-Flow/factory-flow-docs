@@ -1,0 +1,89 @@
+---
+title: "Overview"
+icon: "download"
+description: "What Factory Flow Gateway does, supported platforms, and how to launch it for the first time."
+---
+
+**Factory Flow Gateway** is a desktop application you install on a PC located on your plant network. It connects directly to your machines, PLCs, and sensors using industrial communication protocols, collects the production data they expose, and securely forwards it to your Factory Flow cloud (or self-hosted) organization.
+
+Use Factory Flow Gateway when your machines can't send data to Factory Flow on their own — for example, older equipment that only speaks Modbus, or a CNC controller that only exposes data over FOCAS. The gateway sits between that equipment and Factory Flow, translating whatever protocol your machine speaks into data points that show up on your dashboards.
+
+## Why Factory Flow Gateway?
+
+For a handful of machines, wiring up connections by hand — writing scripts, or building flows in a general-purpose tool like Node-RED — works fine. That approach stops scaling once you're managing data across dozens or hundreds of machines: every protocol needs its own custom logic, every mapping is hand-wired, and the result is usually something only the person who built it can maintain.
+
+Factory Flow Gateway is built for that scale. It handles the protocol-specific communication for you across every [supported connection type](/gateway/connections), and gives you the same guided, point-and-click way to [map raw values to your machines' data points](/gateway/machines) no matter which protocol is underneath. That means adding and mapping a new machine doesn't require someone who can write and maintain custom integration code — plant and IT staff can do it directly from the app.
+
+<CardGroup cols={2}>
+  <Card title="Runs on your network" icon="network">
+    Install it on any Windows, macOS, or Linux PC with network access to your machines — no cloud connectivity required on the machine side.
+  </Card>
+  <Card title="Speaks industrial protocols" icon="cable">
+    Connects to machines over MQTT, Modbus, OPC-UA, MTConnect, HTTP, FOCAS, and EtherNet/IP. See [Connections](/gateway/connections).
+  </Card>
+  <Card title="Never loses data" icon="database">
+    Collected points are queued locally before being forwarded, so a network outage or restart doesn't drop data. See [Data Flow](/gateway/data-flow).
+  </Card>
+  <Card title="Runs unattended" icon="app-window-mac">
+    Minimizes to the system tray and keeps collecting in the background. See [System Tray](/gateway/system-tray).
+  </Card>
+</CardGroup>
+
+---
+
+## Supported Platforms
+
+Factory Flow Gateway ships as a 64-bit (x64) desktop application for all three major operating systems:
+
+| Platform | Installer format | Architecture |
+|----------|-------------------|--------------|
+| **Windows** | NSIS installer (`.exe`) | x64 |
+| **macOS** | Disk image (`.dmg`) | x64 |
+| **Linux** | AppImage | x64 |
+
+---
+
+## Installing the Gateway
+
+<AccordionGroup>
+  <Accordion title="Windows">
+    Run the downloaded `.exe` file and follow the NSIS installer wizard. Once installation completes, launch **Factory Flow Gateway** from the Start menu.
+  </Accordion>
+  <Accordion title="macOS">
+    Open the downloaded `.dmg` file and drag **Factory Flow Gateway** into your **Applications** folder. Launch it from Applications or Launchpad.
+  </Accordion>
+  <Accordion title="Linux">
+    Make the downloaded AppImage executable and run it directly:
+
+    ```bash
+    chmod +x FactoryFlowGateway-x86_64.AppImage
+    ./FactoryFlowGateway-x86_64.AppImage
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Installers are distributed through your Factory Flow organization. If you don't have a download link, ask your Factory Flow admin, or check **Manage → Organization → Gateways** in the Factory Flow web app.
+</Note>
+
+---
+
+## First Launch
+
+The first time you open Factory Flow Gateway, it runs a **system requirements check** before you can proceed — validating that the machine has enough CPU, RAM, and disk space to run the collector reliably. If a check fails, the app displays which resource is insufficient so you can address it before continuing.
+
+<Tip>
+  You can re-run this check at any time from **Settings → System Requirements**. See [Settings](/gateway/settings#system-requirements).
+</Tip>
+
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/first-launch-requirements-check.png" alt="First-launch system requirements check showing CPU, RAM, and disk validation" />
+  <img className="hidden dark:block" src="/images/gateway/first-launch-requirements-check-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/first-launch-requirements-check.png"; }} alt="First-launch system requirements check showing CPU, RAM, and disk validation" />
+</Frame>
+
+Once the system requirements check passes, you'll be taken to the registration screen to connect the app to your Factory Flow organization.
+
+<Card title="Next: Register your gateway" icon="key-round" href="/gateway/registration">
+  Connect the app to your Factory Flow organization using a gateway token.
+</Card>

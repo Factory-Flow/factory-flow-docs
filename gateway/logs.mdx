@@ -1,0 +1,92 @@
+---
+title: "Logs"
+icon: "wrench"
+description: "Filter and review gateway logs, and troubleshoot common connection problems by protocol."
+---
+
+## Viewing Logs
+
+Factory Flow Gateway keeps a log of collector activity, connection events, and errors. The log panel can be filtered by:
+
+- **Level** (e.g. info, warning, error)
+- **Source**
+- **Connection**
+- **Time range**
+
+<Tip>
+  From any connection, use its **Show Logs** shortcut to jump straight to the log panel pre-filtered to that connection — the fastest way to diagnose a single connection without wading through everything else.
+</Tip>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/log-panel.png" alt="Log panel filtered by level, source, connection, and time range" />
+  <img className="hidden dark:block" src="/images/gateway/log-panel-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/log-panel.png"; }} alt="Log panel filtered by level, source, connection, and time range" />
+</Frame>
+
+### Managing Log Storage
+
+Logs can be cleaned up manually at any time, or cleared entirely, from the log panel. Automatic retention (how long logs are kept, and the maximum number of entries) is configured in [Settings → Log Settings](/gateway/settings#log-settings).
+
+---
+
+## Troubleshooting by Protocol
+
+<AccordionGroup>
+  <Accordion title="MQTT">
+    **Connection fails to connect**
+    - Confirm the broker URL and port are correct and reachable from the gateway machine.
+    - Check username/password if the broker requires authentication.
+    - If TLS is enabled, confirm the broker's certificate is trusted, or supply the correct CA certificate.
+    - Confirm no firewall is blocking outbound traffic to the broker port.
+  </Accordion>
+
+  <Accordion title="Modbus">
+    **Connection fails to connect**
+    - Check that the host, port, and Unit ID match your device's configuration.
+    - Confirm the selected mode (TCP or RTU) matches how the device is actually connected.
+    - Check that no firewall on the gateway machine or network is blocking the connection.
+    - For TCP with TLS enabled, confirm the certificate configuration is correct — remember TLS only applies in TCP mode.
+  </Accordion>
+
+  <Accordion title="OPC-UA">
+    **Fails with a security error**
+    - Confirm the **Security Policy** matches what the server expects — a mismatch is the most common cause of this error.
+    - Confirm the **Security Mode** (`None`, `Sign`, `SignAndEncrypt`) is set to what the server requires.
+    - If Security Mode is `Sign` or `SignAndEncrypt`, confirm the client certificate, private key, and key password are all correct.
+    - Check the endpoint URL is exactly what the server publishes — some servers expose multiple endpoints with different security requirements.
+  </Accordion>
+
+  <Accordion title="MTConnect">
+    **No data appearing**
+    - Confirm the agent URL is correct and reachable from the gateway machine.
+    - If you set a device name filter, confirm it exactly matches a device the agent serves.
+    - Try toggling **Use Sample Endpoint** — some agents behave differently between `sample` and `current`.
+    - If the agent is served over HTTPS, confirm the TLS/certificate settings are correct.
+  </Accordion>
+
+  <Accordion title="HTTP">
+    **Poll mode returns no data or errors**
+    - Confirm the URL, method, and expected response format match what the target API actually returns.
+    - Check authentication settings (bearer token, API key, or basic auth) are correct and not expired.
+    - For HTTPS URLs, confirm TLS/certificate settings are correct.
+
+    **Webhook mode isn't receiving data**
+    - Confirm **Allow Network Requests** is enabled and the correct LAN interface is selected if the sender is on your local network.
+    - Use the **reachability test** to confirm the webhook can actually be reached from outside the gateway machine.
+    - Confirm the sending system is posting to the correct endpoint path and using the correct auth secret.
+  </Accordion>
+
+  <Accordion title="FOCAS">
+    **Connection fails to connect**
+    - Confirm the host, port, and connection timeout are correct for the CNC controller.
+    - Confirm you're running on Windows or Linux — FOCAS is not supported on other platforms.
+    - Check **Settings → FOCAS Library Path** to confirm the app detects a valid FOCAS library.
+    - Confirm the CNC controller is configured to accept Ethernet/TCP-IP connections.
+  </Accordion>
+
+  <Accordion title="EtherNet/IP">
+    **Connection fails to connect**
+    - Confirm the host and port are correct and reachable from the gateway machine.
+    - Confirm the **Slot** number matches where the processor module actually sits in the PLC's rack — an incorrect slot is a common cause of connection failures on chassis-based controllers like ControlLogix.
+    - Confirm no firewall on the gateway machine or network is blocking the connection.
+  </Accordion>
+</AccordionGroup>

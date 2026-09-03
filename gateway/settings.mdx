@@ -1,0 +1,85 @@
+---
+title: "Settings"
+icon: "settings"
+description: "Full reference for every settings section in Factory Flow Gateway."
+---
+
+This page documents every section of the Factory Flow Gateway **Settings** screen.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/settings-overview.png" alt="Settings screen showing the navigation between all settings sections" />
+  <img className="hidden dark:block" src="/images/gateway/settings-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-overview.png"; }} alt="Settings screen showing the navigation between all settings sections" />
+</Frame>
+
+## Gateway Registration
+
+Shows your current registration details and lets you re-register the gateway against a different token or server. See [Registration](/gateway/registration) for the full walkthrough.
+
+## Collector Settings
+
+Controls how the collector talks to Factory Flow and manages its local queue.
+
+| Setting | Description |
+|---------|-------------|
+| **API Timeout** | How long to wait for a response from Factory Flow before considering a forwarding request failed. |
+| **API Retries** | How many times to retry a failed forwarding request. |
+| **Batch Flush Interval** | How often queued data points are batched and forwarded. |
+| **Compression** | Toggle to compress data before forwarding it. |
+| **Max Queued Points** | The upper limit on how many points can sit in the local queue at once. |
+
+See [Data Flow](/gateway/data-flow) for how these settings fit together.
+
+## Application Settings
+
+General app behavior.
+
+| Setting | Description |
+|---------|-------------|
+| **Run on Startup** | Launch Factory Flow Gateway automatically when the computer starts. |
+| **Start Minimized** | Launch directly to the system tray instead of opening the main window. |
+| **Auto-Start Collector** | Start the collector automatically when the app launches. |
+| **Theme** | The app's display theme. |
+
+## Connection Settings
+
+Shared settings for HTTP webhook connections. See [Connections](/gateway/connections#http) for how these interact with individual webhook connections.
+
+| Setting | Description |
+|---------|-------------|
+| **Webhook Port** | The port used to receive incoming webhook requests. |
+| **Allow Network Requests** | Whether the gateway accepts webhook requests from other devices on your LAN. |
+| **Webhook TLS** | Toggle to serve webhooks over HTTPS. |
+
+## Log Settings
+
+Controls how long logs are kept and how they're cleaned up. See [Logs](/gateway/logs) for how to view and filter logs.
+
+| Setting | Description |
+|---------|-------------|
+| **Retention Days** | How many days of logs to keep. |
+| **Max Entries** | The maximum number of log entries to retain. |
+| **Auto-Cleanup** | Toggle automatic removal of logs older than the retention period, or beyond the max entry count. |
+
+## FOCAS Library Path
+
+The location of the FOCAS library on disk, required for [FOCAS connections](/gateway/connections#focas-fanuc-cnc). The app reports whether a valid library is currently detected at this path.
+
+## System Requirements
+
+Re-runs the CPU, RAM, and disk space check performed on first launch. Use this if you've changed hardware or want to confirm the gateway machine still meets requirements after adding more connections or machines. See [Overview](/gateway/overview#first-launch).
+
+## Danger Zone
+
+<Warning>
+  These actions affect the running app directly. Make sure you understand the effect before using them.
+</Warning>
+
+| Action | Effect |
+|--------|--------|
+| **Restart** | Restarts the Factory Flow Gateway application. |
+| **Reset to Defaults** | Resets application settings back to their defaults. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/settings-danger-zone.png" alt="Danger Zone settings with Restart and Reset to Defaults actions" />
+  <img className="hidden dark:block" src="/images/gateway/settings-danger-zone-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-danger-zone.png"; }} alt="Danger Zone settings with Restart and Reset to Defaults actions" />
+</Frame>

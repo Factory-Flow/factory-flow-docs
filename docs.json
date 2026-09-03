@@ -70,6 +70,20 @@
             ]
           },
           {
+            "group": "Factory Flow Gateway",
+            "pages": [
+              "gateway/overview",
+              "gateway/registration",
+              "gateway/connections",
+              "gateway/machines",
+              "gateway/dashboard",
+              "gateway/data-flow",
+              "gateway/settings",
+              "gateway/system-tray",
+              "gateway/logs"
+            ]
+          },
+          {
             "group": "Self-Hosted",
             "pages": [
               "self-hosted/overview",
@@ -106,7 +120,18 @@
       {
         "tab": "Changelog",
         "pages": [
-          "getting-started/release-notes"
+          {
+            "group": "Factory Flow",
+            "pages": [
+              "changelog/app"
+            ]
+          },
+          {
+            "group": "Factory Flow Gateway",
+            "pages": [
+              "changelog/gateway"
+            ]
+          }
         ]
       },
       {

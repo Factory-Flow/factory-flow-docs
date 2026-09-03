@@ -1,0 +1,57 @@
+---
+title: "Machines"
+icon: "cpu"
+description: "Map data from your connections to the machines assigned to your gateway."
+---
+
+Once you have one or more working [connections](/gateway/connections), the next step is telling Factory Flow Gateway which piece of data from which connection corresponds to which value on which machine.
+
+This mapping step is the same guided, point-and-click process regardless of which protocol a machine's connection uses — which is what lets you scale from a handful of machines to hundreds without needing someone who can write custom integration code for each one.
+
+## Machines Come From the Web App
+
+Machines are created and managed in the Factory Flow web app, not in the gateway app itself. Once a machine is assigned to your gateway (in **Manage → Organization → Gateways**, or from the machine's own Data Source settings), it automatically appears in Factory Flow Gateway — there's no separate step to create it locally.
+
+Each machine carries a **schema**: the list of data points Factory Flow expects from it (for example, part counts, good/bad counts), each with a defined type — integer, float, boolean, or string.
+
+<Note>
+  If a machine you expect to see isn't listed in the gateway, confirm it has been assigned to this specific gateway in the Factory Flow web app.
+</Note>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/machines-list.png" alt="Machines list showing machines assigned to this gateway with their schemas" />
+  <img className="hidden dark:block" src="/images/gateway/machines-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/machines-list.png"; }} alt="Machines list showing machines assigned to this gateway with their schemas" />
+</Frame>
+
+## Creating a Mapping
+
+<Steps>
+  <Step title="Open the machine">
+    Select the machine you want to map data for. You'll see its schema — the data points Factory Flow expects, and their types.
+  </Step>
+  <Step title="Choose a data point to map">
+    Pick the schema data point you want to supply data for (e.g. **Good Count**), then click to map it.
+  </Step>
+  <Step title="Select a connection">
+    Choose which of your configured connections supplies this value.
+  </Step>
+  <Step title="Select the address">
+    Depending on the connection's protocol, choose the specific topic, register, or node that holds the value. For connections that return JSON payloads, you can also supply a **JSON path** to pull a specific field out of a larger payload.
+  </Step>
+  <Step title="Preview and save">
+    Before saving, the mapping dialog shows a **live preview** of the value currently being read — including its detected type — so you can confirm it matches what the schema expects. Save once it looks correct.
+
+    <Frame>
+      <img className="block dark:hidden" src="/images/gateway/mapping-dialog.png" alt="Mapping dialog with connection, address, JSON path, and a live value preview" />
+      <img className="hidden dark:block" src="/images/gateway/mapping-dialog-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/mapping-dialog.png"; }} alt="Mapping dialog with connection, address, JSON path, and a live value preview" />
+    </Frame>
+  </Step>
+</Steps>
+
+<Tip>
+  Not sure which topic, register, or node to pick? Use the [Explore browser](/gateway/connections#managing-connections) on the connection first to see what's available.
+</Tip>
+
+## Enabling and Disabling
+
+Both individual mappings and entire machines can be enabled or disabled independently. Disabling a mapping stops that specific data point from being collected without affecting the rest of the machine; disabling a machine stops all collection for it.

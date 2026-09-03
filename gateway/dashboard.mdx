@@ -1,0 +1,50 @@
+---
+title: "Dashboard"
+icon: "gauge"
+description: "Monitor the collector, your connections, and data throughput from the gateway dashboard."
+---
+
+The Dashboard is the home screen of Factory Flow Gateway — a live view of whether data collection is healthy and how much data is flowing.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/dashboard-overview.png" alt="Gateway dashboard showing collector status, connections overview, and recent data" />
+  <img className="hidden dark:block" src="/images/gateway/dashboard-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/dashboard-overview.png"; }} alt="Gateway dashboard showing collector status, connections overview, and recent data" />
+</Frame>
+
+## Collector Status
+
+At the top of the dashboard, you'll see whether the collector is **running** or **stopped**, along with the elapsed time since it was started.
+
+## Connections Overview
+
+A breakdown of your active connections by status:
+
+| Status | Meaning |
+|--------|---------|
+| **Connected** | The connection is established and healthy. |
+| **Connecting** | The gateway is currently attempting to establish the connection. |
+| **Disconnected** | The connection is not currently established. |
+| **Error** | The connection failed and needs attention. |
+| **Disabled** | The connection has been manually disabled. |
+
+## Data Point Mappings
+
+A summary of how many data point mappings you have configured, along with counts of points successfully **forwarded** versus **failed**.
+
+## Recent Data & Metrics
+
+The dashboard includes a live feed of recently collected data points, plus collector metrics:
+
+- Points collected
+- Points forwarded
+- Points failed
+- Success rate
+- Data volume
+- Average latency
+
+These metrics can be viewed over a selectable time range, with a trend chart showing how they've changed over that period.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/dashboard-metrics.png" alt="Collector metrics with selectable time range and trend chart" />
+  <img className="hidden dark:block" src="/images/gateway/dashboard-metrics-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/dashboard-metrics.png"; }} alt="Collector metrics with selectable time range and trend chart" />
+</Frame>

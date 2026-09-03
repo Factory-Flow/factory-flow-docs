@@ -1,0 +1,184 @@
+---
+title: "Connections"
+icon: "cable"
+description: "Set up connections to your machines using MQTT, Modbus, OPC-UA, MTConnect, HTTP, FOCAS, or EtherNet/IP."
+---
+
+A **Connection** is a link from Factory Flow Gateway to one machine, control system, or message broker. Each connection uses one **protocol** — the "language" that machine or system speaks.
+
+You typically don't need to know these protocols in depth to set one up — you just need the connection details (address, port, credentials) for your equipment, which your machine builder, integrator, or plant IT team can usually provide. The sections below explain what each protocol is in plain terms and exactly which fields you'll fill in.
+
+## Supported Protocols at a Glance
+
+| Protocol | What it is |
+|----------|------------|
+| **MQTT** | A lightweight messaging protocol where devices publish data to a central "broker" and other systems subscribe to receive it. |
+| **Modbus** | One of the oldest and most widely supported industrial communication protocols, used to read data directly from a device's memory registers. |
+| **OPC-UA** | A modern, secure standard for exchanging real-time industrial data between machines, PLCs, and software systems. |
+| **MTConnect** | An open data standard built specifically for manufacturing equipment, where a machine (or an "agent" in front of it) publishes standardized production data. |
+| **HTTP** | The standard protocol the web runs on — used here either to poll a web API for data, or to receive data pushed to the gateway as a webhook. |
+| **FOCAS** | Fanuc's proprietary protocol (Fanuc Open CNC API Specification) for reading data directly from Fanuc CNC controllers. |
+| **EtherNet/IP** | An industrial networking protocol (built on CIP, the Common Industrial Protocol) used by Rockwell Automation / Allen-Bradley PLCs to exchange data over standard Ethernet. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/connections-list.png" alt="Connections list showing configured connections and their status" />
+  <img className="hidden dark:block" src="/images/gateway/connections-list-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/connections-list.png"; }} alt="Connections list showing configured connections and their status" />
+</Frame>
+
+---
+
+## Protocol Setup Reference
+
+<AccordionGroup>
+  <Accordion title="MQTT">
+    Typically used for IoT sensors, edge devices, and PLC add-on modules that publish readings to a shared broker rather than being polled directly.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Broker URL** | The address of the MQTT broker to connect to. |
+    | **Port** | The port the broker listens on. |
+    | **Client ID** | The identifier this connection presents to the broker. |
+    | **Username / Password** | Credentials for brokers that require authentication. |
+    | **TLS** | Toggle to connect over an encrypted connection. When enabled, certificate options are available (see [Security](#security)). |
+    | **Clean Session** | Toggle controlling whether the broker discards this client's subscription state between connections. |
+  </Accordion>
+
+  <Accordion title="Modbus (TCP or RTU)">
+    Common on PLCs, VFDs/drives, and legacy industrial controllers — especially older equipment that predates modern networked protocols.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Mode** | Selector for **TCP** (network) or **RTU** (serial) transport. |
+    | **Host** | The device's network address (TCP mode). |
+    | **Port** | The port to connect to (TCP mode). |
+    | **Unit ID** | The Modbus unit/slave identifier, `0`–`255`. |
+
+    <Note>
+      TLS and certificate options are only available in **TCP** mode. RTU (serial) connections do not support TLS.
+    </Note>
+  </Accordion>
+
+  <Accordion title="OPC-UA">
+    Common on modern PLCs, SCADA systems, and industrial software that need a secure, standardized way to exchange data.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Endpoint URL** | The OPC-UA server's endpoint address. |
+    | **Security Mode** | `None`, `Sign`, or `SignAndEncrypt`. |
+    | **Security Policy** | `None`, `Basic128Rsa15`, `Basic256`, or `Basic256Sha256`. |
+    | **Username / Password** | Credentials, if the server requires them. |
+    | **Client Certificate / Private Key / Key Password** | Required when Security Mode is set to `Sign` or `SignAndEncrypt` — used to establish a secure, authenticated session with the server. |
+
+    <Note>
+      OPC-UA doesn't use a simple TLS on/off toggle. Instead, its security model is set through the **Security Mode** and **Security Policy** fields together — both must match what the server expects.
+    </Note>
+  </Accordion>
+
+  <Accordion title="MTConnect">
+    Common on CNC machines and other manufacturing equipment that expose an MTConnect agent.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Agent URL** | The address of the MTConnect agent. |
+    | **Device Name** | Optional filter to a specific device when the agent serves multiple devices. |
+    | **Poll Interval** | How often to request data from the agent. |
+    | **Request Timeout** | How long to wait for a response before considering the request failed. |
+    | **Use Sample Endpoint** | Toggle between the agent's `sample` endpoint (a stream of recent events) and its `current` endpoint (a snapshot of current values). |
+
+    TLS options are available for agents served over HTTPS.
+  </Accordion>
+
+  <Accordion title="HTTP">
+    Used for custom integrations — polling a REST API on a schedule, or receiving data pushed to the gateway as a webhook. HTTP connections run in one of two mutually exclusive modes.
+
+    **Poll mode** — the gateway requests data from a URL on a schedule.
+
+    | Field | Description |
+    |-------|-------------|
+    | **URL** | The endpoint to request. |
+    | **Method** | `GET` or `POST`. |
+    | **Response Format** | `JSON`, `XML`, or `text`. |
+    | **Interval** | How often to poll the URL. |
+    | **Timeout** | How long to wait for a response. |
+    | **Custom Headers** | Additional HTTP headers to send with each request. |
+    | **Auth** | `None`, `Bearer`, `API Key`, or `Basic`. |
+    | **Body / Content Type** | Request body and content type, for `POST`. |
+    | **TLS** | Available for `https://` URLs. |
+
+    **Webhook mode** — the gateway runs its own server and receives data pushed to it from another system.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Server Port** | The port the gateway listens on for incoming requests. |
+    | **TLS** | Toggle to serve the webhook over HTTPS. |
+    | **Auth Type** | Authentication required of incoming requests, with a secret you generate once. |
+    | **Allow Network Requests** | Toggle to accept requests from other devices on your LAN, with a picker for which local network interface to bind to. |
+    | **Reachability Test** | A built-in test to confirm the webhook is reachable from outside the gateway machine. |
+    | **Endpoint Paths** | Multiple configurable paths, each accepting its own incoming data format. |
+  </Accordion>
+
+  <Accordion title="FOCAS (Fanuc CNC)">
+    Used exclusively with Fanuc-controlled CNC machines, connected over Ethernet/TCP-IP.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Host** | The CNC controller's network address. |
+    | **Port** | The port to connect to. |
+    | **Connection Timeout** | How long to wait when establishing the connection. |
+
+    <Warning>
+      FOCAS connections are supported on **Windows and Linux only**. The app detects whether the FOCAS library is available on your system and reports its status; on unsupported platforms, setting up a FOCAS connection is blocked with a clear message.
+    </Warning>
+
+    <Note>
+      FOCAS connections are **strictly read-only**. Factory Flow Gateway never sends commands back to the CNC controller.
+    </Note>
+  </Accordion>
+
+  <Accordion title="EtherNet/IP">
+    Used with Rockwell Automation / Allen-Bradley PLCs (e.g. ControlLogix, CompactLogix).
+
+    | Field | Description |
+    |-------|-------------|
+    | **Host** | The PLC's network address. |
+    | **Port** | The port to connect to. |
+    | **Slot** | The slot number of the processor module within the PLC's rack/chassis. |
+  </Accordion>
+</AccordionGroup>
+
+## Security
+
+Every protocol that supports TLS lets you supply your own CA and client certificates for that connection. A few protocol-specific notes:
+
+- **Modbus** — TLS only applies in **TCP** mode; RTU (serial) connections don't support it.
+- **OPC-UA** — instead of a simple TLS toggle, security is configured through **Security Mode** and **Security Policy**, plus a client certificate and private key when encryption is required.
+- **MQTT, MTConnect, HTTP** — use a straightforward TLS toggle with certificate options.
+
+---
+
+## Managing Connections
+
+<Steps>
+  <Step title="Add a connection">
+    From the connections list, click **New Connection**, choose a protocol type, and fill in its fields as described above.
+
+    <Frame>
+      <img className="block dark:hidden" src="/images/gateway/connection-new-form.png" alt="New connection form with protocol type selector and protocol-specific fields" />
+      <img className="hidden dark:block" src="/images/gateway/connection-new-form-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/connection-new-form.png"; }} alt="New connection form with protocol type selector and protocol-specific fields" />
+    </Frame>
+  </Step>
+  <Step title="Test before saving">
+    Use **Test Connection** to verify the gateway can reach and authenticate with the target before you save it.
+  </Step>
+  <Step title="Explore available data">
+    Once connected, use the **Explore** browser to preview the topics, registers, or nodes the connection can see — useful for finding the exact address to map in [Machines](/gateway/machines).
+
+    <Frame>
+      <img className="block dark:hidden" src="/images/gateway/connection-explore.png" alt="Explore browser showing available topics, registers, or nodes for a connection" />
+      <img className="hidden dark:block" src="/images/gateway/connection-explore-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/connection-explore.png"; }} alt="Explore browser showing available topics, registers, or nodes for a connection" />
+    </Frame>
+  </Step>
+  <Step title="Edit, enable/disable, or delete">
+    Open any existing connection to edit its settings. Each connection can be individually enabled or disabled without deleting it, or removed entirely.
+  </Step>
+</Steps>

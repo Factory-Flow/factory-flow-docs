@@ -1,8 +1,19 @@
 import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { createInterface } from 'readline/promises'
 
-const REPO = 'Factory-Flow/factory-flow-app'
-const OUTPUT = new URL('../release-notes.mdx', import.meta.url).pathname.replace(/%20/g, ' ')
+const TARGETS = {
+  app: {
+    repo: 'Factory-Flow/factory-flow-app',
+    output: '../changelog/app.mdx',
+    product: 'Factory Flow',
+  },
+  gateway: {
+    repo: 'Factory-Flow/factory-flow-gateway',
+    output: '../changelog/gateway.mdx',
+    product: 'Factory Flow Gateway',
+  },
+}
+
 const ENV_PATH = new URL('../.env', import.meta.url).pathname.replace(/%20/g, ' ')
 
 function loadEnv() {
@@ -20,9 +31,10 @@ function loadEnv() {
 
 function parseArgs() {
   const args = process.argv.slice(2)
-  const opts = { prerelease: false, limit: null, from: null, since: null, body: true }
+  const opts = { target: null, prerelease: false, limit: null, from: null, since: null, body: true }
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--prerelease') opts.prerelease = true
+    if (args[i] === '--target' && args[i + 1]) opts.target = args[++i]
+    else if (args[i] === '--prerelease') opts.prerelease = true
     else if (args[i] === '--no-body') opts.body = false
     else if (args[i] === '--limit' && args[i + 1]) opts.limit = parseInt(args[++i], 10)
     else if (args[i] === '--from' && args[i + 1]) opts.from = args[++i]
@@ -34,6 +46,15 @@ function parseArgs() {
 async function promptFilters() {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   const ask = (q) => rl.question(q)
+
+  console.log('\nSync which changelog?\n')
+  for (const [key, t] of Object.entries(TARGETS)) {
+    console.log(`  ${key} — ${t.product} (${t.repo})`)
+  }
+  let target = null
+  while (!TARGETS[target]) {
+    target = (await ask(`\nTarget (${Object.keys(TARGETS).join('/')}): `)).trim()
+  }
 
   console.log('\nFilter options (press Enter to skip):\n')
 
@@ -53,14 +74,14 @@ async function promptFilters() {
 
   rl.close()
   console.log()
-  return { prerelease, body, limit, from, since }
+  return { target, prerelease, body, limit, from, since }
 }
 
-async function fetchReleases() {
+async function fetchReleases(repo) {
   const headers = { Accept: 'application/vnd.github+json' }
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
 
-  const url = `https://api.github.com/repos/${REPO}/releases?per_page=100`
+  const url = `https://api.github.com/repos/${repo}/releases?per_page=100`
   console.log(`Fetching: ${url}`)
   console.log(`Token: ${process.env.GITHUB_TOKEN ? 'set' : 'not set'}`)
 
@@ -103,7 +124,18 @@ function applyFilters(all, opts) {
 async function main() {
   loadEnv()
   const opts = process.argv.length > 2 ? parseArgs() : await promptFilters()
-  const all = await fetchReleases()
+
+  if (opts.target && !TARGETS[opts.target]) {
+    throw new Error(`Unknown --target "${opts.target}". Expected one of: ${Object.keys(TARGETS).join(', ')}`)
+  }
+  if (!opts.target) {
+    console.warn(`No --target given, defaulting to "app". Pass --target ${Object.keys(TARGETS).join('|')} to choose.`)
+    opts.target = 'app'
+  }
+  const target = TARGETS[opts.target]
+  const output = new URL(target.output, import.meta.url).pathname.replace(/%20/g, ' ')
+
+  const all = await fetchReleases(target.repo)
   const releases = applyFilters(all, opts)
 
   if (releases.length === 0) {
@@ -122,15 +154,15 @@ async function main() {
   const mdx = [
     '---',
     'title: "Release notes"',
-    'description: "New features, improvements, and fixes shipped to Factory Flow."',
+    `description: "New features, improvements, and fixes shipped to ${target.product}."`,
     '---',
     '',
     sections.join('\n\n'),
     '',
   ].join('\n')
 
-  writeFileSync(OUTPUT, mdx)
-  console.log(`Synced ${releases.length} release(s) → release-notes.mdx`)
+  writeFileSync(output, mdx)
+  console.log(`Synced ${releases.length} release(s) → ${target.output.replace('../', '')}`)
 }
 
 main().catch((err) => {

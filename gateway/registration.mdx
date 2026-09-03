@@ -1,0 +1,79 @@
+---
+title: "Registration"
+icon: "key-round"
+description: "Connect Factory Flow Gateway to your organization using a gateway token."
+---
+
+Before it can collect or forward any data, Factory Flow Gateway must be registered to your Factory Flow organization. Registration links the desktop app to a gateway record in the cloud, which is where you'll later assign machines to it.
+
+## Getting a Gateway Token
+
+Registration requires a **gateway token** — a string that starts with `gw_`.
+
+1. Sign in to the Factory Flow web app.
+2. Navigate to **Manage → Organization → Gateways**.
+3. Create a new gateway (or open an existing one) and copy its token.
+
+<Note>
+  See [Gateways](/manage/organization/gateways) for how gateway records are created and managed in the web app.
+</Note>
+
+## Registering in the App
+
+<Steps>
+  <Step title="Open the registration screen">
+    On first launch (or from **Settings → Gateway Registration** if you need to re-register), Factory Flow Gateway will prompt you to enter your gateway token.
+  </Step>
+  <Step title="Enter your gateway token">
+    Paste the `gw_` token you copied from the web app.
+  </Step>
+  <Step title="(Optional) Set a custom server URL">
+    If you're connecting to a self-hosted Factory Flow deployment rather than the default cloud service, enter your organization's server URL.
+
+    <Tip>
+      If your self-hosted deployment uses a self-signed TLS certificate, enable **Allow self-signed certificates** so the gateway can connect without a trusted certificate authority. Leave this off when connecting to the standard Factory Flow cloud service.
+    </Tip>
+  </Step>
+  <Step title="Register">
+    Click **Register**. The app validates your token against the server and, once successful, links itself to that gateway record.
+  </Step>
+</Steps>
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/registration-form.png" alt="Gateway registration form with token, custom server URL, and self-signed certificate fields" />
+  <img className="hidden dark:block" src="/images/gateway/registration-form-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-form.png"; }} alt="Gateway registration form with token, custom server URL, and self-signed certificate fields" />
+</Frame>
+
+---
+
+## After Registration
+
+Once registered, the app displays your gateway's status:
+
+| Field | Description |
+|-------|-------------|
+| **Gateway name** | The name assigned to this gateway in the Factory Flow web app. |
+| **Gateway ID** | The unique identifier for this gateway record. |
+| **Assigned machines** | The number of machines currently assigned to this gateway. |
+| **Server** | The Factory Flow server this gateway is registered against (cloud, or your custom server URL). |
+| **Token** | Your gateway token, shown masked. |
+| **License status** | Valid, Expiring, or Expired — see below. |
+
+### License Status
+
+| Status | Meaning |
+|--------|---------|
+| **Valid** | The gateway's license is active. Data collection and forwarding operate normally. |
+| **Expiring** | The license is approaching its renewal date. |
+| **Expired** | The license has passed its renewal date. |
+
+Alongside the status, the app shows who the license is **issued to** and its **renewal date**.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/registration-status.png" alt="Registered gateway status showing name, ID, assigned machines, server, masked token, and license status" />
+  <img className="hidden dark:block" src="/images/gateway/registration-status-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-status.png"; }} alt="Registered gateway status showing name, ID, assigned machines, server, masked token, and license status" />
+</Frame>
+
+<Note>
+  If you need to change which organization a gateway is registered to, or rotate its token, re-run registration from **Settings → Gateway Registration**.
+</Note>

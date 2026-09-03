@@ -1,0 +1,28 @@
+---
+title: "Data Flow"
+icon: "cloud-upload"
+description: "How Factory Flow Gateway queues and forwards collected data, and how it survives network interruptions."
+---
+
+Factory Flow Gateway is built so that a flaky network connection or an app restart never means lost data.
+
+## Local Queue First
+
+Every data point the collector reads is saved to a **durable local queue** before anything is sent anywhere. If the network drops, or the app itself restarts, points already collected are safe on disk and will still be forwarded once things recover.
+
+## Batching and Forwarding
+
+Queued points are batched and forwarded to Factory Flow on a **configurable interval** rather than one at a time. If a forwarding attempt fails, the gateway retries with backoff rather than dropping the batch. Forwarding can optionally use **compression** to reduce bandwidth usage.
+
+## Inspecting and Clearing the Queue
+
+If you need to check how much data is pending, or clear it out, you can do so from **Settings → Collector**. See [Settings](/gateway/settings#collector-settings) for the related settings.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/pending-queue.png" alt="Pending queue view showing queued data points with options to inspect or clear them" />
+  <img className="hidden dark:block" src="/images/gateway/pending-queue-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/pending-queue.png"; }} alt="Pending queue view showing queued data points with options to inspect or clear them" />
+</Frame>
+
+<Tip>
+  A steadily growing pending queue usually means data is being collected faster than it can be forwarded — check your network connectivity and the [Dashboard](/gateway/dashboard) for connection or forwarding errors.
+</Tip>

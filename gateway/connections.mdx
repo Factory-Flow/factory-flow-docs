@@ -1,7 +1,7 @@
 ---
 title: "Connections"
 icon: "cable"
-description: "Set up connections to your machines using MQTT, Modbus, OPC-UA, MTConnect, HTTP, FOCAS, or EtherNet/IP."
+description: "Set up connections to your machines using MQTT, Modbus, OPC-UA, MTConnect, HTTP, GraphQL, FOCAS, or EtherNet/IP."
 ---
 
 A **Connection** is a link from Factory Flow Gateway to one machine, control system, or message broker. Each connection uses one **protocol** — the "language" that machine or system speaks.
@@ -17,6 +17,7 @@ You typically don't need to know these protocols in depth to set one up — you 
 | **OPC-UA** | A modern, secure standard for exchanging real-time industrial data between machines, PLCs, and software systems. |
 | **MTConnect** | An open data standard built specifically for manufacturing equipment, where a machine (or an "agent" in front of it) publishes standardized production data. |
 | **HTTP** | The standard protocol the web runs on — used here either to poll a web API for data, or to receive data pushed to the gateway as a webhook. |
+| **GraphQL** | A query-based API standard, used here to poll a GraphQL endpoint on a schedule for exactly the fields you request. |
 | **FOCAS** | Fanuc's proprietary protocol (Fanuc Open CNC API Specification) for reading data directly from Fanuc CNC controllers. |
 | **EtherNet/IP** | An industrial networking protocol (built on CIP, the Common Industrial Protocol) used by Rockwell Automation / Allen-Bradley PLCs to exchange data over standard Ethernet. |
 
@@ -117,6 +118,21 @@ You typically don't need to know these protocols in depth to set one up — you 
     | **Endpoint Paths** | Multiple configurable paths, each accepting its own incoming data format. |
   </Accordion>
 
+  <Accordion title="GraphQL">
+    Used for custom integrations against systems that expose a GraphQL API — MES, ERP, or other software systems — instead of a REST endpoint.
+
+    | Field | Description |
+    |-------|-------------|
+    | **Endpoint URL** | The GraphQL endpoint to query (commonly ending in `/graphql`). |
+    | **Query** | The GraphQL query (or named operation) to send on each poll. |
+    | **Variables** | Optional JSON object of variables to pass alongside the query. |
+    | **Interval** | How often to run the query. |
+    | **Timeout** | How long to wait for a response. |
+    | **Custom Headers** | Additional HTTP headers to send with each request. |
+    | **Auth** | `None`, `Bearer`, `API Key`, or `Basic`. |
+    | **TLS** | Available for `https://` endpoints. |
+  </Accordion>
+
   <Accordion title="FOCAS (Fanuc CNC)">
     Used exclusively with Fanuc-controlled CNC machines, connected over Ethernet/TCP-IP.
 
@@ -152,7 +168,7 @@ Every protocol that supports TLS lets you supply your own CA and client certific
 
 - **Modbus** — TLS only applies in **TCP** mode; RTU (serial) connections don't support it.
 - **OPC-UA** — instead of a simple TLS toggle, security is configured through **Security Mode** and **Security Policy**, plus a client certificate and private key when encryption is required.
-- **MQTT, MTConnect, HTTP** — use a straightforward TLS toggle with certificate options.
+- **MQTT, MTConnect, HTTP, GraphQL** — use a straightforward TLS toggle with certificate options.
 
 ---
 

@@ -75,6 +75,14 @@ Logs can be cleaned up manually at any time, or cleared entirely, from the log p
     - Confirm the sending system is posting to the correct endpoint path and using the correct auth secret.
   </Accordion>
 
+  <Accordion title="GraphQL">
+    **Poll returns no data or errors**
+    - Confirm the endpoint URL is correct and reachable from the gateway machine.
+    - Validate the query and variables against the target API's schema — a malformed query typically returns a GraphQL error payload rather than a connection failure.
+    - Check authentication settings (bearer token, API key, or basic auth) are correct and not expired.
+    - For HTTPS endpoints, confirm TLS/certificate settings are correct.
+  </Accordion>
+
   <Accordion title="FOCAS">
     **Connection fails to connect**
     - Confirm the host, port, and connection timeout are correct for the CNC controller.

@@ -31,7 +31,7 @@ Registration requires a **gateway token** — a string that starts with `gw_`.
     If you're connecting to a self-hosted Factory Flow deployment rather than the default cloud service, enter your organization's server URL.
 
     <Tip>
-      If your self-hosted deployment uses a self-signed TLS certificate, enable **Allow self-signed certificates** so the gateway can connect without a trusted certificate authority. Leave this off when connecting to the standard Factory Flow cloud service.
+      If your self-hosted server's certificate was issued by an internal or private CA rather than a publicly trusted one, use the **CA Certificate (optional)** field to point the gateway at that CA's certificate so it can verify the connection. This is how gateways trust a server set up with [`./factoryflow cert`](/self-hosted/ssl-and-proxies#private-ca-for-lan-only-deployments) for a LAN-only deployment — run `./factoryflow cert export` on the server, transfer the resulting file to this machine, and select it here. Leave this blank when connecting to the standard Factory Flow cloud service or a self-hosted server with a publicly trusted certificate.
     </Tip>
   </Step>
   <Step title="Register">
@@ -40,8 +40,8 @@ Registration requires a **gateway token** — a string that starts with `gw_`.
 </Steps>
 
 <Frame>
-  <img className="block dark:hidden" src="/images/gateway/registration-form.png" alt="Gateway registration form with token, custom server URL, and self-signed certificate fields" />
-  <img className="hidden dark:block" src="/images/gateway/registration-form-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-form.png"; }} alt="Gateway registration form with token, custom server URL, and self-signed certificate fields" />
+  <img className="block dark:hidden" src="/images/gateway/registration-form.png" alt="Gateway registration form with token, custom server URL, and CA certificate fields" />
+  <img className="hidden dark:block" src="/images/gateway/registration-form-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-form.png"; }} alt="Gateway registration form with token, custom server URL, and CA certificate fields" />
 </Frame>
 
 ---

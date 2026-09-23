@@ -185,6 +185,68 @@ See [Storage Paths](/self-hosted/storage-paths) for full details.
 
 ---
 
+## Certificates
+
+Manages a private CA and server certificate for deployments with no public domain (so Let's Encrypt isn't an option). See [Private CA for LAN-Only Deployments](/self-hosted/ssl-and-proxies#private-ca-for-lan-only-deployments) for the full walkthrough and security notes.
+
+### `cert init [--san=host1,host2,...]`
+
+One-time setup. Generates a private CA (or reuses one already placed at `./certs/ca.pem` + `ca.key`, e.g. to bring your own internal/corporate CA), issues a server certificate for the given SANs, enables HTTPS, and restarts the app container to activate it.
+
+```bash
+./factoryflow cert init --san=factoryflow.local,192.168.1.50
+```
+
+### `cert issue [--san=host1,host2,...]`
+
+Issues a new server certificate from the existing CA. Reuses the current certificate's SANs if `--san` is omitted.
+
+```bash
+./factoryflow cert issue
+```
+
+<Note>
+  Unlike `cert init`, this only reloads Nginx — no container restart, no downtime.
+</Note>
+
+### `cert show`
+
+Prints the current server certificate's subject, issuer, SAN, and days until expiry, plus the CA's subject, expiry, and SHA-256 fingerprint (if a local CA exists).
+
+```bash
+./factoryflow cert show
+```
+
+### `cert export [path]`
+
+Copies `ca.pem` (never `ca.key`) to a local path — default `./factoryflow-ca.pem` — and prints its SHA-256 fingerprint, for transfer to a gateway machine.
+
+```bash
+./factoryflow cert export ~/Desktop
+```
+
+### `cert trust`
+
+Prints step-by-step instructions for trusting this server's CA on a gateway machine.
+
+```bash
+./factoryflow cert trust
+```
+
+### `cert rotate-ca [--san=host1,host2,...]`
+
+Regenerates the CA and reissues the server certificate. Prompts for confirmation.
+
+```bash
+./factoryflow cert rotate-ca
+```
+
+<Warning>
+  Rotating the CA invalidates trust on every gateway machine that trusted the previous CA. Each one needs the new `ca.pem` re-installed (`cert trust`) before it can reconnect over HTTPS.
+</Warning>
+
+---
+
 ## Operations
 
 ### `start`

@@ -6,6 +6,22 @@ description: "Serve Factory Flow over HTTPS with your own certificates, or confi
 
 Factory Flow can terminate HTTPS directly using certificates you provide, and can be configured to trust a reverse proxy in front of it (e.g. Cloudflare Tunnel, nginx, Traefik) so client IPs and protocols are detected correctly.
 
+### Which Setup Applies to You?
+
+<CardGroup cols={3}>
+  <Card title="Public domain" icon="globe">
+    Get a certificate from Let's Encrypt or a purchased/internal CA. Use **[SSL / HTTPS](#ssl-https)** below — drop `cert.pem`/`key.pem` in `./certs/` and Factory Flow's built-in Nginx serves them directly. Publicly trusted, so [Factory Flow Gateway](/gateway/overview) connects with no extra setup.
+  </Card>
+  <Card title="Reverse proxy / Cloudflare Tunnel" icon="route">
+    Something in front of Factory Flow already terminates TLS. Use **[Reverse Proxies](#reverse-proxies)** below. If a [Factory Flow Gateway](/gateway/overview) connects through the proxy's or tunnel's public hostname, nothing else is needed — but see the [Cloudflare Tunnel note](#cloudflare-tunnel-and-lan-direct-gateways) if a gateway connects directly to this server's LAN address instead.
+  </Card>
+  <Card title="LAN-only, no public domain" icon="network">
+    Only reachable on your local network, so Let's Encrypt isn't an option. Use **[Private CA for LAN-Only Deployments](#private-ca-for-lan-only-deployments)** below — `./factoryflow cert` generates a private CA so [Factory Flow Gateway](/gateway/overview) machines can verify this server over HTTPS without a public certificate.
+  </Card>
+</CardGroup>
+
+These aren't mutually exclusive — a Cloudflare Tunnel and a private CA commonly coexist, e.g. a tunnel exposing the admin UI publicly while gateways on the LAN connect directly using the private-CA certificate.
+
 ---
 
 ## SSL / HTTPS
@@ -93,3 +109,82 @@ To enable or update this after the initial install, edit `TRUSTED_PROXIES` direc
 <Note>
   If you're not running behind any reverse proxy, leave this unset — trusting proxy headers you don't actually receive from a real proxy can allow client IP spoofing.
 </Note>
+
+### Cloudflare Tunnel and LAN-Direct Gateways
+
+`cloudflared` makes an outbound-only connection from this server to Cloudflare's edge, which terminates TLS with a publicly-trusted certificate. If a [Factory Flow Gateway](/gateway/overview) connects to your organization over the tunnel's public hostname, that's it — the connection is HTTPS with a publicly-trusted certificate, same as the [public-domain case](#ssl-https) above, and nothing further needs configuring.
+
+<Warning>
+  A Cloudflare Tunnel only covers traffic that actually goes through it. If a gateway instead connects directly to this server's local IP or hostname on the LAN — bypassing the tunnel, which is common when the gateway and server share a network — that connection is **plain HTTP** unless you also set up [Private CA for LAN-Only Deployments](#private-ca-for-lan-only-deployments) below. Running a tunnel does not automatically secure LAN-direct gateway connections.
+</Warning>
+
+The two are independent and can coexist: for example, exposing an admin UI publicly through the tunnel while gateways on the LAN connect directly to the server using a private-CA certificate.
+
+---
+
+## Private CA for LAN-Only Deployments
+
+If this server has no public domain — for example, it's only reachable on a local network by [Factory Flow Gateway](/gateway/overview) machines — Let's Encrypt isn't an option, and a plain self-signed certificate would need to be re-trusted by hand on every gateway machine each time it's renewed.
+
+`./factoryflow cert` automates this with a private CA instead: each gateway machine trusts that CA once, and every server certificate issued afterward is trusted automatically — no re-trusting needed on renewal.
+
+| Command | What it does |
+|---------|---------------|
+| `cert init [--san=host1,host2,...]` | One-time setup. Generates a private CA (or reuses one you've placed at `./certs/ca.pem` + `ca.key` beforehand, e.g. an internal/corporate root CA), issues a server certificate for the given SANs, enables HTTPS, and restarts the app container. |
+| `cert issue [--san=host1,host2,...]` | Issues a new server certificate from the existing CA. Reuses the current certificate's SANs if `--san` is omitted. Only reloads Nginx — no downtime. |
+| `cert show` | Prints the current server certificate's subject, issuer, SAN, and days until expiry, plus the CA's subject, expiry, and SHA-256 fingerprint. |
+| `cert export [path]` | Copies `ca.pem` (never `ca.key`) to a local path (default `./factoryflow-ca.pem`) and prints its SHA-256 fingerprint, for transfer to a gateway machine. |
+| `cert trust` | Prints step-by-step instructions for trusting this server on a gateway machine. |
+| `cert rotate-ca [--san=host1,host2,...]` | Regenerates the CA (with a confirmation prompt) and reissues the server certificate. Breaks trust on every gateway until each is re-pointed at the new `ca.pem`. |
+
+### Quick Start
+
+```bash
+# One-time: generate a CA + server cert and enable HTTPS
+./factoryflow cert init --san=factoryflow.local,192.168.1.50
+
+# Copy the CA cert out (with a fingerprint to verify) for transfer to a gateway
+./factoryflow cert export ~/Desktop
+
+# Print instructions for trusting the CA in the Gateway app
+./factoryflow cert trust
+
+# Check the current certificate/CA and days until expiry
+./factoryflow cert show
+
+# Renew the server cert before it expires (reuses the existing SANs)
+./factoryflow cert issue
+```
+
+`--san` accepts a comma-separated list of every hostname/IP a gateway might use to reach this server. It must match how gateways actually connect, or TLS verification fails.
+
+<Note>
+  Already have your own CA — e.g. an internal/corporate root CA? Copy its `ca.pem` and `ca.key` into `./certs/` before running `cert init`. It detects them and signs the Factory Flow server certificate with that CA instead of generating a new one.
+</Note>
+
+### Trusting the Server on a Gateway Machine
+
+<Steps>
+  <Step title="Export the CA certificate">
+    On the server, run `./factoryflow cert export` to copy `ca.pem` to a local path and print its SHA-256 fingerprint.
+  </Step>
+  <Step title="Transfer it to the gateway machine">
+    Move the file over a channel you already trust — scp/SFTP, a USB drive, your NAS file browser.
+  </Step>
+  <Step title="Verify the fingerprint">
+    On the gateway machine, confirm the transferred file's fingerprint matches what `cert export` printed:
+
+    ```bash
+    openssl x509 -in factoryflow-ca.pem -noout -fingerprint -sha256
+    ```
+  </Step>
+  <Step title="Point the Gateway app at it">
+    In the Factory Flow Gateway app, open its server connection settings and set the **CA Certificate** field to the transferred file. See [Registration](/gateway/registration#registering-in-the-app).
+  </Step>
+</Steps>
+
+<Warning>
+  There is deliberately no command or endpoint that serves the CA certificate for a gateway to download directly over the network. Fetching a CA certificate over an unauthenticated connection is a MITM bootstrap risk — anything on the network path (ARP spoofing, a rogue access point, DNS spoofing) could hand back an attacker's own CA instead, and the gateway would silently trust it from then on. Always transfer the file manually and verify its fingerprint, the same pattern tools like `kubeadm join` use.
+</Warning>
+
+`./certs/ca.key` never needs to leave the server — only `ca.pem` is copied to gateway machines. See [CLI Reference](/self-hosted/cli-reference#certificates) for the full command reference, including `cert rotate-ca`.

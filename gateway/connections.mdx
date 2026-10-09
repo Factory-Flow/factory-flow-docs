@@ -176,7 +176,10 @@ Every protocol that supports TLS lets you supply your own CA and client certific
 
 <Steps>
   <Step title="Add a connection">
-    From the connections list, click **New Connection**, choose a protocol type, and fill in its fields as described above.
+    From the connections list, click **Add Connection**. A dropdown offers two ways to proceed, separated by an "or" divider:
+
+    - **Add Manually** — choose a protocol type and fill in its fields yourself, as described above.
+    - **Scan Network** — let Factory Flow Gateway discover devices on your network for you, then add connections straight from what it finds. See [Scan Network](#scan-network) below.
 
     <Frame>
       <img className="block dark:hidden" src="/images/gateway/connection-new-form.png" alt="New connection form with protocol type selector and protocol-specific fields" />
@@ -196,5 +199,81 @@ Every protocol that supports TLS lets you supply your own CA and client certific
   </Step>
   <Step title="Edit, enable/disable, or delete">
     Open any existing connection to edit its settings. Each connection can be individually enabled or disabled without deleting it, or removed entirely.
+  </Step>
+</Steps>
+
+---
+
+## Scan Network
+
+Typing in the IP address, port, and protocol for every device on your floor is slow and error-prone — especially when you're not sure what's actually out there. **Scan Network** finds devices for you: it scans your network, tells you what ports are open on each device, and lets you turn any of them into a connection in a couple of clicks.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/scan-network-modal.png" alt="Scan Network modal showing discovered devices, networks scanned, and a progress bar" />
+  <img className="hidden dark:block" src="/images/gateway/scan-network-modal-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/scan-network-modal.png"; }} alt="Scan Network modal showing discovered devices, networks scanned, and a progress bar" />
+</Frame>
+
+<Steps>
+  <Step title="Open the scanner">
+    From the connections list, click **Add Connection → Scan Network**. The modal immediately starts scanning your machine's local subnet and loopback address, checking each device for common protocol ports — Modbus, OPC-UA, MQTT, HTTP, EtherNet/IP, FOCAS, MTConnect, GraphQL, WebSocket, and more.
+
+    A progress bar and an address-scanned counter show how the scan is progressing.
+  </Step>
+
+  <Step title="Add other networks to scan (optional)">
+    The automatic scan only covers the subnet your gateway machine is directly attached to. If your devices live on a different subnet or VLAN — for example, a dedicated OT network reached through a router — enter its range in **CIDR notation** (e.g. `10.0.1.0/24`) and click **Add** to include it in the scan.
+
+    As you type, a live preview shows exactly what will be scanned: the network address, subnet mask, the first and last host address actually reachable, and the total address count.
+
+    <Note>
+      To keep scans fast, any range looser than a **/24** is rejected — the **Add** button stays disabled and an error explains why. A /24 (254 usable addresses) is the largest single range you can add at once. If you need to cover a larger block, add it as multiple /24 (or smaller) ranges.
+    </Note>
+
+    <Accordion title="Not sure what a CIDR range like 10.0.1.0/24 means?">
+      Hovering the range input shows an in-depth breakdown, but here's the short version:
+
+      A CIDR range is written as `address/prefix`, where the prefix (`/24`) is the number of bits — out of 32 — reserved for the **network**. The remaining bits are **host** bits, and every combination of those host bits is one address on that network.
+
+      For `/24`, that's 32 − 24 = 8 host bits, giving 2⁸ = 256 possible addresses. Two are reserved (the network address itself and the broadcast address), leaving **2⁸ − 2 = 254** usable host addresses — which is why `/24` is the scan limit.
+
+      | Prefix | Host bits | Usable addresses |
+      |--------|-----------|-------------------|
+      | /24 | 8 | 254 |
+      | /28 | 4 | 14 |
+      | /30 | 2 | 2 |
+    </Accordion>
+
+    Ranges you add manually are saved to a **Recently used** list (stored on this device only, not synced to your account) so you don't have to retype them next time. Click an entry to re-add it, remove entries individually, or clear the list entirely.
+  </Step>
+
+  <Step title="Track scan progress">
+    Each network being scanned appears as a pill showing its CIDR range and a running device count. Hover a pill to see its subnet breakdown: mask, address range, total address count, and how many devices have been found out of the total scanned so far.
+
+    <Tip>
+      If you add or change a network range after a scan has already finished, a **Refresh to update** prompt appears with a highlighted **Refresh** button — so you're never looking at results that are missing a network you just added.
+    </Tip>
+  </Step>
+
+  <Step title="Review discovered devices">
+    Results appear in a sortable table:
+
+    | Column | Description |
+    |--------|-------------|
+    | **IP** | The device's address. |
+    | **Network** | Which scanned CIDR range the device was found on. |
+    | **MAC Address** | Resolved via ARP. |
+    | **Vendor** | Looked up from the MAC address's OUI (organizationally unique identifier), when recognized. |
+    | **Detected Ports** | Every open port found on the device, each matched against the protocols that commonly use it. |
+
+    Use the filter controls at the far right of the table header to narrow results by IP, MAC address, port, network, vendor, or likely protocol — handy once a scan turns up dozens of devices.
+  </Step>
+
+  <Step title="Add a connection from a result">
+    Click any detected port on a device to choose a protocol for it. Likely protocols for that port are listed first, so in most cases you just confirm the default. This opens the standard **Add Connection** form, pre-filled with that device's IP, port, and protocol — review the rest of the fields and save.
+
+    <Frame>
+      <img className="block dark:hidden" src="/images/gateway/scan-network-port-picker.png" alt="Port picker showing likely protocols for a detected port, before opening the pre-filled Add Connection form" />
+      <img className="hidden dark:block" src="/images/gateway/scan-network-port-picker-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/scan-network-port-picker.png"; }} alt="Port picker showing likely protocols for a detected port, before opening the pre-filled Add Connection form" />
+    </Frame>
   </Step>
 </Steps>

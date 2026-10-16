@@ -22,7 +22,7 @@ Registration requires a **gateway token** — a string that starts with `gw_`.
 
 <Steps>
   <Step title="Open the registration screen">
-    On first launch (or from **Settings → Gateway Registration** if you need to re-register), Factory Flow Gateway will prompt you to enter your gateway token.
+    On first launch, Factory Flow Gateway will prompt you to enter your gateway token. To re-register later, click **Change/Update Settings** on the **Server Connection** card in Settings.
   </Step>
   <Step title="Enter your gateway token">
     Paste the `gw_` token you copied from the web app.
@@ -48,32 +48,8 @@ Registration requires a **gateway token** — a string that starts with `gw_`.
 
 ## After Registration
 
-Once registered, the app displays your gateway's status:
-
-| Field | Description |
-|-------|-------------|
-| **Gateway name** | The name assigned to this gateway in the Factory Flow web app. |
-| **Gateway ID** | The unique identifier for this gateway record. |
-| **Assigned machines** | The number of machines currently assigned to this gateway. |
-| **Server** | The Factory Flow server this gateway is registered against (cloud, or your custom server URL). |
-| **Token** | Your gateway token, shown masked. |
-| **License status** | Valid, Expiring, or Expired — see below. |
-
-### License Status
-
-| Status | Meaning |
-|--------|---------|
-| **Valid** | The gateway's license is active. Data collection and forwarding operate normally. |
-| **Expiring** | The license is approaching its renewal date. |
-| **Expired** | The license has passed its renewal date. |
-
-Alongside the status, the app shows who the license is **issued to** and its **renewal date**.
-
-<Frame>
-  <img className="block dark:hidden" src="/images/gateway/registration-status.png" alt="Registered gateway status showing name, ID, assigned machines, server, masked token, and license status" />
-  <img className="hidden dark:block" src="/images/gateway/registration-status-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-status.png"; }} alt="Registered gateway status showing name, ID, assigned machines, server, masked token, and license status" />
-</Frame>
+Once registered, the **Server Connection** card at the top of Settings switches from the registration form to a live status view — connection status, your gateway's name, ID, assigned machines, masked token, and license status. See [Settings → Server Connection](/gateway/settings#server-connection) for the full field reference.
 
 <Note>
-  If you need to change which organization a gateway is registered to, or rotate its token, re-run registration from **Settings → Gateway Registration**.
+  If you need to change which organization a gateway is registered to, rotate its token, or disconnect, click **Change/Update Settings** on the Server Connection card to reopen this form.
 </Note>

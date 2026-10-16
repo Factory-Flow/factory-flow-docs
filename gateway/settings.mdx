@@ -4,69 +4,198 @@ icon: "settings"
 description: "Full reference for every settings section in Factory Flow Gateway."
 ---
 
-This page documents every section of the Factory Flow Gateway **Settings** screen.
+This page documents every section of the Factory Flow Gateway **Settings** screen, in the order they appear: **Server Connection**, **Collector**, **Connections**, **Logs**, **Application**, and **Danger Zone**. Each section is a collapsible card you can expand independently.
 
 <Frame>
   <img className="block dark:hidden" src="/images/gateway/settings-overview.png" alt="Settings screen showing the navigation between all settings sections" />
   <img className="hidden dark:block" src="/images/gateway/settings-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-overview.png"; }} alt="Settings screen showing the navigation between all settings sections" />
 </Frame>
 
-## Gateway Registration
+## Server Connection
 
-Shows your current registration details and lets you re-register the gateway against a different token or server. See [Registration](/gateway/registration) for the full walkthrough.
+The first card on the page. What it shows depends on whether the gateway is already connected to a Factory Flow server.
 
-## Collector Settings
+### Initial Setup
 
-Controls how the collector talks to Factory Flow and manages its local queue.
+Before the gateway is connected, this card is a form:
+
+| Field | Description |
+|-------|-------------|
+| **Gateway Token** | Paste the token (starts with `gw_`) from your Factory Flow dashboard. This is what links the app to a specific gateway record in your organization. |
+
+An **Advanced Settings** sub-section, collapsed by default, holds:
+
+| Field | Description |
+|-------|-------------|
+| **Server URL** | Defaults to the Factory Flow cloud URL. Self-hosted organizations point this at their own server instead. |
+| **CA Certificate** | Optional file picker. Only needed for self-hosted servers whose TLS certificate was issued by an internal/private CA rather than a publicly trusted one. |
+
+See [Registration](/gateway/registration) for the full step-by-step walkthrough of obtaining a token and connecting for the first time, including how to transfer a private CA certificate safely.
+
+### Connected State
+
+Once connected, the card shows a live status badge plus the gateway's details:
+
+| Status | Meaning |
+|--------|---------|
+| **Connected** | The gateway has a working connection to the server. |
+| **Connecting** | The gateway is attempting to establish or re-establish a connection. |
+| **Error** | The gateway cannot reach or authenticate with the server. The card shows which of the following caused it: a missing certificate file, a certificate/TLS error, the server being offline or unreachable, or a generic connection failure. |
+
+Below the badge:
+
+| Field | Description |
+|-------|-------------|
+| **Server URL** | Clickable — opens in your default browser. Shows a lock icon when the connection's TLS certificate has been verified. |
+| **Gateway Name** | The name assigned to this gateway in the Factory Flow web app. |
+| **Description** | The description set for this gateway record, if any. |
+| **Gateway ID** | The gateway's unique identifier (UUID). |
+| **Machines** | The number of machines currently assigned to this gateway. |
+| **Token** | Your gateway token, masked except for the last 4 characters. |
+| **Connected At** | When this connection was established. |
+
+### License
+
+Shown whenever license data is available for the gateway:
+
+| Status | Meaning |
+|--------|---------|
+| **Valid** | The license is active. |
+| **Expiring soon** | The license is within 30 days of its renewal/expiry date. A warning banner is shown. |
+| **Expired** | The license has passed its renewal/expiry date. A warning banner is shown. |
+| **Invalid** | The license could not be validated. A warning banner is shown. |
+
+Alongside the status, the card shows who the license is **Issued To** and its renewal/expiry date.
+
+### Changing or Disconnecting
+
+Click **Change/Update Settings** to reopen the token/Server URL/CA Certificate form — use this to reconnect to a different organization, switch servers, rotate the token, or disconnect entirely.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/registration-status.png" alt="Server Connection card showing connection status, gateway details, and license status" />
+  <img className="hidden dark:block" src="/images/gateway/registration-status-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-status.png"; }} alt="Server Connection card showing connection status, gateway details, and license status" />
+</Frame>
+
+## Collector
+
+Controls how the collector gathers and forwards data, and manages its local send queue. See [Data Flow](/gateway/data-flow) for how these settings fit together.
+
+| Setting | Default | Range | Description |
+|---------|---------|-------|-------------|
+| **Flush Interval (ms)** | 5000 | 100–60000 | How often collected data is sent to the server. Requests are automatically sized to stay within the API's limit of 100 readings per request, regardless of this interval. |
+| **Max Data Points In Queue** | 50,000 | 1,000–1,000,000 | Cap on the on-disk send queue that preserves data across lost connections and app restarts. Once the cap is reached, the oldest queued entries are dropped to make room for new ones. |
+| **Compress outbound requests** | On | — | Gzip-compresses data before forwarding it, to reduce bandwidth usage. |
+| **Auto-start collector on app launch** | — | — | Starts the collector automatically when the app opens. Takes effect on the next launch or restart. |
+| **Prevent computer from sleeping while collector is running** | On | — | Keeps the machine awake so collection isn't interrupted. The display can still turn off on its own schedule. |
+
+### Queue Stats
+
+A live panel shows the current state of the send queue:
+
+- **Data Points Waiting**
+- **Queued Batches**
+- **Size**
+- **Oldest Waiting Since**
+- **Retrying** — number of batches currently being retried, along with the maximum retry attempts, shown only when a retry is in progress.
+
+<Warning>
+  **Clear Queue** permanently discards all unsent data currently in the queue. Use it only if you don't need that data forwarded.
+</Warning>
+
+## Connections
+
+Settings for protocol integrations that need gateway-level configuration beyond what's set on the individual connection. Today this covers **Fanuc FOCAS**:
+
+| Field | Description |
+|-------|-------------|
+| **FOCAS Library Directory** | Path to the vendor-supplied FOCAS DLL/.so files, with a file-browse button. Required before any [FOCAS connection](/gateway/connections#focas-fanuc-cnc) can be used. |
+| **Library Status** | A live check (with a **Recheck** button) showing which libraries were found, and which Fanuc CNC model-specific libraries are supported given what's present. Warns if the Ethernet library is missing, or if DLLs for specific CNC models are missing. |
+
+<Note>
+  FOCAS is supported on **Windows and Linux only**. On other platforms, this section shows an unsupported-platform notice instead of the library path and status check.
+</Note>
+
+## Logs
+
+Controls how long logs are kept and how they're cleaned up. See [Logs](/gateway/logs) for viewing and filtering logs, and troubleshooting by protocol.
+
+| Setting | Default | Range | Description |
+|---------|---------|-------|-------------|
+| **Auto-cleanup old logs** | On | — | Runs a background cleanup job once daily, around a scheduled time. |
+| **Retention (days)** | 30 | 1–365 | Logs older than this are deleted. Only shown when auto-cleanup is on. |
+| **Max entries** | 10,000 | 100–100,000 | Cap on the number of stored log rows. Only shown when auto-cleanup is on. |
+
+### Log Stats
+
+A live panel shows:
+
+- **Entries** — total stored log rows.
+- **Size**
+- **Oldest Log** — date of the oldest stored entry.
+- A breakdown of entry counts **by log level**.
+
+<Warning>
+  **Clear All Logs** permanently deletes every stored log entry. **Run Cleanup Now** applies your retention and max-entries settings immediately rather than waiting for the next scheduled run.
+</Warning>
+
+## Application
+
+General app behavior, grouped into collapsible sub-sections — all collapsed by default.
+
+### General
 
 | Setting | Description |
 |---------|-------------|
-| **API Timeout** | How long to wait for a response from Factory Flow before considering a forwarding request failed. |
-| **API Retries** | How many times to retry a failed forwarding request. |
-| **Batch Flush Interval** | How often queued data points are batched and forwarded. |
-| **Compression** | Toggle to compress data before forwarding it. |
-| **Max Queued Points** | The upper limit on how many points can sit in the local queue at once. |
+| **Run on system startup** | Launch Factory Flow Gateway automatically when the computer starts. |
+| **Launch app minimized** | Launch directly to the system tray instead of opening the main window. |
+| **Theme** | Light, Dark, or System. |
 
-See [Data Flow](/gateway/data-flow) for how these settings fit together.
+### About
 
-## Application Settings
+Shows the app name and version — click through for the changelog. If you're running a beta build, a **Beta** badge appears with a tooltip containing a support email. An **Open Source Licenses** link opens a dialog listing third-party license information.
 
-General app behavior.
+### Network
 
-| Setting | Description |
-|---------|-------------|
-| **Run on Startup** | Launch Factory Flow Gateway automatically when the computer starts. |
-| **Start Minimized** | Launch directly to the system tray instead of opening the main window. |
-| **Auto-Start Collector** | Start the collector automatically when the app launches. |
-| **Theme** | The app's display theme. |
+Read-only, copyable network details for the gateway machine's primary interface:
 
-## Connection Settings
+- **Hostname**
+- **Interface** — the primary network interface in use.
+- **IPv4 address**
+- **MAC address**
+- **Subnet/CIDR**
+- **IPv6 address**
 
-Shared settings for HTTP webhook connections. See [Connections](/gateway/connections#http) for how these interact with individual webhook connections.
+An **Open Network Settings** link deep-links into the OS's network panel (macOS and Windows only). Expand **See all Network Interfaces** to see the same details for every interface on the machine, with the primary one badged.
 
-| Setting | Description |
-|---------|-------------|
-| **Webhook Port** | The port used to receive incoming webhook requests. |
-| **Allow Network Requests** | Whether the gateway accepts webhook requests from other devices on your LAN. |
-| **Webhook TLS** | Toggle to serve webhooks over HTTPS. |
+### Database
 
-## Log Settings
+| Field | Description |
+|-------|-------------|
+| **Database location** | Path to the local database file, copyable and revealable in Finder/Explorer, shown with its current size. |
 
-Controls how long logs are kept and how they're cleaned up. See [Logs](/gateway/logs) for how to view and filter logs.
+#### Database Backups
 
-| Setting | Description |
-|---------|-------------|
-| **Retention Days** | How many days of logs to keep. |
-| **Max Entries** | The maximum number of log entries to retain. |
-| **Auto-Cleanup** | Toggle automatic removal of logs older than the retention period, or beyond the max entry count. |
+| Action | Description |
+|--------|-------------|
+| **Back Up Now** | Creates a backup immediately. |
+| **View Backups** | Opens the backups modal (see below). |
+| **Automatic daily backups** | Toggle. Shows the next scheduled run time, and the last error if a recent automatic backup failed. |
 
-## FOCAS Library Path
+The card also shows the timestamp of the last backup taken.
 
-The location of the FOCAS library on disk, required for [FOCAS connections](/gateway/connections#focas-fanuc-cnc). The app reports whether a valid library is currently detected at this path.
+<Info>
+  Full backups run automatically once a day. Only the **14 most recent** backups are kept — older ones are deleted automatically.
+</Info>
 
-## System Requirements
+Clicking **View Backups** opens a modal listing every retained backup, grouped by day, with per-backup **Reveal**, **Export**, and **Delete** actions, plus the backups folder location. From the modal you can also **Back Up Now** or **Delete All Backups**.
 
-Re-runs the CPU, RAM, and disk space check performed on first launch. Use this if you've changed hardware or want to confirm the gateway machine still meets requirements after adding more connections or machines. See [Overview](/gateway/overview#first-launch).
+<Warning>
+  **Delete All Backups** permanently removes every stored backup. Make sure you don't need any of them — or have exported the ones you want to keep — before using it.
+</Warning>
+
+### System Requirements
+
+A pass/fail checklist (CPU, RAM, disk, and similar) comparing the required values against what's currently detected on this machine, along with a last-checked timestamp. This is the same check that runs on first launch — see [Overview](/gateway/overview#first-launch).
 
 ## Danger Zone
 
@@ -76,10 +205,22 @@ Re-runs the CPU, RAM, and disk space check performed on first launch. Use this i
 
 | Action | Effect |
 |--------|--------|
-| **Restart** | Restarts the Factory Flow Gateway application. |
-| **Reset to Defaults** | Resets application settings back to their defaults. |
+| **Restart Application** | Stops the collector and restarts the app. |
+| **Reset All Settings** | Restores all settings on this page to their defaults. This does not affect your connections, mappings, data, or logs. |
+
+### Advanced
+
+Collapsed by default. These actions are destructive and each requires typing a confirmation phrase before it will run.
+
+<Warning>
+  **Restore from Backup** replaces all connections, mappings, settings, and logs with the contents of a chosen backup — either one of the app's own automatic backups or an imported `.db` file. If the backup contains saved credentials that were encrypted on a different device, those credentials can't be restored and you'll be warned which ones. Type **RESTORE** to confirm. The app restarts automatically afterward.
+</Warning>
+
+<Warning>
+  **Reset Database** permanently deletes all connections, mappings, data, logs, and settings, and resets this device's identity with the Factory Flow server — your gateway token will stop working and must be regenerated from the web app before you can reconnect. Type **RESET** to confirm. The app restarts automatically afterward.
+</Warning>
 
 <Frame>
-  <img className="block dark:hidden" src="/images/gateway/settings-danger-zone.png" alt="Danger Zone settings with Restart and Reset to Defaults actions" />
-  <img className="hidden dark:block" src="/images/gateway/settings-danger-zone-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-danger-zone.png"; }} alt="Danger Zone settings with Restart and Reset to Defaults actions" />
+  <img className="block dark:hidden" src="/images/gateway/settings-danger-zone.png" alt="Danger Zone settings with Restart, Reset, and Advanced destructive actions" />
+  <img className="hidden dark:block" src="/images/gateway/settings-danger-zone-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-danger-zone.png"; }} alt="Danger Zone settings with Restart, Reset, and Advanced destructive actions" />
 </Frame>

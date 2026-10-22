@@ -75,7 +75,7 @@ See [CLI Reference](/self-hosted/cli-reference) for the full command documentati
 |---------|-------|-------------|
 | Data hosting | Managed cloud | Your own servers |
 | Authentication | Email/password + OAuth | Email/password + optional LDAP |
-| User registration | Public sign-up | Admin-created or invitation only |
+| User registration | Public sign-up | Admin-created, invitation-only, or open with [registration codes](/self-hosted/admin-management#registration-codes) |
 | Email notifications | System-managed | Your configured SMTP server |
 | Software updates | Automatic | `./factoryflow update` |
 | License | Managed in-app | License key activated in Application Settings |
@@ -94,6 +94,7 @@ Self-hosted deployments have an additional section called **Application Settings
 - **LDAP Settings** — Connect to Active Directory or LDAP.
 - **Data Retention** — Control how long historical analytics data is stored.
 - **App Admins** — Grant or revoke application-admin privileges.
+- **Registration** — Control whether sign-up is open at all (**Allow Registration**), optionally gated by single-use [registration codes](/self-hosted/admin-management#registration-codes).
 - **Host Info** — View live server resource usage (CPU, memory, disk, database).
 
 <Note>

@@ -53,7 +53,11 @@ Click **Revoke** next to any user in the App Admins list under **Application Set
 
 ## Creating User Accounts
 
-On a self-hosted deployment, public registration can be disabled. The `factoryflow user create` command lets you create accounts directly from the server without requiring the user to go through the registration flow.
+On a self-hosted deployment, public registration can be disabled entirely. The `factoryflow user create` command lets you create accounts directly from the server without requiring the user to go through the registration flow.
+
+<Tip>
+  If you'd rather keep sign-up open but gate it behind an invite code instead of disabling it outright, see [Registration Codes](#registration-codes) below.
+</Tip>
 
 ```bash
 ./factoryflow user create \
@@ -77,6 +81,56 @@ All flags are optional — the command will prompt for any missing values intera
 <Tip>
   Use `user create` when onboarding a team on a fresh install, or when LDAP is not configured and you want to pre-provision accounts without emailing invitations.
 </Tip>
+
+---
+
+## Registration Codes
+
+Self-hosted deployments can require a valid, single-use **registration code** before anyone can create an account — a way to run invite-only sign-up without disabling registration entirely.
+
+### Enabling the gate
+
+Set `REGISTRATION_CODE_ENABLED=true` in your `.env` file. Like other self-hosted-specific flags (e.g. `SELF_HOSTED`), it's already present — set to `false` — in `.env.docker` and `.env.example`. After changing it, apply the change:
+
+```bash
+./factoryflow config cache
+```
+
+When enabled, every new account sign-up — whether by email/OTP or social sign-up (Google/Microsoft) — requires a valid, single-use registration code before the account is created. When disabled (the default), behavior is unchanged: no code prompt, no validation.
+
+### Generating codes
+
+```bash
+# Generate a batch of codes
+./factoryflow artisan registration-code:generate --count=5 --note="Q1 onboarding"
+
+# Generate and email a single code
+./factoryflow artisan registration-code:generate --note="Q1 onboarding" --email=jane@example.com
+```
+
+| Flag | Description |
+|------|-------------|
+| `--count=N` | Number of codes to generate (default: 1). |
+| `--note="..."` | An optional label stored with the code(s), for your own later reference. |
+| `--email=someone@example.com` | Sends the generated code directly to this address instead of only printing it. Only valid when generating a single code (`--count=1`, the default) — omit `--count` or set it to `1`. |
+| `--force` | Skips the send confirmation prompt (used with `--email`). |
+
+<Warning>
+  The plaintext code is printed once, at generation time, and is never stored — only a SHA-256 hash is persisted. If it's lost before it's used, generate a new one.
+</Warning>
+
+### Interaction with "Allow Registration"
+
+Registration codes layer on top of the existing **Allow Registration** toggle in Application Settings (`AppSetting.allow_registration`) rather than replacing it. The two gates are independent and both must pass:
+
+1. **Allow Registration** governs whether sign-up is open at all once a first admin user exists. If it's off, sign-up is blocked entirely with "Sign up is disabled…" and the registration-code gate is never reached.
+2. **`REGISTRATION_CODE_ENABLED`** only comes into play once sign-up is reachable — i.e. Allow Registration is on, or it's the very first user (which always bypasses the toggle).
+
+For invite-only sign-up gated by codes, set both: **Allow Registration** on in Application Settings, and `REGISTRATION_CODE_ENABLED=true` in `.env`. This turns the binary "anyone can sign up" vs. "only an admin creates accounts" choice into controlled, code-gated invites.
+
+<Note>
+  LDAP sign-in bypasses this gate entirely. LDAP-authenticated users are auto-provisioned from the directory on first successful login — they never pass through the email/OTP or social sign-up flows that registration codes hook into. Access for those users is controlled by [LDAP group mapping](/self-hosted/ldap#group-to-role-mapping) instead.
+</Note>
 
 ---
 

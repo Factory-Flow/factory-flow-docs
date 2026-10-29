@@ -1,5 +1,5 @@
 {
-    "openapi": "3.1.0",
+    "openapi": "3.1.2",
     "info": {
         "title": "Factory Flow",
         "version": "0.0.1",
@@ -34,7 +34,7 @@
         "/production": {
             "post": {
                 "operationId": "production",
-                "description": "Report part count data for one or more machines in a single request (max 100).\nEach reading requires `machine_uuid` plus `part_count_total`. If only one of\n`part_count_good` or `part_count_bad` is provided the other is derived automatically.\nAll machines must belong to the authenticated organization and use the `factory_flow_api` data source.\n\nReadings that fail business-logic checks (unknown UUID, per-machine rate limit) are\nreturned in `rejected`; valid readings are always written. The response is 202 when\nat least one reading is accepted, 422 when all are rejected.\n\n**Batch rate limit:** 60 requests per minute per token/gateway. Exceeding this returns 429.\n\n**Per-machine rate limit:** each machine UUID may be written at most once every 10 seconds,\nglobally across all callers (API tokens and gateways). If another source wrote to the same\nmachine within that window, the reading is rejected with `error: \"Rate limit exceeded\"` and\na `retry_after` value (seconds) in the rejected entry.",
+                "description": "Report part count data for one or more machines in a single request (max 100).\nEach reading requires `machine_uuid` plus `part_count_total`. If only one of\n`part_count_good` or `part_count_bad` is provided the other is derived automatically.\nAll machines must belong to the authenticated organization and use the `factory_flow_api` data source.\n\nAn optional `recorded_at` ISO 8601 timestamp may be included on each reading to indicate\nwhen the data was actually captured. This supports gateways that buffer readings locally\nduring a connectivity loss and flush them once the connection resumes. When omitted, the\nserver records the current time. Historical readings (older than 10 seconds) bypass the\nper-machine rate limit since they represent replayed buffered data.\n\nFor gateway requests, the same `machine_uuid` may appear more than once in `readings`;\neach occurrence is validated and persisted as its own independent reading. This is\nintended for gateways replaying a backlog of buffered/historical readings for one\nmachine in a single request instead of issuing one request per reading \u2014 each entry\nshould carry its own `recorded_at`. When a request contains multiple readings for the\nsame machine, they are processed in `recorded_at` order (oldest first) regardless of\ntheir position in the array. Non-gateway (org-token) requests may not supply\n`recorded_at` and must still include each `machine_uuid` at most once per batch.\n\nReadings that fail business-logic checks (unknown UUID, per-machine rate limit, or a\nmachine restricted for exceeding the organization's plan limit) are returned in\n`rejected`; valid readings are always written. The response is 202 when at least one\nreading is accepted, 422 when all are rejected.\n\n**Batch rate limit:** 60 requests per minute per token/gateway. Exceeding this returns 429.\n\n**Per-machine rate limit:** each machine UUID may be written at most once every 10 seconds,\nglobally across all callers (API tokens and gateways). If another source wrote to the same\nmachine within that window, the reading is rejected with `error: \"Rate limit exceeded\"` and\na `retry_after` value (seconds) in the rejected entry. This limit is skipped for readings\nwith a `recorded_at` older than 10 seconds.",
                 "summary": "Post production",
                 "tags": [
                     "MachineProduction"
@@ -100,7 +100,9 @@
                                     "properties": {
                                         "status": {
                                             "type": "string",
-                                            "example": "accepted"
+                                            "examples": [
+                                                "accepted"
+                                            ]
                                         },
                                         "accepted_count": {
                                             "type": "integer"
@@ -119,11 +121,15 @@
                                                     "machine_uuid": {
                                                         "type": "string",
                                                         "format": "uuid",
-                                                        "example": "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                                                        "examples": [
+                                                            "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                                                        ]
                                                     },
                                                     "error": {
                                                         "type": "string",
-                                                        "example": "Rate limit exceeded"
+                                                        "examples": [
+                                                            "Rate limit exceeded"
+                                                        ]
                                                     },
                                                     "retry_after": {
                                                         "type": "integer"
@@ -142,32 +148,6 @@
                                         "accepted_count",
                                         "rejected_count"
                                     ]
-                                },
-                                "examples": {
-                                    "accepted": {
-                                        "summary": "All readings accepted",
-                                        "value": {
-                                            "status": "accepted",
-                                            "accepted_count": 3,
-                                            "rejected_count": 0
-                                        }
-                                    },
-                                    "partial": {
-                                        "summary": "Some readings rejected",
-                                        "value": {
-                                            "status": "partial",
-                                            "accepted_count": 2,
-                                            "rejected_count": 1,
-                                            "rejected": [
-                                                {
-                                                    "index": 2,
-                                                    "machine_uuid": "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a",
-                                                    "error": "Rate limit exceeded",
-                                                    "retry_after": 8
-                                                }
-                                            ]
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -181,7 +161,9 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "All readings rejected"
+                                            "examples": [
+                                                "All readings rejected"
+                                            ]
                                         },
                                         "rejected": {
                                             "type": "array",
@@ -194,11 +176,15 @@
                                                     "machine_uuid": {
                                                         "type": "string",
                                                         "format": "uuid",
-                                                        "example": "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                                                        "examples": [
+                                                            "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                                                        ]
                                                     },
                                                     "error": {
                                                         "type": "string",
-                                                        "example": "Rate limit exceeded"
+                                                        "examples": [
+                                                            "Rate limit exceeded"
+                                                        ]
                                                     },
                                                     "retry_after": {
                                                         "type": "integer"
@@ -229,7 +215,9 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Too Many Requests"
+                                            "examples": [
+                                                "Too Many Requests"
+                                            ]
                                         },
                                         "retry_after": {
                                             "type": "integer"
@@ -238,6 +226,27 @@
                                     "required": [
                                         "message",
                                         "retry_after"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "This organization's subscription has ended (or, for self-hosted deployments, the license is missing or invalid). A subscription cancelled \"at period end\" still works until that period actually runs out.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "examples": [
+                                                "This organization's subscription has ended."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
                                     ]
                                 }
                             }
@@ -330,6 +339,27 @@
                                 }
                             }
                         }
+                    },
+                    "402": {
+                        "description": "This organization's subscription has ended (or, for self-hosted deployments, the license is missing or invalid). A subscription cancelled \"at period end\" still works until that period actually runs out.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "examples": [
+                                                "This organization's subscription has ended."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -400,11 +430,15 @@
                     "uuid": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "7c3a1b2d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"
+                        "examples": [
+                            "7c3a1b2d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"
+                        ]
                     },
                     "name": {
                         "type": "string",
-                        "example": "Main Factory Floor"
+                        "examples": [
+                            "Main Factory Floor"
+                        ]
                     },
                     "location": {
                         "type": [
@@ -466,11 +500,15 @@
                     "uuid": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                        "examples": [
+                            "9d4e2f8a-1b3c-4d5e-6f7a-8b9c0d1e2f3a"
+                        ]
                     },
                     "name": {
                         "type": "string",
-                        "example": "CNC Mill #1"
+                        "examples": [
+                            "CNC Mill #1"
+                        ]
                     },
                     "facility": {
                         "anyOf": [
@@ -561,11 +599,15 @@
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": 3
+                        "examples": [
+                            3
+                        ]
                     },
                     "name": {
                         "type": "string",
-                        "example": "CNC Mill"
+                        "examples": [
+                            "CNC Mill"
+                        ]
                     }
                 },
                 "required": [
@@ -656,38 +698,6 @@
                     "name"
                 ],
                 "title": "ShiftRef"
-            }
-        },
-        "responses": {
-            "ValidationException": {
-                "description": "Validation error",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "description": "Errors overview."
-                                },
-                                "errors": {
-                                    "type": "object",
-                                    "description": "A detailed description of each field that failed validation.",
-                                    "additionalProperties": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            },
-                            "required": [
-                                "message",
-                                "errors"
-                            ]
-                        }
-                    }
-                }
             }
         }
     }

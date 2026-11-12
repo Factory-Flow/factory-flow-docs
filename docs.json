@@ -177,7 +177,7 @@
     "primary": {
       "type": "button",
       "label": "Open Factory Flow",
-      "href": "https://app.factoryflow.com"
+      "href": "https://app.factoryflow.io"
     }
   },
   "contextual": {

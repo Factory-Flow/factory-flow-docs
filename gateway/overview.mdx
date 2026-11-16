@@ -68,6 +68,54 @@ Factory Flow Gateway ships as a 64-bit (x64) desktop application for all three m
 
 ---
 
+## Can't Open the App?
+
+Factory Flow Gateway isn't notarized/signed through every OS vendor's store program, so each operating system shows a warning the first time you open it. This is expected — here's how to get past it on each platform.
+
+<AccordionGroup>
+  <Accordion title="macOS: “can't be opened because Apple cannot check it for malicious software”">
+    This is macOS **Gatekeeper** quarantining a downloaded app that isn't notarized. Two ways to get past it:
+
+    **Option 1 — Right-click to open (easiest)**
+
+    1. In **Applications**, right-click (or Control-click) **Factory Flow Gateway** and choose **Open**.
+    2. Click **Open** again in the dialog that appears.
+    3. You only need to do this once — after the first confirmed launch, macOS lets it open normally (including double-click).
+
+    **Option 2 — Clear the quarantine flag from Terminal**
+
+    If the right-click option doesn't work, or you're deploying to multiple machines, remove the quarantine attribute directly:
+
+    ```bash
+    xattr -cr "/Applications/factory-flow-gateway.app"
+    ```
+
+    Then launch the app from **Applications** or **Launchpad** as usual.
+  </Accordion>
+  <Accordion title="Windows: “Windows protected your PC” (SmartScreen)">
+    1. In the SmartScreen dialog, click **More info**.
+    2. Click **Run anyway**.
+
+    This only appears on the first run of a newly downloaded installer.
+  </Accordion>
+  <Accordion title="Linux: AppImage won't launch / “Permission denied”">
+    Make sure the AppImage is executable before running it:
+
+    ```bash
+    chmod +x FactoryFlowGateway-x86_64.AppImage
+    ./FactoryFlowGateway-x86_64.AppImage
+    ```
+
+    If it still won't launch, confirm `libfuse2` (or `fuse`) is installed — most distros require it to run AppImages:
+
+    ```bash
+    sudo apt install libfuse2
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
 ## First Launch
 
 The first time you open Factory Flow Gateway, it runs a **system requirements check** before you can proceed — validating that the machine has enough CPU, RAM, and disk space to run the collector reliably. If a check fails, the app displays which resource is insufficient so you can address it before continuing.

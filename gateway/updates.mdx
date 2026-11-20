@@ -1,0 +1,160 @@
+---
+title: "Updates"
+icon: "refresh-cw"
+description: "How Factory Flow Gateway checks for and installs updates, what it needs from your network, and how to update gateways on restricted or isolated networks."
+---
+
+Factory Flow Gateway checks for new versions on its own and tells you when one is available. On most networks there's nothing to set up. This page explains how that works, which network access it needs, and what to do when a gateway runs on a network without internet access.
+
+## How Updates Work
+
+- The gateway checks for updates about **30 seconds after it starts**, then **once a day** while it's running.
+- To check right away, go to **Settings → Application → Updates** and click **Check for Updates**.
+- When an update is found, it downloads in the background. A banner then appears at the top of the window: click **Restart Now** to install it, or it installs automatically the next time the app restarts.
+- Restarting briefly stops the collector. Data waiting to be sent is kept in the gateway's queue and sent once it's running again.
+
+Your connections, mappings, settings, and logs are stored separately from the app itself, so updating never affects them.
+
+### Update indicators
+
+When an update is available, a **blue dot** appears on:
+
+- **Settings** in the sidebar
+- the **Application** section in Settings
+- the **Updates** row in **Settings → Application**
+
+The **Gateway version** row in **Settings → Server** also shows which version is available.
+
+### Update statuses
+
+The **Updates** row in **Settings → Application** shows the current status, with when updates were last checked successfully underneath (hover it for the exact time).
+
+| Status | Meaning |
+|--------|---------|
+| **You are on the latest version.** | The last check found nothing newer. |
+| **Version X is available and downloading.** | An update was found and is downloading in the background. |
+| **An update is ready. Restart the app to install it.** | Click **Restart Now** in the banner, or it installs on the next restart. |
+| **A new version is available and must be installed manually.** | The update can't install itself on this computer. Click **Download Update**, or **Copy Link** to download it elsewhere, then [install it manually](#installing-an-update-manually). |
+| **Version X is available. This computer can't reach the download server…** | Your Factory Flow server confirmed an update exists, but this computer can't download it. See [Networks Without Internet Access](#networks-without-internet-access). |
+| An error message, in red | The latest check failed. See [Troubleshooting](#troubleshooting). Checks retry automatically every day. |
+| **Neither this computer nor your Factory Flow server can reach the download server…** (in grey) | Expected on an [isolated network](#fully-isolated-networks), so it isn't shown as an error. Update the gateway manually. |
+
+---
+
+## Network Requirements
+
+The gateway makes outbound HTTPS connections only. Nothing needs to connect *into* the gateway for updates.
+
+| Destination | Port | Used for |
+|-------------|------|----------|
+| `downloads.factoryflow.io` | 443 (HTTPS) | Checking for and downloading updates |
+| Your Factory Flow server | 443 (HTTPS) | Sending machine data. Also used to check for updates when the download server can't be reached. This is `app.factoryflow.io` for Factory Flow cloud, or your own server's address if you're self-hosted. |
+
+<Tip>
+  If your network only allows traffic to approved destinations, ask your IT team to allow **both** addresses above. Allowing only the Factory Flow server keeps data flowing, but the gateway then can't download updates. It can still tell you that one is available (see below).
+</Tip>
+
+The gateway uses the operating system's proxy settings, so networks that route traffic through a corporate proxy normally work without extra setup.
+
+### Checking connectivity
+
+To see what the gateway can reach, go to **Settings → Application → Network**, click **View Details**, and look at the **Connectivity** panel at the top. Both lines are checked each time the panel opens. Click **↻** to check again.
+
+| Line | Status | Meaning |
+|------|--------|---------|
+| **Factory Flow server** | 🟢 **Online** | Data can be sent. The response time is shown. |
+| | 🔴 **Offline** | The server can't be reached. Hover for the error. |
+| | **Not registered** | The gateway hasn't been [registered](/gateway/registration) yet. |
+| **Update server** | 🟢 **Reachable** | Updates can be checked and downloaded normally. |
+| | 🟠 **Via Factory Flow** | This computer can't reach the download server, but your Factory Flow server is checking for updates on its behalf. You'll still be told when an update is available. |
+| | 🔴 **Unreachable** | Updates can't be checked from this network. Hover for the reason. |
+
+This is the quickest way to confirm whether a firewall rule is the problem when you contact your IT team.
+
+---
+
+## Networks Without Internet Access
+
+Many plant networks only allow the gateway to reach its Factory Flow server, or have no internet access at all. Factory Flow Gateway handles both.
+
+### When only your Factory Flow server is reachable
+
+If the gateway can't reach `downloads.factoryflow.io`, it asks your Factory Flow server whether a newer version exists. The server only checks the version on the gateway's behalf; nothing is downloaded through it.
+
+If an update is available:
+
+1. The update indicators and the banner appear as usual. The banner explains that this computer can't reach the download server.
+2. Click **Copy Link** in the banner, or on the **Updates** row in **Settings → Application**.
+3. Open the link on a computer that has internet access to download the installer.
+4. Move the installer to the gateway computer (for example, over a file share or USB drive) and [install it manually](#installing-an-update-manually).
+
+<Note>
+  Checking for updates through the Factory Flow server requires a Factory Flow server version that supports gateway update checks. If yours doesn't, the gateway shows **"Couldn't reach the download server."** and you can update it manually as described below.
+</Note>
+
+### Fully isolated networks
+
+If your Factory Flow server is [self-hosted](/self-hosted/overview) on a network that also has no internet access, neither the gateway nor the server can check for updates. The **Updates** row shows:
+
+> Neither this computer nor your Factory Flow server can reach the download server, so updates can't be checked automatically on this network.
+
+In this setup, plan to update gateways manually. Check the [Gateway changelog](/changelog/gateway) for new versions, download the installer on a computer with internet access, and [install it manually](#installing-an-update-manually). The **Version** column in [Manage → Organization → Gateways](/manage/organization/gateways) shows which version each gateway is running, so you can see which ones need updating.
+
+### If updates stop being checked
+
+A single failed check is normal: it's retried the next day. If the gateway hasn't checked for updates successfully in **14 days**, it shows a warning so this isn't missed:
+
+- The **Updates** row turns **amber** and says how many days it's been.
+- An **amber dot** appears on **Settings** in the sidebar and on the **Application** section.
+
+Installing a new version, including [manually](#installing-an-update-manually), counts as checking for updates and restarts the 14-day count. On an isolated network, keeping gateways updated by hand is enough to keep the warning away.
+
+Use the [Connectivity panel](#checking-connectivity) to see what's blocked, or switch to manual updates if the gateway is on an isolated network.
+
+---
+
+## Installing an Update Manually
+
+Install the new version over the existing one. Your connections, mappings, settings, logs, and queued data are kept.
+
+<AccordionGroup>
+  <Accordion title="Windows">
+    1. Quit Factory Flow Gateway from the system tray (right-click the tray icon → **Quit**).
+    2. Run the downloaded `.exe` installer and follow the wizard. Install to the same location as before.
+    3. Launch **Factory Flow Gateway** from the Start menu.
+  </Accordion>
+  <Accordion title="macOS">
+    1. Quit Factory Flow Gateway from the menu bar icon → **Quit**.
+    2. Open the downloaded `.dmg` and drag **Factory Flow Gateway** into **Applications**. Choose **Replace** when asked.
+    3. Launch it from Applications. If macOS shows a warning, see [Can't Open the App?](/gateway/overview#cant-open-the-app).
+  </Accordion>
+  <Accordion title="Linux">
+    1. Quit Factory Flow Gateway from the tray icon → **Quit**.
+    2. Replace the old AppImage with the downloaded one, and make it executable:
+
+       ```bash
+       chmod +x FactoryFlowGateway-x86_64.AppImage
+       ```
+
+    3. Start the new AppImage.
+  </Accordion>
+</AccordionGroup>
+
+After it starts, check the **Version** row in **Settings → Application → About** to confirm the new version number.
+
+---
+
+## Troubleshooting
+
+When a check fails, the **Updates** row says which routes were tried. Click **See logs** for the full error.
+
+| Message | What it means | What to do |
+|---------|---------------|------------|
+| **Couldn't reach the download server.** | This computer can't reach `downloads.factoryflow.io`, and there was no other way to check. | Ask your IT team to allow `downloads.factoryflow.io` on port 443, or update manually. |
+| **Couldn't reach the download server or your Factory Flow server.** | Neither address can be reached. The gateway is probably offline. Data isn't being sent either. | Check the gateway computer's network connection and the [Connectivity panel](#checking-connectivity). |
+| **Couldn't reach the download server, and your Factory Flow server couldn't check for updates either.** | The Factory Flow server was reached but returned an error. | Try **Check for Updates** again later. If it continues, contact [support](mailto:support@factoryflow.io). |
+| **Neither this computer nor your Factory Flow server can reach the download server…** | You're on an isolated network. | See [Fully isolated networks](#fully-isolated-networks). |
+
+<Tip>
+  When contacting support, include the gateway version from the **Version** row in **Settings → Application → About**, and the error from **See logs**.
+</Tip>

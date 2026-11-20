@@ -79,6 +79,7 @@
               "gateway/dashboard",
               "gateway/data-flow",
               "gateway/settings",
+              "gateway/updates",
               "gateway/system-tray",
               "gateway/logs"
             ]

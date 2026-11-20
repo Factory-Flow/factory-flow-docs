@@ -33,13 +33,17 @@ Factory Flow Gateway is built for that scale. It handles the protocol-specific c
 
 ## Supported Platforms
 
-Factory Flow Gateway ships as a 64-bit (x64) desktop application for all three major operating systems:
+Factory Flow Gateway ships as a 64-bit desktop application for all three major operating systems:
 
 | Platform | Installer format | Architecture |
 |----------|-------------------|--------------|
 | **Windows** | NSIS installer (`.exe`) | x64 |
-| **macOS** | Disk image (`.dmg`) | x64 |
+| **macOS** | Disk image (`.dmg`) | Apple Silicon (arm64) and Intel (x64), as separate installers |
 | **Linux** | AppImage | x64 |
+
+<Tip>
+  On macOS, download the installer that matches your Mac: the **arm64** one for Apple Silicon (M-series) Macs, or the standard one for Intel Macs. To check, open the Apple menu → **About This Mac** and look at **Chip** (Apple M…) or **Processor** (Intel).
+</Tip>
 
 ---
 

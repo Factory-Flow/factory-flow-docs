@@ -6,6 +6,10 @@ description: "How Factory Flow Gateway queues and forwards collected data, and h
 
 Factory Flow Gateway is built so that a flaky network connection or an app restart never means lost data.
 
+## Converted and Checked First
+
+Before a value is queued, it goes through the [conversions and checks](/gateway/machines/conversions) set on its mapping. Conversions change it (for example × 0.1, or "RUN" → 1), then checks decide whether it's sent. A value that fails a blocking check, fails its type check, or comes from a failed read is dropped instead of sent, and shows as a problem on the machine and in the [Dashboard](/gateway/dashboard). Values skipped on purpose with **Skip when…** aren't treated as problems.
+
 ## Local Queue First
 
 Every data point the collector reads is saved to a **durable local queue** before anything is sent anywhere. If the network drops, or the app itself restarts, points already collected are safe on disk and will still be forwarded once things recover.
@@ -16,7 +20,7 @@ Queued points are batched and forwarded to Factory Flow on a **configurable inte
 
 ## Inspecting and Clearing the Queue
 
-If you need to check how much data is pending, or clear it out, you can do so from **Settings → Collector**. See [Settings](/gateway/settings#collector) for the related settings.
+If you need to check how much data is pending, or clear it out, you can do so from **Settings → Collector**. See [Settings](/gateway/settings/collector) for the related settings.
 
 <Frame>
   <img className="block dark:hidden" src="/images/gateway/pending-queue.png" alt="Pending queue view showing queued data points with options to inspect or clear them" />

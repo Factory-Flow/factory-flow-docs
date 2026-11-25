@@ -1,0 +1,29 @@
+---
+title: "Log Settings"
+sidebarTitle: "Logs"
+icon: "scroll-text"
+description: "How long logs are kept, where they are stored, and log maintenance."
+---
+
+Controls how long logs are kept and how they're cleaned up. See [Logs](/gateway/logs) for viewing and filtering logs, and troubleshooting by protocol.
+
+## Automatic Cleanup
+
+| Setting | Default | Range | Description |
+|---------|---------|-------|-------------|
+| **Auto-cleanup old logs** | On | — | Runs a cleanup check once a day, around a scheduled time. Shows when the next cleanup will run. |
+| **Max entries** | 10,000 | 100–100,000 | Cleanup starts once there are more log entries than this, and trims them back to this size. Only shown when auto-cleanup is on. |
+| **Retention** | 30 days | 1–365 | When cleaning up, logs older than this are removed first. Only shown when auto-cleanup is on. |
+
+## Storage
+
+- **Entries** — total stored log entries.
+- **Size on disk**
+- **Oldest log** — date of the oldest stored entry.
+- **By level** — a breakdown of entry counts by log level.
+
+## Maintenance
+
+<Warning>
+  **Run Cleanup** applies your cleanup settings immediately rather than waiting for the next scheduled run. **Clear All Logs** permanently deletes every stored log entry.
+</Warning>

@@ -1,0 +1,28 @@
+/* Keep the product dropdown (Factory Flow / Gateway) pinned at the top of the sidebar while it scrolls. */
+#navigation-items > .nav-dropdown-trigger {
+  position: sticky;
+  /* Sit a little below the top of the sidebar, with the gap filled so nothing shows through. */
+  top: 1rem;
+  z-index: 20;
+  background-color: rgb(var(--background-light));
+  /* Cover the sidebar's top edge above it, and fade the pages out as they scroll underneath. */
+  box-shadow:
+    0 -2.5rem 0 0 rgb(var(--background-light)),
+    0 0.75rem 0.75rem -0.25rem rgb(var(--background-light));
+}
+
+.dark #navigation-items > .nav-dropdown-trigger {
+  background-color: rgb(var(--background-dark));
+  box-shadow:
+    0 -2.5rem 0 0 rgb(var(--background-dark)),
+    0 0.75rem 0.75rem -0.25rem rgb(var(--background-dark));
+}
+
+/* Keep the hover highlight now that the button has a solid background. */
+#navigation-items > .nav-dropdown-trigger:hover {
+  background-image: linear-gradient(rgb(75 85 99 / 0.05), rgb(75 85 99 / 0.05));
+}
+
+.dark #navigation-items > .nav-dropdown-trigger:hover {
+  background-image: linear-gradient(rgb(229 231 235 / 0.05), rgb(229 231 235 / 0.05));
+}

@@ -1,0 +1,78 @@
+---
+title: "Server"
+sidebarTitle: "Server"
+icon: "server"
+description: "Connect the gateway to Factory Flow, and see its connection, license, and details."
+---
+
+What this section shows depends on whether the gateway is already connected to a Factory Flow server.
+
+## Initial Setup
+
+Before the gateway is connected, the section shows a **Connect to Factory Flow** form:
+
+| Field | Description |
+|-------|-------------|
+| **Where is your Factory Flow?** | Choose **Factory Flow Cloud** (the default) or **Self-hosted**. |
+| **Server URL** | Self-hosted only. The URL of your own Factory Flow server. |
+| **CA certificate** (optional) | Self-hosted only. Only needed when your server's TLS certificate was issued by an internal/private CA rather than a publicly trusted one. |
+| **Gateway token** | Paste the token (starts with `gw_`) from the Factory Flow app. This links the gateway to a specific gateway record in your organization. |
+
+Click **Connect Gateway** to finish. See [Registration](/gateway/registration) for the full walkthrough, including how to transfer a private CA certificate safely.
+
+## Connection Overview
+
+Once connected, the top of the section shows this gateway linked to your Factory Flow server, with the live connection status between them:
+
+| Status | Meaning |
+|--------|---------|
+| **Connected** | The gateway has a working connection to the server. |
+| **Connecting…** | The gateway is trying to establish or re-establish a connection. |
+| **Not connected** | The gateway can't reach or authenticate with the server. A message underneath explains why — a missing CA certificate file, a certificate that couldn't be verified, the server being unreachable, or another connection error. |
+
+The server side shows whether you're on **Factory Flow Cloud** or **Self-hosted Factory Flow**, and its address — click it to open it in your browser.
+
+Below that is a row of summary details:
+
+| Field | Description |
+|-------|-------------|
+| **Organization** | The organization this gateway belongs to. |
+| **Plan** | Your organization's plan. |
+| **License** | The license status, with its expiry date underneath (see below). |
+| **Machines** | The number of machines assigned to this gateway. |
+
+## License
+
+| Status | Meaning |
+|--------|---------|
+| **Valid** | The license is active. |
+| **Expires in _N_d** | The license expires within 30 days. A warning banner is shown. |
+| **Expired** | The license has passed its expiry date. A warning banner is shown. |
+| **Invalid** | The license could not be validated. A warning banner is shown. |
+
+## Connection
+
+Where the gateway connects and how it authenticates. Each field has an **Edit** button, so you can change one without re-entering the others — for example, to point the gateway at a different server or rotate its token.
+
+| Field | Description |
+|-------|-------------|
+| **Security** | Whether the connection is encrypted and the server's certificate is trusted: **Secure**, **Not verified yet** (HTTPS, but the gateway hasn't reached the server yet), **Certificate not trusted**, or **Not encrypted** (the server URL uses `http://`). |
+| **Server URL** | The Factory Flow server this gateway connects to. Leave the default for Factory Flow Cloud. |
+| **Gateway token** | Masked except for the last 4 characters. Generate a new one in the Factory Flow app if it's lost or revoked. |
+| **CA certificate** | The CA certificate used to trust a self-hosted server, or **None (public CA)**. |
+
+## Gateway Details
+
+| Field | Description |
+|-------|-------------|
+| **Gateway ID** | The gateway's unique identifier (UUID), with a copy button. |
+| **IP address** | This PC's main IP address on the plant network, with a copy button. The hostname and any other addresses are shown under it. Useful for finding the gateway PC on the network, for example when setting up webhooks or firewall rules. |
+| **Description** | The description set for this gateway in the Factory Flow app, if any. |
+| **Gateway version** | The installed version — click it for the changelog. Shows when a newer version is available. |
+| **Connected since** | When this gateway was connected. |
+| **License issued to** | Who the license is issued to, when available. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/registration-status.png" alt="Server settings showing the connection overview, license, connection, and gateway details" />
+  <img className="hidden dark:block" src="/images/gateway/registration-status-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-status.png"; }} alt="Server settings showing the connection overview, license, connection, and gateway details" />
+</Frame>

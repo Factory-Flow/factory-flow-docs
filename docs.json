@@ -9,109 +9,167 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Status",
-          "icon": "activity",
-          "href": "https://status.factoryflow.io"
-        },
-        {
-          "anchor": "Support",
-          "icon": "headset",
-          "href": "mailto:support@factoryflow.io"
-        }
-      ]
-    },
     "tabs": [
       {
         "tab": "Guides",
-        "pages": [
+        "icon": "book-open",
+        "dropdowns": [
           {
-            "group": "Getting Started",
-            "pages": [
-              "getting-started/introduction",
-              "getting-started/quickstart",
-              "getting-started/concepts"
-            ]
-          },
-          {
-            "group": "Monitor",
-            "pages": [
-              "monitor/analytics",
-              "monitor/layouts",
-              "monitor/alerts"
-            ]
-          },
-          {
-            "group": "Configure",
-            "pages": [
-              "configure/machines",
-              "configure/lines",
-              "configure/facilities",
-              "configure/shifts",
-              "configure/alert-rules"
-            ]
-          },
-          {
-            "group": "Manage",
-            "pages": [
-              "manage/team",
+            "dropdown": "Factory Flow",
+            "icon": "layout-dashboard",
+            "description": "Monitor, configure, and self-host Factory Flow",
+            "groups": [
               {
-                "group": "Organization",
+                "group": "Getting Started",
                 "pages": [
-                  "manage/organization",
-                  "manage/organization/api-tokens",
-                  "manage/organization/gateways",
+                  "getting-started/introduction",
+                  "getting-started/quickstart",
+                  "getting-started/concepts"
+                ]
+              },
+              {
+                "group": "Monitor",
+                "pages": [
+                  "monitor/analytics",
+                  "monitor/layouts"
+                ]
+              },
+              {
+                "group": "Alerts",
+                "pages": [
+                  "monitor/alerts",
+                  "configure/alert-rules",
                   "manage/organization/alert-groups"
                 ]
               },
-              "manage/profile"
-            ]
-          },
-          {
-            "group": "Factory Flow Gateway",
-            "pages": [
-              "gateway/overview",
-              "gateway/registration",
-              "gateway/connections",
-              "gateway/machines",
-              "gateway/dashboard",
-              "gateway/data-flow",
-              "gateway/settings",
-              "gateway/updates",
-              "gateway/system-tray",
-              "gateway/logs"
-            ]
-          },
-          {
-            "group": "Self-Hosted",
-            "pages": [
-              "self-hosted/overview",
-              "self-hosted/installation",
-              "self-hosted/license",
               {
                 "group": "Configure",
                 "pages": [
-                  "self-hosted/smtp",
-                  "self-hosted/ldap",
-                  "self-hosted/storage-paths",
-                  "self-hosted/ssl-and-proxies"
+                  "configure/facilities",
+                  "configure/lines",
+                  "configure/machines",
+                  "configure/shifts"
                 ]
               },
               {
                 "group": "Manage",
                 "pages": [
-                  "self-hosted/updates",
-                  "self-hosted/backups",
-                  "self-hosted/data-retention"
+                  "manage/team",
+                  "manage/profile",
+                  {
+                    "group": "Organization",
+                    "icon": "building-2",
+                    "pages": [
+                      "manage/organization",
+                      "manage/organization/api-tokens",
+                      "manage/organization/gateways"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Administration",
+                "group": "Self-Hosted",
                 "pages": [
-                  "self-hosted/admin-management",
-                  "self-hosted/cli-reference"
+                  "self-hosted/overview",
+                  "self-hosted/installation",
+                  "self-hosted/license",
+                  {
+                    "group": "Configure",
+                    "icon": "sliders-horizontal",
+                    "pages": [
+                      "self-hosted/smtp",
+                      "self-hosted/ldap",
+                      "self-hosted/storage-paths",
+                      "self-hosted/ssl-and-proxies"
+                    ]
+                  },
+                  {
+                    "group": "Operate",
+                    "icon": "wrench",
+                    "pages": [
+                      "self-hosted/updates",
+                      "self-hosted/backups",
+                      "self-hosted/data-retention"
+                    ]
+                  },
+                  {
+                    "group": "Administration",
+                    "icon": "shield",
+                    "pages": [
+                      "self-hosted/admin-management",
+                      "self-hosted/cli-reference"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "dropdown": "Gateway",
+            "icon": "server",
+            "description": "Connect machines and collect data",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "gateway/overview",
+                  "gateway/registration"
+                ]
+              },
+              {
+                "group": "Collect Data",
+                "pages": [
+                  {
+                    "group": "Connections",
+                    "icon": "cable",
+                    "pages": [
+                      "gateway/connections",
+                      "gateway/connections/industrial",
+                      "gateway/connections/streaming",
+                      "gateway/connections/web-apis",
+                      "gateway/connections/databases",
+                      "gateway/connections/scan-network"
+                    ]
+                  },
+                  {
+                    "group": "Machines",
+                    "icon": "cpu",
+                    "pages": [
+                      "gateway/machines",
+                      "gateway/machines/mapping",
+                      "gateway/machines/conversions",
+                      "gateway/machines/checks"
+                    ]
+                  },
+                  "gateway/data-flow"
+                ]
+              },
+              {
+                "group": "Monitor & Troubleshoot",
+                "pages": [
+                  "gateway/dashboard",
+                  "gateway/logs",
+                  "gateway/troubleshooting"
+                ]
+              },
+              {
+                "group": "Settings & Updates",
+                "pages": [
+                  {
+                    "group": "Settings",
+                    "icon": "settings",
+                    "pages": [
+                      "gateway/settings",
+                      "gateway/settings/server",
+                      "gateway/settings/collector",
+                      "gateway/settings/connections",
+                      "gateway/settings/logs",
+                      "gateway/settings/application",
+                      "gateway/settings/danger-zone"
+                    ]
+                  },
+                  "gateway/updates",
+                  "gateway/system-tray"
                 ]
               }
             ]
@@ -119,7 +177,21 @@
         ]
       },
       {
+        "tab": "API",
+        "icon": "code",
+        "openapi": "/api/openapi.json",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api/introduction"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Changelog",
+        "icon": "history",
         "pages": [
           {
             "group": "Factory Flow",
@@ -131,18 +203,6 @@
             "group": "Factory Flow Gateway",
             "pages": [
               "changelog/gateway"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API",
-        "openapi": "/api/openapi.json",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "api/introduction"
             ]
           }
         ]
@@ -171,6 +231,10 @@
   "navbar": {
     "links": [
       {
+        "label": "Status",
+        "href": "https://status.factoryflow.io"
+      },
+      {
         "label": "Support",
         "href": "mailto:support@factoryflow.io"
       }
@@ -192,5 +256,8 @@
       "cursor",
       "vscode"
     ]
+  },
+  "appearance": {
+    "default": "light"
   }
 }

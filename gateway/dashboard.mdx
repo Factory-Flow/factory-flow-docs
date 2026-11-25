@@ -11,40 +11,61 @@ The Dashboard is the home screen of Factory Flow Gateway — a live view of whet
   <img className="hidden dark:block" src="/images/gateway/dashboard-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/dashboard-overview.png"; }} alt="Gateway dashboard showing collector status, connections overview, and recent data" />
 </Frame>
 
-## Collector Status
+## Health Summary
 
-At the top of the dashboard, you'll see whether the collector is **running** or **stopped**, along with the elapsed time since it was started.
+A bar across the top answers "is everything OK?" with one segment per part of the gateway. Each segment shows its current state and, when something needs doing, a button that takes you straight to the fix.
 
-## Connections Overview
+| Segment | What it shows |
+|---------|---------------|
+| **Collector** | Whether the collector is running or stopped, and how long it's been up. If it's stopped, **Start** starts it. |
+| **Server** | Whether the gateway is registered and can reach Factory Flow. **Set up** or **Check** opens [Settings → Server](/gateway/settings/server). |
+| **Connections** | How many enabled connections are connected (e.g. `4/5 connected`) and how many are down. |
+| **Mappings** | How many data point mappings are enabled. **Set up** opens Machines when there are none. |
 
-A breakdown of your active connections by status:
+Problems that don't belong to one segment, such as data points being dropped or queued data that hasn't been delivered for more than 5 minutes, are called out in the bar as well.
+
+## Metrics
+
+Four headline numbers, each with a trend line you can hover to read the value at any point:
+
+| Metric | What it shows |
+|--------|---------------|
+| **Points collected & sent** | Points read from your machines, with how many were sent and the data volume. |
+| **Success rate** | The share of points delivered successfully. |
+| **Avg latency** | The time it takes to deliver a batch to Factory Flow. |
+| **Send queue** | Data waiting to be sent. Its trend line covers the last 15 minutes while the app is open. |
+
+Choose the **Time range** for the metrics: the last hour, 2 hours, 6 hours, 24 hours, 7 days, or 30 days. A number only turns amber or red when it's actually a problem.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/dashboard-metrics.png" alt="Dashboard metrics: points collected and sent, success rate, average latency, and send queue, each with a trend line" />
+  <img className="hidden dark:block" src="/images/gateway/dashboard-metrics-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/dashboard-metrics.png"; }} alt="Dashboard metrics: points collected and sent, success rate, average latency, and send queue, each with a trend line" />
+</Frame>
+
+## Needs Attention
+
+A list of what to fix, worst first: machines that need setup or are failing (using the same [health rules](/gateway/machines#machine-health) as the Machines page), then the latest warnings and errors from the logs in the last 24 hours. Machines with no mappings at all are counted in one line rather than listed one by one. When there's nothing to fix, it says so.
+
+## Connections
+
+Every connection with its live status, problems first, then working connections, then disabled ones.
 
 | Status | Meaning |
 |--------|---------|
 | **Connected** | The connection is established and healthy. |
-| **Connecting** | The gateway is currently attempting to establish the connection. |
-| **Disconnected** | The connection is not currently established. |
+| **Connecting** | The gateway is trying to establish the connection. |
+| **Disconnected** | The connection is not established. |
 | **Error** | The connection failed and needs attention. |
-| **Disabled** | The connection has been manually disabled. |
+| **Disabled** | The connection has been turned off. |
 
-## Data Point Mappings
+---
 
-A summary of how many data point mappings you have configured, along with counts of points successfully **forwarded** versus **failed**.
+## Data Flow in the Header
 
-## Recent Data & Metrics
+Wherever you are in the app, the header shows a compact view of where your data goes: **Connections → Data point mappings → Gateway → Factory Flow server**, with an overall verdict first. Each hop has a status dot, and the lines between them are solid while data is moving and dashed when nothing is. A lock on the last line shows whether the link to the server is encrypted.
 
-The dashboard includes a live feed of recently collected data points, plus collector metrics:
+Hover any hop to see its details and a link to the screen that fixes it, for example a connection in error or mappings pointing at a connection that was deleted or turned off.
 
-- Points collected
-- Points forwarded
-- Points failed
-- Success rate
-- Data volume
-- Average latency
-
-These metrics can be viewed over a selectable time range, with a trend chart showing how they've changed over that period.
-
-<Frame>
-  <img className="block dark:hidden" src="/images/gateway/dashboard-metrics.png" alt="Collector metrics with selectable time range and trend chart" />
-  <img className="hidden dark:block" src="/images/gateway/dashboard-metrics-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/dashboard-metrics.png"; }} alt="Collector metrics with selectable time range and trend chart" />
-</Frame>
+<Note>
+  Nothing is read or sent while the collector is stopped, so both lines show as idle until you start it.
+</Note>

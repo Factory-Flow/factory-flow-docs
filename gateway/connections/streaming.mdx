@@ -1,0 +1,41 @@
+---
+title: "Streaming Connections"
+sidebarTitle: "Streaming"
+icon: "radio"
+description: "Set up MQTT and WebSocket connections."
+---
+
+Every polled protocol accepts a **poll interval** from 100 ms to 24 hours. Fields marked optional can be left blank to use the default. For adding, testing, and exploring a connection, see [Connections](/gateway/connections#managing-connections).
+
+## MQTT
+
+Typically used for IoT sensors, edge devices, and PLC add-on modules that publish readings to a shared broker instead of being polled directly.
+
+| Field | Description |
+|-------|-------------|
+| **Broker URL** | The address of the MQTT broker. |
+| **Port** | The port the broker listens on. When it's still on its default, turning TLS on switches it from `1883` to `8883`. |
+| **Client ID** | The identifier this connection presents to the broker. |
+| **Username / Password** | Optional. Credentials for brokers that require authentication. |
+| **Use TLS** | Connect over an encrypted connection. When on, certificate options are available (see [Security](/gateway/connections#security)). |
+| **Clean session** | Start without any subscriptions or queued messages from a previous session. |
+
+## WebSocket
+
+Used for devices and services that stream data over a persistent connection, sending messages as things happen instead of being polled.
+
+| Field | Description |
+|-------|-------------|
+| **Server URL** | The WebSocket server, e.g. `wss://stream.example.com/ws`. |
+| **Message streams** | One or more named streams received over the connection (see below). |
+| **Headers** | Custom headers sent when the connection opens. |
+| **Authentication** | `None`, `Bearer`, `API Key`, or `Basic`. |
+| **Reconnect interval (ms)** | How long to wait before reconnecting after the connection drops. Default 5000. |
+
+Each **message stream** has:
+
+- **Stream name**, e.g. *Production Data*.
+- **Subscription**: whether the server needs a message before it starts sending. If it does, enter the **Subscription message**, which is sent once right after the connection opens (for example `{"type":"subscribe","channel":"machine-a"}`).
+- **Receive**: how the gateway picks messages for this stream. If the server sends several kinds of message over the same connection, set a **Match field** (a path into each message, such as `channel`) and the **Match value** it must have. A stream with no match field receives every message that no other stream claims.
+
+TLS options are available for `wss://` servers.

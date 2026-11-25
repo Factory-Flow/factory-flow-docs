@@ -1,0 +1,120 @@
+---
+title: "Troubleshooting"
+icon: "life-buoy"
+description: "Fix common connection problems, by protocol."
+---
+
+Start with the [logs](/gateway/logs) for the connection: open it and check its log panel for the exact error. Then work through the checks for its protocol below.
+
+## MQTT
+
+**Connection fails to connect**
+- Confirm the broker URL and port are correct and reachable from the gateway machine.
+- Check username/password if the broker requires authentication.
+- If TLS is enabled, confirm the broker's certificate is trusted, or supply the correct CA certificate.
+- Confirm no firewall is blocking outbound traffic to the broker port.
+
+## WebSocket
+
+**Connection fails or no messages arrive**
+- Confirm the server URL (`ws://` or `wss://`) is correct and reachable from the gateway machine.
+- Check authentication and any headers the server requires during the handshake.
+- If the server needs a subscription message before it sends data, confirm the stream's **Subscription message** is exactly what the server expects.
+- If messages arrive but a stream stays empty, check its **Match field** and **Match value** against a real message in the Explore browser.
+
+## Modbus
+
+**Connection fails to connect**
+- Check that the host, port, and Unit ID match your device's configuration.
+- Confirm the selected mode (TCP or RTU) matches how the device is actually connected.
+- Check that no firewall on the gateway machine or network is blocking the connection.
+- For TCP with TLS enabled, confirm the certificate configuration is correct — remember TLS only applies in TCP mode.
+
+## Siemens S7
+
+**Connection fails to connect**
+- Confirm the host is reachable and port `102` isn't blocked by a firewall.
+- Confirm the **PLC family** (or rack and slot) matches the PLC. S7-1200/1500 CPUs are in slot 1 and S7-300 CPUs in slot 2; S7-400 slots depend on the rack layout.
+- Confirm **PUT/GET access** is enabled in the CPU's protection settings in TIA Portal.
+
+**Reads fail or return wrong values**
+- Turn off **Optimized block access** on the data block, then download it to the PLC again. Optimized blocks don't have fixed offsets, so they can't be read by address.
+- Confirm the data block number, offset, and data type match the block's layout.
+
+## OPC-UA
+
+**Fails with a security error**
+- Confirm the **Security Policy** matches what the server expects — a mismatch is the most common cause of this error.
+- Confirm the **Security Mode** (`None`, `Sign`, `SignAndEncrypt`) is set to what the server requires.
+- If Security Mode is `Sign` or `SignAndEncrypt`, confirm the client certificate, private key, and key password are all correct.
+- Check the endpoint URL is exactly what the server publishes — some servers expose multiple endpoints with different security requirements.
+
+## MTConnect
+
+**No data appearing**
+- Confirm the agent URL is correct and reachable from the gateway machine.
+- If you set a device name filter, confirm it exactly matches a device the agent serves.
+- Try toggling **Use Sample Endpoint** — some agents behave differently between `sample` and `current`.
+- If the agent is served over HTTPS, confirm the TLS/certificate settings are correct.
+
+## HTTP
+
+**Poll mode returns no data or errors**
+- Confirm the base URL and each endpoint's path, method, and response format match what the target API actually returns.
+- Check authentication settings (bearer token, API key, or basic auth) are correct and not expired.
+- For HTTPS URLs, confirm TLS/certificate settings are correct.
+
+**Webhook mode isn't receiving data**
+- Confirm **Allow network requests** is enabled and the correct LAN interface is selected if the sender is on your local network.
+- Use the **External reachability** test to confirm the webhook can actually be reached from outside the gateway machine.
+- Confirm the sending system is posting to the correct endpoint path and using the correct auth secret.
+
+## GraphQL
+
+**Poll returns no data or errors**
+- Confirm the endpoint URL is correct and reachable from the gateway machine.
+- Validate the query and variables against the target API's schema — a malformed query typically returns a GraphQL error payload rather than a connection failure.
+- Check authentication settings (bearer token, API key, or basic auth) are correct and not expired.
+- For HTTPS endpoints, confirm TLS/certificate settings are correct.
+
+## SQL Server, PostgreSQL, MySQL
+
+**Connection or test fails**
+- Confirm the host, port, and database name, and that the server accepts network connections from the gateway machine.
+- For a SQL Server named instance, enter the **Instance name** and make sure the SQL Browser service is running.
+- Check the username and password, and that the account can read the tables your queries use.
+
+**A query is refused or returns nothing**
+- Queries must be a single read (`SELECT`). Anything else is refused before it reaches the database.
+- If the query returns no rows, check its conditions. Mappings read the **first row**, so set **Newest first by** to a timestamp column to get the latest reading.
+- If a query takes too long, it's cancelled after the **Query timeout**.
+
+**Test warns the account can write**
+- The gateway still only reads, but switch to a read-only database account.
+
+## InfluxDB
+
+**Connection or test fails**
+- Confirm the URL and that the **Version** matches the server: 1.x uses InfluxQL, 2.x uses Flux, and 3 uses SQL.
+- On 2.x, confirm the **Organization**; on 1.x and 3, confirm the **Database**.
+- Check the API token (or, on 1.x, the username and password) is valid and has read access.
+
+**A query is refused**
+- InfluxQL queries must be a `SELECT` or `SHOW`. Flux queries can't call `to()` or import packages that write or send data.
+
+## FOCAS
+
+**Connection fails to connect**
+- Confirm the host, port, and connection timeout are correct for the CNC controller.
+- New FOCAS connections are temporarily unavailable (**Coming soon**).
+- Confirm you're running on Windows or Linux. FOCAS is not supported on other platforms.
+- Check **Settings → Connections** to confirm the app detects a valid FOCAS library at the configured directory.
+- Confirm the CNC controller is configured to accept Ethernet/TCP-IP connections.
+
+## EtherNet/IP
+
+**Connection fails to connect**
+- Confirm the host is correct and reachable from the gateway machine on port `44818`.
+- Confirm the **Slot** number matches where the processor module actually sits in the PLC's rack — an incorrect slot is a common cause of connection failures on chassis-based controllers like ControlLogix.
+- Confirm no firewall on the gateway machine or network is blocking the connection.
+- For simulators or third-party devices that don't support connected messaging, turn on **Use unconnected messaging**.

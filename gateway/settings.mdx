@@ -1,10 +1,11 @@
 ---
 title: "Settings"
+sidebarTitle: "Overview"
 icon: "settings"
-description: "Full reference for every settings section in Factory Flow Gateway."
+description: "Every settings section in Factory Flow Gateway."
 ---
 
-This page documents every section of the Factory Flow Gateway **Settings** screen, in the order they appear: **Server**, **Collector**, **Connections**, **Logs**, **Application**, and **Danger Zone**.
+The Factory Flow Gateway **Settings** screen has six sections, each documented on its own page: **Server**, **Collector**, **Connections**, **Logs**, **Application**, and **Danger Zone**.
 
 Pick a section from the list on the left to show it. On narrower windows, the sections appear as a row of buttons above the content instead. Changes save automatically — there's no Save button.
 
@@ -17,240 +18,23 @@ Pick a section from the list on the left to show it. On narrower windows, the se
   <img className="hidden dark:block" src="/images/gateway/settings-overview-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-overview.png"; }} alt="Settings screen showing the section list and search on the left" />
 </Frame>
 
-## Server
-
-What this section shows depends on whether the gateway is already connected to a Factory Flow server.
-
-### Initial Setup
-
-Before the gateway is connected, the section shows a **Connect to Factory Flow** form:
-
-| Field | Description |
-|-------|-------------|
-| **Where is your Factory Flow?** | Choose **Factory Flow Cloud** (the default) or **Self-hosted**. |
-| **Server URL** | Self-hosted only. The URL of your own Factory Flow server. |
-| **CA certificate** (optional) | Self-hosted only. Only needed when your server's TLS certificate was issued by an internal/private CA rather than a publicly trusted one. |
-| **Gateway token** | Paste the token (starts with `gw_`) from the Factory Flow app. This links the gateway to a specific gateway record in your organization. |
-
-Click **Connect Gateway** to finish. See [Registration](/gateway/registration) for the full walkthrough, including how to transfer a private CA certificate safely.
-
-### Connection Overview
-
-Once connected, the top of the section shows this gateway linked to your Factory Flow server, with the live connection status between them:
-
-| Status | Meaning |
-|--------|---------|
-| **Connected** | The gateway has a working connection to the server. |
-| **Connecting…** | The gateway is trying to establish or re-establish a connection. |
-| **Not connected** | The gateway can't reach or authenticate with the server. A message underneath explains why — a missing CA certificate file, a certificate that couldn't be verified, the server being unreachable, or another connection error. |
-
-The server side shows whether you're on **Factory Flow Cloud** or **Self-hosted Factory Flow**, and its address — click it to open it in your browser.
-
-Below that is a row of summary details:
-
-| Field | Description |
-|-------|-------------|
-| **Organization** | The organization this gateway belongs to. |
-| **Plan** | Your organization's plan. |
-| **License** | The license status, with its expiry date underneath (see below). |
-| **Machines** | The number of machines assigned to this gateway. |
-
-### License
-
-| Status | Meaning |
-|--------|---------|
-| **Valid** | The license is active. |
-| **Expires in _N_d** | The license expires within 30 days. A warning banner is shown. |
-| **Expired** | The license has passed its expiry date. A warning banner is shown. |
-| **Invalid** | The license could not be validated. A warning banner is shown. |
-
-### Connection
-
-Where the gateway connects and how it authenticates. Each field has an **Edit** button, so you can change one without re-entering the others — for example, to point the gateway at a different server or rotate its token.
-
-| Field | Description |
-|-------|-------------|
-| **Security** | Whether the connection is encrypted and the server's certificate is trusted: **Secure**, **Not verified yet** (HTTPS, but the gateway hasn't reached the server yet), **Certificate not trusted**, or **Not encrypted** (the server URL uses `http://`). |
-| **Server URL** | The Factory Flow server this gateway connects to. Leave the default for Factory Flow Cloud. |
-| **Gateway token** | Masked except for the last 4 characters. Generate a new one in the Factory Flow app if it's lost or revoked. |
-| **CA certificate** | The CA certificate used to trust a self-hosted server, or **None (public CA)**. |
-
-### Gateway Details
-
-| Field | Description |
-|-------|-------------|
-| **Gateway ID** | The gateway's unique identifier (UUID), with a copy button. |
-| **Description** | The description set for this gateway in the Factory Flow app, if any. |
-| **Gateway version** | The installed version — click it for the changelog. Shows when a newer version is available. |
-| **Connected since** | When this gateway was connected. |
-| **License issued to** | Who the license is issued to, when available. |
-
-<Frame>
-  <img className="block dark:hidden" src="/images/gateway/registration-status.png" alt="Server settings showing the connection overview, license, connection, and gateway details" />
-  <img className="hidden dark:block" src="/images/gateway/registration-status-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/registration-status.png"; }} alt="Server settings showing the connection overview, license, connection, and gateway details" />
-</Frame>
-
-## Collector
-
-Controls how the collector gathers and forwards data, and manages its local send queue. See [Data Flow](/gateway/data-flow) for how these settings fit together.
-
-### Behavior
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| **Auto-start collector on app launch** | Off | Starts the collector automatically when the app opens. Takes effect the next time the app starts or restarts. |
-| **Prevent sleep while collecting** | On | Keeps the computer awake while the collector is running, so collection isn't interrupted. The display can still turn off on its own schedule. |
-
-### Sending
-
-| Setting | Default | Range | Description |
-|---------|---------|-------|-------------|
-| **Flush interval** | 5000 ms | 100–60000 | How often collected data is sent to the server. Requests are automatically sized to stay within the API's limit of 100 readings per request. |
-| **Compress outbound requests** | On | — | Gzip-compresses each request before sending, to reduce bandwidth. |
-| **Max data points in queue** | 50,000 | 1,000–1,000,000 | Cap on the on-disk send queue that preserves data across lost connections and app restarts. Once it's reached, the oldest entries are dropped to make room for new ones. |
-
-Settings changed from their default show a reset button next to them.
-
-### Outbound Queue
-
-Data collected but not yet sent to the server:
-
-- **Data points waiting**
-- **Queued batches**
-- **Size on disk**
-- **Oldest waiting since** — shown while anything is queued.
-- **Retrying** — the number of batches being retried, and the maximum attempts per batch. Shown only while a retry is in progress.
-
-<Warning>
-  **Clear Queue** permanently discards all unsent data in the queue. Use it only if you don't need that data forwarded.
-</Warning>
-
-## Connections
-
-Settings for protocol integrations that need gateway-level configuration beyond what's set on the individual connection. Today this covers **Fanuc FOCAS**:
-
-| Field | Description |
-|-------|-------------|
-| **Library directory** | Path to the vendor-supplied FOCAS DLL/.so files, with a browse button. Required before any [FOCAS connection](/gateway/connections#focas-fanuc-cnc) can be used. |
-| **Library status** | A live check (with a **Recheck** button) showing whether the main and Ethernet libraries were found. |
-| **Supported CNC models** | The Fanuc CNC model-specific libraries found in the directory. A notice appears on Windows if none were found. |
-
-<Note>
-  FOCAS is supported on **Windows and Linux only**. On other platforms, this section shows a notice that FOCAS isn't available instead.
-</Note>
-
-## Logs
-
-Controls how long logs are kept and how they're cleaned up. See [Logs](/gateway/logs) for viewing and filtering logs, and troubleshooting by protocol.
-
-### Automatic Cleanup
-
-| Setting | Default | Range | Description |
-|---------|---------|-------|-------------|
-| **Auto-cleanup old logs** | On | — | Runs a cleanup check once a day, around a scheduled time. Shows when the next cleanup will run. |
-| **Max entries** | 10,000 | 100–100,000 | Cleanup starts once there are more log entries than this, and trims them back to this size. Only shown when auto-cleanup is on. |
-| **Retention** | 30 days | 1–365 | When cleaning up, logs older than this are removed first. Only shown when auto-cleanup is on. |
-
-### Storage
-
-- **Entries** — total stored log entries.
-- **Size on disk**
-- **Oldest log** — date of the oldest stored entry.
-- **By level** — a breakdown of entry counts by log level.
-
-### Maintenance
-
-<Warning>
-  **Run Cleanup** applies your cleanup settings immediately rather than waiting for the next scheduled run. **Clear All Logs** permanently deletes every stored log entry.
-</Warning>
-
-## Application
-
-General app behavior, information about this computer, and help links.
-
-### General
-
-| Setting | Description |
-|---------|-------------|
-| **Run on system startup** | Launch Factory Flow Gateway automatically when you sign in to the computer. |
-| **Launch app minimized** | Start in the system tray instead of opening the main window. |
-| **Theme** | Light, Dark, or System. |
-| **Network** | This computer's IP address, with a copy button. **View Details** opens the full network details (see [Network](#network)). |
-| **Database** | The last backup time, or a warning if the last automatic backup failed. **View Details** opens the database details (see [Database](#database)). |
-
-Below the General card, **Restart** (under **Restart application**) stops the collector and restarts the app.
-
-### About
-
-The first card covers the installed app and its updates:
-
-| Row | Description |
-|-----|-------------|
-| **Updates** | The current update status and when updates were last checked successfully, with a **Check for Updates** button. When an update needs to be installed manually, **Download Update** and **Copy Link** buttons appear. A blue dot means an update is available; an amber dot means updates haven't been checked successfully in 14 days. See [Updates](/gateway/updates). |
-| **Version** | The installed version — click it for the changelog. If you're running a beta build, a **Beta** badge appears with a tooltip containing a support email. |
-
-The second card holds **System requirements** (see below) and **Licenses**: **View Licenses** opens the Factory Flow Gateway license agreement and the licenses for the open source software it includes.
-
-### Help & Support
-
-| Row | Description |
-|-----|-------------|
-| **Website** | Opens factoryflow.io. |
-| **Documentation** | Opens these docs. |
-| **Report an issue** | Opens an email to Factory Flow support, pre-filled with your gateway version and system details. |
-
-### Network
-
-Click **View Details** on the **Network** row to see read-only, copyable network details for this computer's primary interface:
-
-- **IP address**
-- **Hostname**
-- **Interface** — the primary network interface in use.
-- **Subnet**
-- **MAC**
-- **IPv6**
-
-An **Open Network Settings** link deep-links into the OS's network panel (macOS and Windows only). The details also list every network interface on the machine, with the primary one badged.
-
-A **Connectivity** panel at the top of the details shows whether the gateway can reach your **Factory Flow server** and the **Update server**, with response times. Use it to check whether a firewall is blocking either one. See [Updates → Checking connectivity](/gateway/updates#checking-connectivity).
-
-### Database
-
-Click **View Details** on the **Database** row to open the database details:
-
-| Item | Description |
-|------|-------------|
-| **Location** | Path to the local database file, with its current size. Copy it, or reveal it in Finder/Explorer. |
-| **Automatic daily backups** | Toggle. Shows the next scheduled backup, and the error if a recent automatic backup failed. |
-| **Backups** | When the last backup was taken, with **View Backups** and **Back Up Now** buttons. |
-
-<Info>
-  Full backups run automatically once a day. Only the **14 most recent** backups are kept — older ones are deleted automatically.
-</Info>
-
-**View Backups** opens a list of every retained backup, grouped by day, with per-backup **Reveal**, **Export**, and **Delete** actions, plus the backups folder location. From there you can also **Delete All Backups**. To restore one, use [Restore from backup](#danger-zone) in the Danger Zone.
-
-<Warning>
-  **Delete All Backups** permanently removes every stored backup. Make sure you don't need any of them — or have exported the ones you want to keep — before using it.
-</Warning>
-
-### System Requirements
-
-The **System requirements** row shows whether this computer meets the recommended specs. **View Details** opens a pass/fail checklist (CPU, RAM, disk, and similar) comparing the recommended values against what's detected on this machine, with when it was last checked. This is the same check that runs on first launch — see [Overview](/gateway/overview#first-launch).
-
-## Danger Zone
-
-<Warning>
-  These actions affect the entire gateway and cannot be undone. Make sure you understand the effect before using them.
-</Warning>
-
-| Action | Effect |
-|--------|--------|
-| **Reset all settings** | Restores every setting to its default. This does not affect your connections, mappings, data, or logs. |
-| **Restore from backup** | Replaces all connections, mappings, settings, and logs with the contents of a backup — either one of this gateway's own automatic backups, or a `.db` file imported with **Import Backup File...**. If the backup contains saved credentials that were encrypted on a different device, those credentials can't be restored and you'll be warned which ones. Type **RESTORE** to confirm. The app restarts automatically afterward. |
-| **Reset database** | Permanently deletes all connections, mappings, data, logs, and settings, and resets this device's identity with the Factory Flow server — your gateway token will stop working and you'll need to generate a new one in the Factory Flow app before you can reconnect. Type **RESET** to confirm. The app restarts automatically afterward. |
-
-<Frame>
-  <img className="block dark:hidden" src="/images/gateway/settings-danger-zone.png" alt="Danger Zone settings with Reset all settings, Restore from backup, and Reset database" />
-  <img className="hidden dark:block" src="/images/gateway/settings-danger-zone-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-danger-zone.png"; }} alt="Danger Zone settings with Reset all settings, Restore from backup, and Reset database" />
-</Frame>
+<CardGroup cols={2}>
+  <Card title="Server" icon="server" href="/gateway/settings/server">
+    Connect the gateway to Factory Flow, and see its connection, license, and details.
+  </Card>
+  <Card title="Collector" icon="activity" href="/gateway/settings/collector">
+    How the collector runs, sends data, and queues it while offline.
+  </Card>
+  <Card title="Connections" icon="cable" href="/gateway/settings/connections">
+    Settings shared by connections, such as the FOCAS library.
+  </Card>
+  <Card title="Logs" icon="scroll-text" href="/gateway/settings/logs">
+    How long logs are kept, where they are stored, and log maintenance.
+  </Card>
+  <Card title="Application" icon="app-window" href="/gateway/settings/application">
+    General app preferences, about, help, network, database, and system requirements.
+  </Card>
+  <Card title="Danger Zone" icon="triangle-alert" href="/gateway/settings/danger-zone">
+    Reset or remove gateway data. These actions cannot be undone.
+  </Card>
+</CardGroup>

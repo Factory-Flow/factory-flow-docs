@@ -48,7 +48,9 @@ Registration requires a **gateway token** — a string that starts with `gw_`.
 
 ## After Registration
 
-Once registered, **Settings → Server** switches from the setup form to a live status view — connection status, organization, plan, license, assigned machines, connection security, masked token, and gateway details. See [Settings → Server](/gateway/settings#server) for the full field reference.
+Once registered, **Settings → Server** switches from the setup form to a live status view — connection status, organization, plan, license, assigned machines, connection security, masked token, and gateway details. See [Settings → Server](/gateway/settings/server) for the full field reference.
+
+If the gateway can't connect, the setting responsible is highlighted in red with a short reason: the **Server URL** when the server can't be reached, the **Gateway token** when it's invalid, expired, revoked, or locked to a different device, or the **CA certificate** when its file can't be read or the server's certificate can't be verified.
 
 <Note>
   To point the gateway at a different server, rotate its token, or change its CA certificate, click **Edit** next to that field under **Settings → Server → Connection**.

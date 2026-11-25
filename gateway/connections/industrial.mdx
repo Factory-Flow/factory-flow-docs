@@ -1,0 +1,111 @@
+---
+title: "Industrial Connections"
+sidebarTitle: "Industrial"
+icon: "factory"
+description: "Set up OPC-UA, Siemens S7, Modbus, EtherNet/IP, MTConnect, and FOCAS connections."
+---
+
+Every polled protocol accepts a **poll interval** from 100 ms to 24 hours. Fields marked optional can be left blank to use the default. For adding, testing, and exploring a connection, see [Connections](/gateway/connections#managing-connections).
+
+## OPC-UA
+
+Common on modern PLCs, SCADA systems, and industrial software that need a secure, standardized way to exchange data.
+
+| Field | Description |
+|-------|-------------|
+| **Endpoint URL** | The OPC-UA server's endpoint address, e.g. `opc.tcp://192.168.1.20:4840`. |
+| **Security mode** | `None`, `Sign`, or `SignAndEncrypt`. |
+| **Security policy** | `None`, `Basic128Rsa15`, `Basic256`, or `Basic256Sha256`. |
+| **Username / Password** | Credentials, if the server requires them. |
+| **Client certificate / Client private key / Key password** | Required when Security mode is `Sign` or `SignAndEncrypt`. Used to establish a secure, authenticated session with the server. The key password is only needed if the key is encrypted. |
+
+<Note>
+  OPC-UA doesn't use a simple TLS on/off toggle. Its security is set through **Security mode** and **Security policy** together, and both must match what the server expects.
+</Note>
+
+## Siemens S7
+
+Reads Siemens S7-300, S7-400, S7-1200, and S7-1500 PLCs directly over S7comm (ISO-on-TCP), without an OPC-UA server in between.
+
+| Field | Description |
+|-------|-------------|
+| **Host** | The PLC's (or its communication module's) network address. |
+| **Port** | The S7 port. The standard is `102`. |
+| **PLC family** | Sets the rack and slot of the CPU for you: **S7-1200 / S7-1500** (rack 0, slot 1) or **S7-300** (rack 0, slot 2). Choose **S7-400 / other** to enter them yourself. |
+| **Rack / Slot** | Shown only for **S7-400 / other**. The CPU's position as shown in the PLC's hardware configuration. Rack is almost always `0`. |
+| **Connection timeout (ms)** | How long to wait when connecting. Default 5000. |
+| **Poll interval (ms)** | How often to read. Default 1000. |
+
+When you map a data point, an address builder lets you pick the memory area (**Data block (DB)**, **Markers / memory (M)**, **Inputs (I)**, or **Outputs (Q)**), the data type (Bool, Byte, Char, Word, Int, DWord, DInt, Real, LReal, or String), and the offset. It writes the address for you, for example `DB10,REAL4`, `DB10,X0.3`, `MW20`, or `I0.1`.
+
+<Warning>
+  Two settings on the PLC must be changed in TIA Portal (or STEP 7) before the gateway can read it:
+
+  - **PUT/GET access** must be enabled in the CPU's protection settings.
+  - **Optimized block access** must be turned off on every data block you read, so its values have fixed offsets.
+</Warning>
+
+<Note>
+  S7 connections are **read-only**. The gateway's S7 driver has no way to write to the PLC.
+</Note>
+
+## Modbus (TCP or RTU)
+
+Common on PLCs, VFDs/drives, and legacy industrial controllers, especially older equipment that predates modern networked protocols.
+
+| Field | Description |
+|-------|-------------|
+| **Mode** | **TCP** (network) or **RTU** (serial). |
+| **Host** | The device's network address (TCP mode). |
+| **Port** | The port to connect to (TCP mode). |
+| **Unit ID** | The Modbus unit/slave identifier, `0`–`255`. |
+| **Use TLS** | Modbus/TCP Security (TCP mode only). When the port is still on its default, turning TLS on switches it from `502` to `802`. |
+
+<Note>
+  TLS and certificate options are only available in **TCP** mode. RTU (serial) connections don't support TLS.
+</Note>
+
+## EtherNet/IP
+
+Used with Rockwell Automation / Allen-Bradley PLCs (e.g. ControlLogix, CompactLogix). The gateway connects on the standard EtherNet/IP port, `44818`.
+
+| Field | Description |
+|-------|-------------|
+| **Host** | The PLC's network address. |
+| **Slot** | The backplane slot of the controller: `0` for CompactLogix. For ControlLogix it depends on where the processor sits in the chassis. |
+| **Use unconnected messaging** | Skips the Forward Open handshake. Turn this on for simulators or third-party devices that don't support connected (Class 3) messaging. |
+| **Connect timeout (ms)** | How long to wait when connecting. Default 10000. |
+| **Poll interval (ms)** | How often subscribed tags are read. Default 1000. |
+
+## MTConnect
+
+Common on CNC machines and other manufacturing equipment that expose an MTConnect agent.
+
+| Field | Description |
+|-------|-------------|
+| **Agent URL** | The address of the MTConnect agent, e.g. `http://192.168.1.100:5000`. |
+| **Device name** | Optional. Limits the connection to one device when the agent serves several. Leave blank for all devices. |
+| **Poll interval (ms)** | How often to request data from the agent. |
+| **Request timeout (ms)** | How long to wait for a response before the request counts as failed. |
+| **Use sample endpoint** | Reads the agent's `sample` endpoint (a sequence-based stream of recent events) instead of polling its `current` endpoint (a snapshot of current values). |
+
+TLS options are available for agents served over HTTPS.
+
+## FOCAS (Fanuc CNC)
+
+Used with Fanuc-controlled CNC machines, connected over Ethernet.
+
+| Field | Description |
+|-------|-------------|
+| **Connection type** | Ethernet (TCP/IP), using the FOCAS Ethernet library. |
+| **Host / IP address** | The CNC controller's network address. |
+| **Port** | The port to connect to. Default `8193`. |
+| **Timeout (ms)** | How long to wait when connecting. |
+
+<Warning>
+  New FOCAS connections are temporarily unavailable (**Coming soon**). Where FOCAS is available, it runs on **Windows and Linux only**, and needs the FOCAS library configured in [Settings → Connections](/gateway/settings/connections). The app checks for the library and tells you if it's missing or if your platform isn't supported.
+</Warning>
+
+<Note>
+  FOCAS connections are **read-only**. Factory Flow Gateway never sends commands to the CNC controller.
+</Note>

@@ -1,0 +1,36 @@
+---
+title: "Conversions"
+icon: "calculator"
+description: "Change raw machine values before they are checked and sent, without writing code."
+---
+
+Raw machine values often need a small change before they mean something: a register that holds tenths of a degree, a 4–20 mA signal, or a status word with one bit per signal. **Conversions** handle this without any code. Add as many steps as you need; they run in order on each value, before its checks.
+
+Click **Add conversion** to open a picker that shows each kind with a diagram and a worked example. You can search it (for example "offset", "bit mask", or "pulse"). Each step in the list shows what it does to the current value, so you can see the effect immediately. Drag steps to reorder them, duplicate a step, or change a step to a different kind.
+
+| Conversion | What it does |
+|------------|--------------|
+| **Multiply** | Multiply by a number, e.g. × 0.1 for a register that holds tenths. |
+| **Add / offset** | Add a number (negative to subtract), e.g. to correct a sensor offset. |
+| **Scale range** | Map one range onto another, e.g. a 4–20 mA signal onto 0–100 %. |
+| **Round** | Round to a number of decimal places (0 for a whole number). |
+| **Clamp** | Keep a value inside limits instead of rejecting it, e.g. a sensor reading −0.3 % → 0 %. |
+| **Unit conversion** | Common unit changes: °C ↔ °F, psi ↔ bar, psi ↔ kPa, in ↔ mm, Hz ↔ RPM, lb ↔ kg, US gal ↔ L. |
+| **Signed / unsigned** | Read a register as a signed number (two's complement), e.g. 16-bit 65535 → −1, or back. |
+| **BCD decode** | Read binary-coded decimal, as older PLCs and counters store digits, e.g. 0x1234 → 1234. |
+| **Extract number** | Pull the number out of text, e.g. "1,234 pcs" → 1234. |
+| **Regex extract** | Take the part of the text that matches a pattern, e.g. `T=(\d+)` on "T=21;P=3" → 21. |
+| **Regex replace** | Replace what matches a pattern, e.g. strip " pcs" from "1234 pcs". |
+| **Map values** | Replace specific values, e.g. "RUN" → 1, "STOP" → 0. |
+| **Map ranges** | Turn bands of a number into values, e.g. 0–10 → IDLE, 10–80 → RUNNING. |
+| **Threshold → true/false** | Turn a number into a state, e.g. spindle speed > 50 → running. |
+| **Invert true/false** | Flip true and false, e.g. for a signal that's on when the machine is stopped. |
+| **True/false → number** | Turn true/false into 1/0. |
+| **Get bits** | Pick signals out of a status word: one bit as true/false, or several as a number, e.g. bits 4–7. |
+| **Invert bits** | Flip every bit of a word, for a device that reports its status bits inverted. |
+| **Skip when…** | Quietly don't send values that match, e.g. 0 while the machine is off. Not treated as a problem. |
+| **Smoothing** | Average the last few readings to calm a noisy sensor. |
+| **Counter rollover** | Keep counting past a counter's limit, e.g. a 16-bit counter going 65,535 → 0 carries on at 65,536. |
+| **Count edges** | Count a sensor's pulses, e.g. one true per part made → a part count. |
+
+After conversions, the value goes through its [checks](/gateway/machines/checks).

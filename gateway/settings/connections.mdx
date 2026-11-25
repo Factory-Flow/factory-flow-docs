@@ -1,0 +1,18 @@
+---
+title: "Connections"
+sidebarTitle: "Connections"
+icon: "cable"
+description: "Settings shared by connections, such as the FOCAS library."
+---
+
+Settings for protocol integrations that need gateway-level configuration beyond what's set on the individual connection. Today this covers **Fanuc FOCAS**:
+
+| Field | Description |
+|-------|-------------|
+| **Library directory** | Path to the vendor-supplied FOCAS DLL/.so files, with a browse button. Required before any [FOCAS connection](/gateway/connections/industrial#focas-fanuc-cnc) can be used. |
+| **Library status** | A live check (with a **Recheck** button) showing whether the main and Ethernet libraries were found. |
+| **Supported CNC models** | The Fanuc CNC model-specific libraries found in the directory. A notice appears on Windows if none were found. |
+
+<Note>
+  FOCAS is supported on **Windows and Linux only**. On other platforms, this section shows a notice that FOCAS isn't available instead.
+</Note>

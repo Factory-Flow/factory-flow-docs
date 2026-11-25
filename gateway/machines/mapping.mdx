@@ -1,0 +1,52 @@
+---
+title: "Mapping Data Points"
+icon: "route"
+description: "Map a value from a connection to a machine data point, and reuse a setup across data points and machines."
+---
+
+## Creating a Mapping
+
+<Steps>
+  <Step title="Open the data point">
+    Open the machine, then click the data point you want to supply (e.g. **Part Count Good**), or drag a line to it from a connection.
+  </Step>
+  <Step title="Select a connection">
+    Choose which connection supplies the value. If the one you need doesn't exist yet, you can add it from here without leaving the editor.
+  </Step>
+  <Step title="Select the source and address">
+    Depending on the protocol, choose the topic, register, node, tag, or field that holds the value:
+
+    - For connections with several **endpoints, streams, or saved queries** (HTTP, GraphQL, WebSocket, SQL databases, InfluxDB), first pick which one, then pick a field from the response, message, or first row it returns.
+    - For **Siemens S7**, an address builder writes the address from the memory area, data type, and offset you pick.
+    - For **Modbus**, an address builder helps you pick the register type and address.
+
+    Click **Read value** to fetch a fresh value from the machine at any time.
+  </Step>
+  <Step title="Check the value's journey">
+    The editor shows how the value moves from the machine to Factory Flow, one stage at a time:
+
+    1. **Received**: the raw value as read from the machine, with its type and when it arrived.
+    2. **Conversions**: any steps that change the value before it's sent (see [Conversions](/gateway/machines/conversions)).
+    3. **Checks**: what the value must pass to be sent (see [Checks](/gateway/machines/checks)).
+    4. **Factory Flow**: what will actually be sent, or why it won't be.
+
+    Every stage updates live as you change the address, conversions, or checks, so you can confirm the result before saving.
+
+    <Frame>
+      <img className="block dark:hidden" src="/images/gateway/mapping-dialog.png" alt="Mapping editor showing the value received, converted, checked, and sent to Factory Flow" />
+      <img className="hidden dark:block" src="/images/gateway/mapping-dialog-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/mapping-dialog.png"; }} alt="Mapping editor showing the value received, converted, checked, and sent to Factory Flow" />
+    </Frame>
+  </Step>
+  <Step title="Save">
+    Save once the Factory Flow stage shows the value you expect.
+  </Step>
+</Steps>
+
+<Tip>
+  Not sure which topic, register, or node to pick? Use the [Explore browser](/gateway/connections#managing-connections) on the connection first to see what's available.
+</Tip>
+
+## Reusing a Setup
+
+- **Copy setup / Paste setup**: the mapping editor's **…** menu copies a data point's whole setup (source, conversions, and checks) to the clipboard. Paste it into another data point, on this machine or another, and review what will be applied before confirming.
+- **Copy from another machine**: from the machine's actions menu, pick another machine that's already mapped and choose which of its mappings to copy here. Data points that are already mapped are left alone unless you choose to replace them. Copied mappings are ordinary mappings afterwards, so you can edit each one.

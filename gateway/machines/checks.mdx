@@ -1,0 +1,29 @@
+---
+title: "Checks"
+icon: "shield-check"
+description: "Stop bad values from reaching Factory Flow, and get suggested fixes when a value fails."
+---
+
+**Checks** stop bad values from reaching Factory Flow. Every data point has a few checks that are always on:
+
+- **Read succeeded**: if reading from the machine fails, nothing is sent.
+- **Has a value**: blank or missing readings are skipped. They are never sent as 0.
+- **Type check**: the value must match the data point's type: **Is a whole number**, **Is a number**, **Is true/false** (1/0, on/off, and yes/no also work), or **Is text**. Numbers written as text, such as `"42"`, are accepted.
+- **Sent with Total parts** (Part Count Good and Part Count Bad only): Factory Flow only accepts these together with the total part count, so they're sent alongside it.
+
+You can also turn on checks suited to the kind of data point:
+
+| Check | For | What it flags |
+|-------|-----|---------------|
+| **Allowed range** | Counters, measurements | Readings below a minimum or above a maximum you set. |
+| **Never decreases** | Counters | A count that drops, which usually means the reading or address is wrong. You can **Allow a reset to 0**. |
+| **Maximum rate of change** | Counters, measurements | Jumps faster than the machine could really change, such as 10 to 100,000 in a second. |
+| **Hasn't changed** | All | A reading that stays exactly the same for longer than the minutes you set, which can mean the device stopped updating it. This check only warns. |
+
+For each check, **When it fails** sets whether the value is **blocked** (not sent) or only **flagged** with a warning and still sent. Defaults depend on the data point; **Reset to default** puts every check back.
+
+<Tip>
+  When a value fails a check, the editor suggests **Possible fixes**: conversions that would make it pass, such as **Round** for 12.7 where a whole number is expected, or **Counter rollover** for a counter that wrapped from 65535 to 2. Each suggestion is tried on the actual value first and is only shown if it really fixes the problem. Nothing is applied until you choose it.
+</Tip>
+
+When a value is blocked or flagged, the data point's card in the flow view shows it. Hover it to see which check failed and what to look at, or choose **Review checks** to open the editor at that check.

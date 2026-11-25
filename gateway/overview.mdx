@@ -6,7 +6,7 @@ description: "What Factory Flow Gateway does, supported platforms, and how to la
 
 **Factory Flow Gateway** is a desktop application you install on a PC located on your plant network. It connects directly to your machines, PLCs, and sensors using industrial communication protocols, collects the production data they expose, and securely forwards it to your Factory Flow cloud (or self-hosted) organization.
 
-Use Factory Flow Gateway when your machines can't send data to Factory Flow on their own — for example, older equipment that only speaks Modbus, or a CNC controller that only exposes data over FOCAS. The gateway sits between that equipment and Factory Flow, translating whatever protocol your machine speaks into data points that show up on your dashboards.
+Use Factory Flow Gateway when your machines can't send data to Factory Flow on their own — for example, older equipment that only speaks Modbus, a Siemens PLC on S7, or production data that already sits in an MES or historian database. The gateway sits between that equipment and Factory Flow, translating whatever protocol your machine speaks into data points that show up on your dashboards.
 
 ## Why Factory Flow Gateway?
 
@@ -19,7 +19,7 @@ Factory Flow Gateway is built for that scale. It handles the protocol-specific c
     Install it on any Windows, macOS, or Linux PC with network access to your machines — no cloud connectivity required on the machine side.
   </Card>
   <Card title="Speaks industrial protocols" icon="cable">
-    Connects to machines over MQTT, Modbus, OPC-UA, MTConnect, HTTP, GraphQL, FOCAS, and EtherNet/IP. See [Connections](/gateway/connections).
+    Connects over OPC-UA, Siemens S7, Modbus, EtherNet/IP, MTConnect, MQTT, WebSocket, HTTP, and GraphQL, and reads (never writes) SQL Server, PostgreSQL, MySQL, and InfluxDB databases. See [Connections](/gateway/connections).
   </Card>
   <Card title="Never loses data" icon="database">
     Collected points are queued locally before being forwarded, so a network outage or restart doesn't drop data. See [Data Flow](/gateway/data-flow).
@@ -122,19 +122,22 @@ Factory Flow Gateway isn't notarized/signed through every OS vendor's store prog
 
 ## First Launch
 
-The first time you open Factory Flow Gateway, it runs a **system requirements check** before you can proceed — validating that the machine has enough CPU, RAM, and disk space to run the collector reliably. If a check fails, the app displays which resource is insufficient so you can address it before continuing.
+The first time you open Factory Flow Gateway, a **Welcome** window walks you through setup in three steps:
+
+1. **System check**: checks this computer against the recommended CPU, RAM, and disk space for running the gateway. If something falls short, it shows which resource, and you can still choose **Continue anyway**.
+2. **Connect to Factory Flow**: links the gateway to your organization with a gateway token. See [Registration](/gateway/registration).
+3. **Done**: next, add a connection for each machine and map its data points.
+
+If you're not ready, choose **Set up later**. The Welcome window appears again at the next launch until the gateway is connected, and you can always connect from **Settings → Server**.
 
 <Tip>
-  You can re-run this check at any time from **Settings → Application → System Requirements**. See [Settings](/gateway/settings#system-requirements).
+  You can re-run the system check at any time from **Settings → Application → System Requirements**. See [Settings](/gateway/settings/application#system-requirements).
 </Tip>
-
 
 <Frame>
   <img className="block dark:hidden" src="/images/gateway/first-launch-requirements-check.png" alt="First-launch system requirements check showing CPU, RAM, and disk validation" />
   <img className="hidden dark:block" src="/images/gateway/first-launch-requirements-check-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/first-launch-requirements-check.png"; }} alt="First-launch system requirements check showing CPU, RAM, and disk validation" />
 </Frame>
-
-Once the system requirements check passes, you'll be taken to the registration screen to connect the app to your Factory Flow organization.
 
 <Card title="Next: Register your gateway" icon="key-round" href="/gateway/registration">
   Connect the app to your Factory Flow organization using a gateway token.

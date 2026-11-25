@@ -1,0 +1,65 @@
+---
+title: "Database Connections"
+sidebarTitle: "Databases"
+icon: "database"
+description: "Set up read-only SQL Server, PostgreSQL, MySQL, and InfluxDB connections."
+---
+
+Every polled protocol accepts a **poll interval** from 100 ms to 24 hours. Fields marked optional can be left blank to use the default. For adding, testing, and exploring a connection, see [Connections](/gateway/connections#managing-connections).
+
+Database connections let the gateway read production data that already lands in an MES, historian, or OEE database. They are always **read-only**; see [Database connections are read-only](#database-connections-are-read-only) below.
+
+## SQL Server, PostgreSQL, and MySQL / MariaDB
+
+These three share the same form.
+
+| Field | Description |
+|-------|-------------|
+| **Host** | The database server's address. |
+| **Port** | The port to connect to (`1433` for SQL Server, `5432` for PostgreSQL, `3306` for MySQL by default). |
+| **Instance name** | SQL Server only, optional. A named instance such as `SQLEXPRESS`, found through SQL Browser instead of the port. |
+| **Database** | The database to read from. |
+| **Username / Password** | The database account. Use a read-only account. |
+| **Use TLS** | Encrypt the connection, with certificate options. |
+| **Saved queries** | One or more named queries, each run on every poll (see below). |
+| **Poll interval (ms)** | How often to run the queries. Default 5000. |
+| **Query timeout (ms)** | A query running longer than this is cancelled. Default 10000. |
+
+**Saved queries.** Each query can be written in one of two ways:
+
+- **Built from parts.** Choose the **Schema** (optional, e.g. `dbo` or `public`), **Table**, and **Columns** (comma-separated, or leave empty for every column). Set **Newest first by** to a timestamp column so the first row is the latest reading, and add **Only rows where** conditions (column, comparison, and value) to narrow it down, for example to one machine. The gateway writes the SQL for you, and condition values are sent separately as parameters, never as SQL.
+- **Written as SQL.** Write your own `SELECT`. It is checked live as you type and refused if it is anything other than a single read.
+
+When you map a data point, you pick a saved query and a column. The value comes from that column in the **first row** the query returns.
+
+## InfluxDB
+
+Reads time-series data from InfluxDB. The query language depends on the version.
+
+| Field | Description |
+|-------|-------------|
+| **URL** | The server, e.g. `http://localhost:8086` (or `http://localhost:8181` for InfluxDB 3). |
+| **Version** | **InfluxDB 1.x** (InfluxQL), **InfluxDB 2.x** (Flux), or **InfluxDB 3** (SQL). |
+| **Database** | The database to query (1.x and 3). |
+| **Organization** | The organization name or ID (2.x). |
+| **API token** | Required on 2.x and 3. Optional on 1.x, where you can use a **Username** and **Password** instead. Use a read-only token. |
+| **Saved queries** | One or more named queries in the version's language, each run on every poll. |
+| **Poll interval (ms)** | How often to run the queries. Default 5000. |
+| **Request timeout (ms)** | How long to wait for a response. Default 10000. |
+
+---
+
+---
+
+## Database Connections Are Read-Only
+
+The gateway only ever reads from databases. It never writes to them. Every saved query is checked before every run, in layers:
+
+1. **A strict read-only check**, also shown live in the connection form. SQL must be a single `SELECT`. InfluxQL must be a `SELECT` or `SHOW`, and Flux can't call `to()` or import packages that write or send data.
+2. **A full parse** of SQL queries with the database's own grammar. A query that can't be parsed is refused.
+3. **The database itself refuses writes.** PostgreSQL queries run in a read-only transaction, MySQL queries in a read-only session and transaction, and SQL Server queries in a transaction that is always rolled back. InfluxDB 1.x queries use `GET`, which InfluxDB only allows for reads.
+4. **Test Connection** runs every saved query once and **warns you** if the database account is able to write.
+
+<Tip>
+  Even with these safeguards, give the gateway its own **read-only** database account or token. It's the simplest way to guarantee it can't change anything.
+</Tip>

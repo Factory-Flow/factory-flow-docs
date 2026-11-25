@@ -49,6 +49,25 @@ The **Usage** tab shows how much of your plan's limits you're currently consumin
 
 If you're approaching a limit, you'll see a warning indicator. Contact support or upgrade your plan to increase limits.
 
+### If your subscription ends *(Cloud only)*
+
+When you cancel, you keep full access until the end of the billing period you've paid for. If a payment fails, you keep access while the payment is being retried.
+
+Once the subscription has ended, members see a prompt to choose a plan, and gateways and API tokens stop working. Your data is kept, and choosing a plan brings everything back. If no plan is chosen:
+
+| When | What happens |
+|------|--------------|
+| **Day 0** | The subscription ends. The organization is locked until a plan is chosen. |
+| **Day 23** | Admins get an email saying the organization will be scheduled for deletion in 7 days. |
+| **Day 30** | The organization is [scheduled for deletion](#danger-zone). Admins get an email and can still restore it. |
+| **Day 60** | The organization and all of its data are permanently erased. |
+
+The date the organization will be scheduled for deletion also appears on the plan selection page.
+
+<Note>
+  Self-hosted installations are never deleted because of a subscription or license. Only an Admin can delete an organization there.
+</Note>
+
 ---
 
 ## Audit Log
@@ -73,8 +92,47 @@ The audit log is read-only and cannot be cleared or edited. It is available to a
 
 ## Danger Zone
 
-The **Danger Zone** at the bottom of Organization Settings contains the option to **Delete Organization**.
+The **Danger Zone** at the bottom of Organization Settings contains the option to **Delete Organization**. Only Admins can delete an organization, and you must type the organization's name to confirm.
+
+### What happens when you delete an organization
+
+Organizations are also scheduled for deletion [30 days after their subscription ends](#if-your-subscription-ends-cloud-only) if no plan is chosen.
+
+Deleting an organization doesn't erase it immediately. It is scheduled for deletion and kept for **30 days**, so a mistake can be undone:
+
+- **Access stops right away.** The organization disappears for every member, and its gateways and API tokens stop working. No alerts are sent and no analytics are calculated while it's pending deletion.
+- **Your subscription is cancelled immediately**, with no refund or credit for the rest of the billing period. *(Cloud only.)*
+- **Every Admin gets an email** with the date the organization will be permanently erased.
+- **After 30 days, everything is permanently erased**: machines, production and analytics history, layouts, lines, facilities, shifts, alert rules, gateways, API tokens and memberships. This can't be undone.
+
+The organization's name stays reserved until it's permanently erased.
 
 <Warning>
-  Deleting your organization permanently removes all machines, analytics data, layouts, alert rules, and member access. This cannot be undone. Export any data you need before proceeding.
+  Export any data you need before deleting. Once the 30 days have passed, the organization and its data can't be recovered.
 </Warning>
+
+### Restoring a deleted organization
+
+Any Admin of the organization can restore it during the 30 days:
+
+<Steps>
+  <Step title="Open the organization picker">
+    Click the link in the deletion email, or go to the organization picker after signing in.
+  </Step>
+  <Step title="Restore it">
+    Under **Pending deletion**, click **Restore** next to the organization.
+  </Step>
+  <Step title="Resubscribe (Cloud only)">
+    The subscription was cancelled when the organization was deleted, so choose a plan again to regain full access.
+  </Step>
+</Steps>
+
+Everything comes back exactly as it was: machines, history, members, gateways and API tokens. Data your gateways tried to send while the organization was deleted isn't recorded.
+
+### Leaving as the last member
+
+If you're the only member of an organization, leaving it also deletes it. The same 30-day period applies, and you can restore it from the organization picker.
+
+### Audit logs
+
+Audit log entries are kept after an organization is permanently erased, tagged with the organization's name, so there's a record for support and billing questions.

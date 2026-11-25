@@ -1,0 +1,21 @@
+---
+title: "Danger Zone"
+sidebarTitle: "Danger Zone"
+icon: "triangle-alert"
+description: "Reset or remove gateway data. These actions cannot be undone."
+---
+
+<Warning>
+  These actions affect the entire gateway and cannot be undone. Make sure you understand the effect before using them.
+</Warning>
+
+| Action | Effect |
+|--------|--------|
+| **Reset all settings** | Restores every setting to its default. This does not affect your connections, mappings, data, or logs. |
+| **Restore from backup** | Replaces all connections, mappings, settings, and logs with the contents of a backup — either one of this gateway's own automatic backups, or a `.db` file imported with **Import Backup File...**. If the backup contains saved credentials that were encrypted on a different device, those credentials can't be restored and you'll be warned which ones. Type **RESTORE** to confirm. The app restarts automatically afterward. |
+| **Reset database** | Permanently deletes all connections, mappings, data, logs, and settings, and resets this device's identity with the Factory Flow server — your gateway token will stop working and you'll need to generate a new one in the Factory Flow app before you can reconnect. Type **RESET** to confirm. The app restarts automatically afterward. |
+
+<Frame>
+  <img className="block dark:hidden" src="/images/gateway/settings-danger-zone.png" alt="Danger Zone settings with Reset all settings, Restore from backup, and Reset database" />
+  <img className="hidden dark:block" src="/images/gateway/settings-danger-zone-dark.png" onError={(e) => { e.currentTarget.src = "/images/gateway/settings-danger-zone.png"; }} alt="Danger Zone settings with Reset all settings, Restore from backup, and Reset database" />
+</Frame>

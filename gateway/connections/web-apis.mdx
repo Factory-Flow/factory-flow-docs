@@ -1,0 +1,53 @@
+---
+title: "Web APIs Connections"
+sidebarTitle: "Web APIs"
+icon: "globe"
+description: "Set up HTTP (poll or webhook) and GraphQL connections."
+---
+
+Every polled protocol accepts a **poll interval** from 100 ms to 24 hours. Fields marked optional can be left blank to use the default. For adding, testing, and exploring a connection, see [Connections](/gateway/connections#managing-connections).
+
+## HTTP
+
+Used for custom integrations: polling a REST API on a schedule, or receiving data pushed to the gateway as a webhook. Each HTTP connection runs in one mode, chosen at the top of its form.
+
+**Poll mode**: the gateway requests data from one server on a schedule.
+
+| Field | Description |
+|-------|-------------|
+| **Base URL** | The server the endpoints are requested from, e.g. `http://192.168.1.100:8080`. |
+| **Endpoints** | One or more named endpoints on that server. Each has its own **Path** (e.g. `/testData1`), **Method** (`GET` or `POST`), **Query parameters**, **Request body** and **Content-Type** (for `POST`), and **Response format** (`JSON`, `XML`, or `text`). |
+| **Headers** | Custom headers sent with every request. |
+| **Authentication** | `None`, `Bearer`, `API Key`, or `Basic`. |
+| **Poll interval (ms)** | How often every endpoint is requested. Default 5000. |
+| **Request timeout (ms)** | How long to wait for a response. |
+| **TLS** | Available for `https://` URLs. |
+
+**Webhook mode**: the gateway runs its own server and receives data pushed to it by another system.
+
+| Field | Description |
+|-------|-------------|
+| **Server port** | The port the gateway listens on, `1024`–`65535`. Default `8585`. |
+| **TLS** | Serve the webhook over HTTPS. |
+| **Allow network requests** | Accept requests from other devices on your network, with a **Network interface** picker for which local address to listen on. |
+| **External reachability** | A built-in test that confirms the webhook can be reached from outside the gateway PC. |
+| **Webhook endpoints** | One or more named endpoints, each with its own **Endpoint path** (e.g. `/my-endpoint`) and **Incoming format** (`JSON`, `XML`, or `text`). The full **Webhook URL** for each is shown ready to copy. |
+| **Authentication** | Authentication required of incoming requests. **Generate secret** creates one for you. |
+
+<Note>
+  Only one HTTP connection can be in webhook mode at a time, since it owns the gateway's webhook server. Add more endpoints to it instead of creating a second webhook connection.
+</Note>
+
+## GraphQL
+
+Used for systems that expose a GraphQL API (MES, ERP, or other software) instead of a REST endpoint.
+
+| Field | Description |
+|-------|-------------|
+| **Endpoint** | The GraphQL endpoint (commonly ending in `/graphql`). |
+| **Saved queries** | One or more named queries, each run on every poll. Each has its query document, optional **Variables** (a JSON object), and an optional **Operation name** for documents that define more than one operation. |
+| **Headers** | Custom headers sent with each request. |
+| **Authentication** | `None`, `Bearer`, `API Key`, or `Basic`. |
+| **Poll interval (ms)** | How often to run the queries. Default 5000. |
+| **Request timeout (ms)** | How long to wait for a response. |
+| **TLS** | Available for `https://` endpoints. |

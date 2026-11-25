@@ -63,6 +63,28 @@ docker compose exec app bin/retention run
 
 Useful after changing retention settings or to reclaim space immediately.
 
+## Deleted organizations
+
+When an Admin deletes an organization, it isn't erased straight away. It stays restorable for a grace period (30 days by default) and is then permanently erased, including all of its time-series data in TimescaleDB. See [Deleting an organization](/manage/organization#danger-zone) for what users see.
+
+A scheduled job, `organizations:purge-deleted`, runs daily and erases organizations whose grace period has ended. To change the grace period, set it in your `.env` file and restart the application:
+
+```env
+ORGANIZATION_DELETION_GRACE_DAYS=30
+```
+
+Set it to `0` to erase deleted organizations on the next daily run.
+
+To run the purge immediately instead of waiting for the daily job:
+
+```bash
+./factoryflow artisan organizations:purge-deleted
+```
+
+<Note>
+  Audit log entries for a deleted organization are kept after it's erased, tagged with the organization's name. Database backups made before the purge still contain the organization until they're rotated out. See [Backups](/self-hosted/backups).
+</Note>
+
 ## Storage estimates
 
 As a rough guide:

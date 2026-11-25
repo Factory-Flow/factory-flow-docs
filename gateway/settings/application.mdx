@@ -1,0 +1,78 @@
+---
+title: "Application"
+sidebarTitle: "Application"
+icon: "app-window"
+description: "General app preferences, about, help, network, database, and system requirements."
+---
+
+General app behavior, information about this computer, and help links.
+
+## General
+
+| Setting | Description |
+|---------|-------------|
+| **Run on system startup** | Launch Factory Flow Gateway automatically when you sign in to the computer. |
+| **Launch app minimized** | Start in the system tray instead of opening the main window. |
+| **Theme** | Light, Dark, or System. |
+| **Network** | This computer's IP address, with a copy button. **View Details** opens the full network details (see [Network](#network)). |
+| **Database** | The last backup time, or a warning if the last automatic backup failed. **View Details** opens the database details (see [Database](#database)). |
+
+Below the General card, **Restart** (under **Restart application**) stops the collector and restarts the app.
+
+## About
+
+The first card covers the installed app and its updates:
+
+| Row | Description |
+|-----|-------------|
+| **Updates** | The current update status and when updates were last checked successfully, with a **Check for Updates** button. When an update needs to be installed manually, **Download Update** and **Copy Link** buttons appear. A blue dot means an update is available; an amber dot means updates haven't been checked successfully in 14 days. See [Updates](/gateway/updates). |
+| **Version** | The installed version — click it for the changelog. If you're running a beta build, a **Beta** badge appears with a tooltip containing a support email. |
+
+The second card holds **System requirements** (see below) and **Licenses**: **View Licenses** opens the Factory Flow Gateway license agreement and the licenses for the open source software it includes.
+
+## Help & Support
+
+| Row | Description |
+|-----|-------------|
+| **Website** | Opens factoryflow.io. |
+| **Documentation** | Opens these docs. |
+| **Report an issue** | Opens an email to Factory Flow support, pre-filled with your gateway version and system details. |
+
+## Network
+
+Click **View Details** on the **Network** row to see read-only, copyable network details for this computer's primary interface:
+
+- **IP address**
+- **Hostname**
+- **Interface** — the primary network interface in use.
+- **Subnet**
+- **MAC**
+- **IPv6**
+
+An **Open Network Settings** link deep-links into the OS's network panel (macOS and Windows only). The details also list every network interface on the machine, with the primary one badged.
+
+A **Connectivity** panel at the top of the details shows whether the gateway can reach your **Factory Flow server** and the **Update server**, with response times. Use it to check whether a firewall is blocking either one. See [Updates → Checking connectivity](/gateway/updates#checking-connectivity).
+
+## Database
+
+Click **View Details** on the **Database** row to open the database details:
+
+| Item | Description |
+|------|-------------|
+| **Location** | Path to the local database file, with its current size. Copy it, or reveal it in Finder/Explorer. |
+| **Automatic daily backups** | Toggle. Shows the next scheduled backup, and the error if a recent automatic backup failed. |
+| **Backups** | When the last backup was taken, with **View Backups** and **Back Up Now** buttons. |
+
+<Info>
+  Full backups run automatically once a day. Only the **14 most recent** backups are kept — older ones are deleted automatically.
+</Info>
+
+**View Backups** opens a list of every retained backup, grouped by day, with per-backup **Reveal**, **Export**, and **Delete** actions, plus the backups folder location. From there you can also **Delete All Backups**. To restore one, use [Restore from backup](/gateway/settings/danger-zone) in the Danger Zone.
+
+<Warning>
+  **Delete All Backups** permanently removes every stored backup. Make sure you don't need any of them — or have exported the ones you want to keep — before using it.
+</Warning>
+
+## System Requirements
+
+The **System requirements** row shows whether this computer meets the recommended specs. **View Details** opens a pass/fail checklist (CPU, RAM, disk, and similar) comparing the recommended values against what's detected on this machine, with when it was last checked. This is the same check that runs on first launch — see [Overview](/gateway/overview#first-launch).
